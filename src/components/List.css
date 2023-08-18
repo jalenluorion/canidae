@@ -1,0 +1,68 @@
+.container {
+    width: 30vw;
+    height: 70vh;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid orange;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+  }
+  
+  .title {
+    font-size: 25px;
+    font-weight: bold;
+  }
+  
+  .task-list {
+    list-style-type: none;
+    padding: 0;
+    overflow-y: auto; /* Add a scrollbar when content exceeds max height */
+    flex: 1; /* Fill remaining space */
+  }
+  
+  .task-item {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+  }
+  
+  .task-button {
+    font-size: 15px;
+    margin-right: 10px;
+    background-color: transparent;
+    border: none;
+  }
+  
+  .bottom-container {
+  }
+  
+  .input-container {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+  }
+  
+  .task-input {
+    flex: 1;
+    padding: 6px;
+    margin-right: 10px;
+    border: 1px solid orange;
+    border-radius: 5px;
+  }
+  
+  .add-button {
+    font-size: 18px;
+    background-color: transparent;
+    border: none;
+    color: orange;
+  }
+  
+  .clear-button {
+    font-size: 18px;
+    background-color: transparent;
+    border: none;
+    color: orange;
+  }
+  

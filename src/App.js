@@ -25,7 +25,7 @@ function App() {
   const [isRainPlaying, setIsRainPlaying] = useState(false);
   const [isFirePlaying, setIsFirePlaying] = useState(false);
 
-  const [showListView, setShowListView] = useState(true);
+  const [showListView, setShowListView] = useState(false);
   const [showNoteView, setShowNoteView] = useState(false);
 
   const handleBackgroundChange = (value) => {

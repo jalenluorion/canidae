@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/canidae/static/css/main.f30fe740.css",
+    "main.js": "/canidae/static/js/main.3faa249f.js",
+    "static/js/787.39c75e1e.chunk.js": "/canidae/static/js/787.39c75e1e.chunk.js",
+    "index.html": "/canidae/index.html",
+    "main.f30fe740.css.map": "/canidae/static/css/main.f30fe740.css.map",
+    "main.3faa249f.js.map": "/canidae/static/js/main.3faa249f.js.map",
+    "787.39c75e1e.chunk.js.map": "/canidae/static/js/787.39c75e1e.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f30fe740.css",
+    "static/js/main.3faa249f.js"
+  ]
+}

@@ -1,18 +1,18 @@
 .container {
-    width: 30vw;
-    height: 70vh;
-    margin: 10px;
+    width: 300px;
+    height: 400px;
     padding: 10px;
-    border: 1px solid orange;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    background-color: white;
+    background: rgba(50,50,50, .75); /* Adjust the opacity (last parameter) to control darkness */
+    backdrop-filter: blur(30px); /* Adjust the blur amount as needed */
   }
   
   .title {
     font-size: 25px;
     font-weight: bold;
+    color: white;
   }
   
   .task-list {
@@ -25,6 +25,7 @@
   .task-item {
     display: flex;
     align-items: center;
+    color: white;
     margin: 10px 0;
   }
   

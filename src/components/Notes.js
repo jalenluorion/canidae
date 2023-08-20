@@ -27,7 +27,7 @@ const ListView = () => {
 
   return (
     <div className="container">
-      <h1 className="title">Notes (TO DO)</h1>
+      <h1 className="title">Notes (Coming Soon!)</h1>
       
       <ul className="task-list">
         {tasks.map((task) => (

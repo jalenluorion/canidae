@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import './List.css'; // Import the CSS file
+import './List.css';
+import Cookies from 'js-cookie'; // Import the js-cookie library
 
 const Task = ({ name, completed }) => ({
   id: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
@@ -12,14 +13,16 @@ const ListView = () => {
   const [text, setText] = useState('');
 
   useEffect(() => {
-    // Load tasks from storage on component mount
-    const storedTasks = JSON.parse(localStorage.getItem('tasks') || '[]');
-    setTasks(storedTasks);
+    // Load tasks from cookies on component mount
+    const storedTasks = Cookies.get('tasks');
+    if (storedTasks) {
+      setTasks(JSON.parse(storedTasks));
+    }
   }, []);
 
   useEffect(() => {
-    // Save tasks to storage whenever tasks state changes
-    localStorage.setItem('tasks', JSON.stringify(tasks));
+    // Save tasks to cookies whenever tasks state changes
+    Cookies.set('tasks', JSON.stringify(tasks), { expires: 7 });
   }, [tasks]);
 
   const handleToggleComplete = (taskId) => {
@@ -72,7 +75,7 @@ const ListView = () => {
           type="text"
           value={text}
           onChange={(e) => setText(e.target.value)}
-          onKeyDown={handleKeyPress} // Add this line
+          onKeyDown={handleKeyPress}
           className="task-input"
         />
         <button

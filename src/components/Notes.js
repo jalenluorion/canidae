@@ -83,7 +83,7 @@ const NoteView = () => {
           <div className="menu-dropdown" ref={popupRef}>
             <input
               type="text"
-              placeholder="Enter a title"
+              placeholder="Enter a title..."
               value={title}
               onChange={handleTitleChange}
             />

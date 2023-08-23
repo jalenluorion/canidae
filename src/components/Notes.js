@@ -6,8 +6,9 @@ import Cookies from 'js-cookie';
 
 const NoteView = () => {
   const [note, setNote] = useState('');
-  const [showPopup, setShowPopup] = useState(false);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [title, setTitle] = useState('');
+
   const popupRef = useRef(null);
 
   useEffect(() => {
@@ -17,7 +18,7 @@ const NoteView = () => {
     }
 
     document.addEventListener('click', handleClickOutside);
-    
+
     return () => {
       document.removeEventListener('click', handleClickOutside);
     };
@@ -31,11 +32,11 @@ const NoteView = () => {
 
   const handleDownload = (e) => {
     e.stopPropagation();
-    setShowPopup(!showPopup);
+    setIsPopupOpen(!isPopupOpen);
   };
 
   const closePopup = () => {
-    setShowPopup(false);
+    setIsPopupOpen(false);
     setTitle('');
   };
 
@@ -45,7 +46,7 @@ const NoteView = () => {
 
   const downloadNote = (e) => {
     e.stopPropagation();
-    
+
     const downloadTitle = title.trim() ? title : 'Notes';
     const blob = new Blob([note], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
@@ -55,48 +56,49 @@ const NoteView = () => {
     a.click();
     URL.revokeObjectURL(url);
 
-    setShowPopup(false);
+    setIsPopupOpen(false);
     setTitle('');
   };
 
   const handleClickOutside = (e) => {
     if (popupRef.current && !popupRef.current.contains(e.target)) {
-      setShowPopup(false);
+      setIsPopupOpen(false);
       setTitle('');
     }
   };
 
   return (
     <div className="container">
-      <h1 className="title">
-        Notes
-        <span onClick={handleDownload} className="menu-icon" style={{ cursor: `pointer` }}>
-          <FontAwesomeIcon icon={faDownload} />
-        </span>
-      </h1>
+      <div className="workaround">
+        <div className="title">
+          <h1>
+            Notes
+          </h1>
+          <button className="menu-icon" onClick={handleDownload} style={{ cursor: `pointer` }}>
+            <FontAwesomeIcon icon={faDownload} />
+          </button>
+        </div>
+
+        {isPopupOpen && (
+          <div className="menu-dropdown" ref={popupRef}>
+            <input
+              type="text"
+              placeholder="Enter a title"
+              value={title}
+              onChange={handleTitleChange}
+            />
+            <button onClick={downloadNote}>Download</button>
+            <button onClick={closePopup}>Cancel</button>
+          </div>
+        )}
+      </div>
+
       <textarea
         value={note}
         className="text-area"
         onChange={handleNoteChange}
         placeholder="Write your notes here..."
       />
-
-      {showPopup && (
-        <div
-          className="menu-dropdown"
-          style={{ position: 'absolute', top: '50px', right: '10px' }}
-          ref={popupRef}
-        >
-          <input
-            type="text"
-            placeholder="Enter a title"
-            value={title}
-            onChange={handleTitleChange}
-          />
-          <button onClick={downloadNote}>Download</button>
-          <button onClick={closePopup}>Cancel</button>
-        </div>
-      )}
     </div>
   );
 };

@@ -123,20 +123,24 @@ const ListView = () => {
 
   return (
     <div className="container">
-      <h1 className="title">
-        To-Do List
-        <span className="menu-icon" onClick={toggleMenu} style={{ cursor: `pointer` }}>
-          <FontAwesomeIcon icon={faBars} />
-        </span>
-      </h1>
-
-      {isMenuOpen && (
-        <div ref={menuRef} className="menu-dropdown">
-          <button onClick={handleMarkAllCompleted}>Mark All as Completed</button>
-          <button onClick={handleClearCompleted}>Clear Completed</button>
-          <button onClick={handleSortByPeriod}>Sort by Period</button>
+      <div className="top-bar">
+        <div className="title">
+          <h1>
+            To-Do List
+          </h1>
+          <button className="menu-icon" onClick={toggleMenu} style={{ cursor: `pointer` }}>
+            <FontAwesomeIcon icon={faBars} />
+          </button>
         </div>
-      )}
+
+        {isMenuOpen && (
+          <div ref={menuRef} className="menu-dropdown">
+            <button onClick={handleMarkAllCompleted}>Mark All as Completed</button>
+            <button onClick={handleClearCompleted}>Clear Completed</button>
+            <button onClick={handleSortByPeriod}>Sort by Period</button>
+          </div>
+        )}
+      </div>
 
       <ul className="task-list">
         {tasks.map((task) => (

@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/canidae/static/css/main.6c3a0118.css",
-    "main.js": "/canidae/static/js/main.37c5e4b0.js",
+    "main.js": "/canidae/static/js/main.988a66f1.js",
     "static/js/787.39c75e1e.chunk.js": "/canidae/static/js/787.39c75e1e.chunk.js",
     "index.html": "/canidae/index.html",
     "main.6c3a0118.css.map": "/canidae/static/css/main.6c3a0118.css.map",
-    "main.37c5e4b0.js.map": "/canidae/static/js/main.37c5e4b0.js.map",
+    "main.988a66f1.js.map": "/canidae/static/js/main.988a66f1.js.map",
     "787.39c75e1e.chunk.js.map": "/canidae/static/js/787.39c75e1e.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.6c3a0118.css",
-    "static/js/main.37c5e4b0.js"
+    "static/js/main.988a66f1.js"
   ]
 }

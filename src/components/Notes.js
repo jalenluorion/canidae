@@ -69,7 +69,7 @@ const NoteView = () => {
 
   return (
     <div className="container">
-      <div className="workaround">
+      <div className="top-bar">
         <div className="title">
           <h1>
             Notes

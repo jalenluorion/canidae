@@ -31,7 +31,7 @@ const NoteView = () => {
 
   const handleDownload = (e) => {
     e.stopPropagation();
-    setShowPopup(true);
+    setShowPopup(!showPopup);
   };
 
   const closePopup = () => {
@@ -45,6 +45,7 @@ const NoteView = () => {
 
   const downloadNote = (e) => {
     e.stopPropagation();
+    
     const downloadTitle = title.trim() ? title : 'Notes';
     const blob = new Blob([note], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);

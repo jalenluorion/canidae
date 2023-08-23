@@ -3,8 +3,10 @@
   flex-direction: row;
   justify-content: center;
   height: 100vh;
-  background-size: cover; /* Scale to fit the entire viewport */
-  background-position: center; /* Center the background image */
+  background-size: cover;
+  /* Scale to fit the entire viewport */
+  background-position: center;
+  /* Center the background image */
   transition: background-image 0.5s fade-in-out;
   z-index: 0;
   flex-wrap: wrap;
@@ -19,6 +21,7 @@
   z-index: 2;
   flex: 1;
 }
+
 .center-view {
   display: flex;
   flex-direction: column;
@@ -28,6 +31,7 @@
   z-index: 2;
   flex: 1;
 }
+
 .right-view {
   display: flex;
   flex-direction: column;
@@ -40,17 +44,20 @@
 
 @media (max-width: 1248px) {
   .App {
-    flex-direction: row; /* Stack the sections vertically */
+    flex-direction: row;
+    /* Stack the sections vertically */
   }
 
   .left-view,
   .right-view {
-    order: 1; /* Place them above center-view */
+    order: 1;
+    /* Place them above center-view */
     min-width: 40vw;
   }
 
   .center-view {
-    order: 2; /* Place center-view below left-view and right-view */
+    order: 2;
+    /* Place center-view below left-view and right-view */
   }
 }
 

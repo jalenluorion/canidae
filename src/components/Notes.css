@@ -1,0 +1,18 @@
+.text-area {
+  margin-top: 10px;
+  flex: 1;
+  width: 100%;
+  border: none;
+  background: transparent;
+  resize: none;
+  font-size: 16px;
+  outline: none;
+  color: white;
+}
+
+.menu-dropdown input[type="text"] {
+  padding: 8px;
+  margin-bottom: 5px;
+  border: none;
+  border-radius: 3px;
+}

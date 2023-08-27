@@ -3,19 +3,23 @@ import './List.css';
 import Cookies from 'js-cookie';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faBars } from '@fortawesome/free-solid-svg-icons';
+import DatePicker from 'react-datepicker'; // Import react-datepicker
+import 'react-datepicker/dist/react-datepicker.css'; // Import styles
 
-const Task = ({ name, completed, period, periodColor }) => ({
+const Task = ({ name, completed, period, periodColor, dueDate }) => ({
   id: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
   name,
   completed,
   period,
   periodColor,
+  dueDate,
 });
 
 const ListView = () => {
   const [tasks, setTasks] = useState([]);
   const [text, setText] = useState('');
   const [selectedPeriod, setSelectedPeriod] = useState('1');
+  const [dueDate, setDueDate] = useState(null); // State for due date and time
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const menuRef = useRef(null);
@@ -60,9 +64,10 @@ const ListView = () => {
     if (text.trim() !== '') {
       setTasks((prevTasks) => [
         ...prevTasks,
-        Task({ name: text, completed: false, period: selectedPeriod, periodColor: getPeriodColor(selectedPeriod) }),
+        Task({ name: text, completed: false, period: selectedPeriod, periodColor: getPeriodColor(selectedPeriod), dueDate }),
       ]);
       setText('');
+      setDueDate(null); // Reset due date after adding the task
     }
   };
 
@@ -95,6 +100,11 @@ const ListView = () => {
     }
   };
 
+  // Function to handle date and time selection
+  const handleDueDateChange = (date) => {
+    setDueDate(date);
+  };
+
   const getPeriodColor = (period) => {
     switch (period) {
       case '1':
@@ -120,6 +130,12 @@ const ListView = () => {
     e.stopPropagation(); // Prevent the click from propagating to the body
     setIsMenuOpen(!isMenuOpen);
   };
+
+  const CustomDatePickerInput = ({ value, onClick }) => (
+    <button className="custom-datepicker-button" onClick={onClick}>
+      {value || 'Select Due Date and Time'}
+    </button>
+  );
 
   return (
     <div className="container">
@@ -153,6 +169,11 @@ const ListView = () => {
             <span className={`task-period`} style={{ backgroundColor: task.periodColor, color: task.periodColor === 'yellow' || task.periodColor === 'pink' ? 'black' : 'white' }}>
               Period {task.period}
             </span>
+            {task.dueDate && (
+              <span className="task-due-date">
+                Due: {task.dueDate.toLocaleString()}
+              </span>
+            )}
           </li>
         ))}
       </ul>
@@ -163,6 +184,24 @@ const ListView = () => {
           onChange={(e) => setText(e.target.value)}
           onKeyDown={handleKeyPress}
           className="task-input"
+        />
+        <DatePicker
+          selected={dueDate}
+          onChange={handleDueDateChange}
+          showTimeSelect
+          timeFormat="HH:mm"
+          timeIntervals={15}
+          dateFormat="MMMM d, h:mm aa"
+          wrapperClassName="date-picker"
+          customInput={<CustomDatePickerInput />}
+          popperClassName='date-popper'
+          popperPlacement="top"
+          popperModifiers={{
+            name: 'preventOverflow',
+      options: {
+        mainAxis: false, // true by default
+      },
+          }}
         />
         <select
           value={selectedPeriod}

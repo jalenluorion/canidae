@@ -79,14 +79,16 @@
 .input-container {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
 }
 
   .task-input {
-    width: 100%;
+    width: 100vh;
     flex: 1;
     font-size: 16px;
-    margin-right: 10px;
     border: 2px solid orange;
+    margin-bottom: 5px;
     border-radius: 5px;
     height: 21px;
   }
@@ -123,4 +125,8 @@
   .add-button:hover {
     background-color: orange;
     color: white;
+  }
+
+  .date-popper {
+
   }

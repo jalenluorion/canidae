@@ -199,13 +199,7 @@ const ListView = () => {
           wrapperClassName="date-picker"
           customInput={<CustomDatePickerInput />}
           popperClassName='date-popper'
-          popperPlacement="top"
-          popperModifiers={{
-            name: 'preventOverflow',
-      options: {
-        mainAxis: false, // true by default
-      },
-          }}
+          popperPlacement="top-end"
         />
         <select
           value={selectedPeriod}

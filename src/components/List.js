@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faBars } from '@fortawesome/free-solid-svg-icons';
 import DatePicker from 'react-datepicker'; // Import react-datepicker
 import 'react-datepicker/dist/react-datepicker.css'; // Import styles
+import { format, isWithinInterval, addDays, startOfToday, isToday, isTomorrow } from 'date-fns';
 
 const Task = ({ name, completed, period, periodColor, dueDate }) => ({
   id: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
@@ -131,9 +132,27 @@ const ListView = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const formatDueDate = (dueDate) => {
+    const now = startOfToday();
+    const oneWeekFromNow = addDays(now, 7);
+
+    if (isWithinInterval(dueDate, { start: now, end: oneWeekFromNow })) {
+      if (isToday(dueDate)) {
+        return `Today, ${format(dueDate, 'h:mm a')}`;
+      } else if (isTomorrow(dueDate)) {
+        return `Tomorrow, ${format(dueDate, 'h:mm a')}`;
+      } else {
+        return format(dueDate, 'iiii, h:mm a');
+      }
+    } else {
+      return format(dueDate, 'M/d, h:mm a');
+    }
+  };
+
+
   const CustomDatePickerInput = ({ value, onClick }) => (
-    <button className="custom-datepicker-button" onClick={onClick}>
-      {value || 'Select Due Date and Time'}
+    <button className="date-button" onClick={onClick}>
+      {value || 'Select Due Date'}
     </button>
   );
 
@@ -173,11 +192,10 @@ const ListView = () => {
             <span className={`task-period`} style={{ backgroundColor: task.periodColor, color: task.periodColor === 'yellow' || task.periodColor === 'pink' ? 'black' : 'white' }}>
               Period {task.period}
             </span>
-            {task.dueDate && (
-              <span className="task-due-date">
-                Due: {task.dueDate.toLocaleString()}
-              </span>
-            )}
+            <span className="task-due-date">
+              {task.dueDate ? formatDueDate(new Date(task.dueDate)) : "No Due Date"}
+            </span>
+
           </li>
         ))}
       </ul>
@@ -188,36 +206,39 @@ const ListView = () => {
           onChange={(e) => setText(e.target.value)}
           onKeyDown={handleKeyPress}
           className="task-input"
+          placeholder="Reading Assignment..."
         />
-        <DatePicker
-          selected={dueDate}
-          onChange={handleDueDateChange}
-          showTimeSelect
-          timeFormat="HH:mm"
-          timeIntervals={15}
-          dateFormat="MMMM d, h:mm aa"
-          wrapperClassName="date-picker"
-          customInput={<CustomDatePickerInput />}
-          popperClassName='date-popper'
-          popperPlacement="top-end"
-        />
-        <select
-          value={selectedPeriod}
-          onChange={handlePeriodChange}
-          className="period-select"
-          style={{ backgroundColor: getPeriodColor(selectedPeriod), color: getPeriodColor(selectedPeriod) === 'yellow' || getPeriodColor(selectedPeriod) === 'pink' ? 'black' : 'white' }}
-        >
-          <option style={{ backgroundColor: getPeriodColor('1') }} value="1">Period 1</option>
-          <option style={{ backgroundColor: getPeriodColor('2') }} value="2">Period 2</option>
-          <option style={{ backgroundColor: getPeriodColor('3') }} value="3">Period 3</option>
-          <option style={{ backgroundColor: getPeriodColor('4') }} value="4">Period 4</option>
-          <option style={{ backgroundColor: getPeriodColor('5') }} value="5">Period 5</option>
-          <option style={{ backgroundColor: getPeriodColor('6') }} value="6">Period 6</option>
-          <option style={{ backgroundColor: getPeriodColor('7') }} value="7">Period 7</option>
-        </select>
-        <button onClick={handleAddTask} className="add-button">
-          <FontAwesomeIcon icon={faPlus} />
-        </button>
+        <div className="input-buttons">
+          <DatePicker
+            selected={dueDate}
+            onChange={handleDueDateChange}
+            showTimeSelect
+            timeFormat="h:mm aa" // Set the time format to 12-hour clock with AM/PM
+            timeIntervals={15}
+            dateFormat="MMMM d, h:mm aa" // Adjust the date format to include AM/PM
+            wrapperClassName="date-picker"
+            customInput={<CustomDatePickerInput />}
+            popperClassName='date-popper'
+            popperPlacement="top-end"
+          />
+          <select
+            value={selectedPeriod}
+            onChange={handlePeriodChange}
+            className="period-select"
+            style={{ backgroundColor: getPeriodColor(selectedPeriod), color: getPeriodColor(selectedPeriod) === 'yellow' || getPeriodColor(selectedPeriod) === 'pink' ? 'black' : 'white' }}
+          >
+            <option style={{ backgroundColor: getPeriodColor('1') }} value="1">Period 1</option>
+            <option style={{ backgroundColor: getPeriodColor('2') }} value="2">Period 2</option>
+            <option style={{ backgroundColor: getPeriodColor('3') }} value="3">Period 3</option>
+            <option style={{ backgroundColor: getPeriodColor('4') }} value="4">Period 4</option>
+            <option style={{ backgroundColor: getPeriodColor('5') }} value="5">Period 5</option>
+            <option style={{ backgroundColor: getPeriodColor('6') }} value="6">Period 6</option>
+            <option style={{ backgroundColor: getPeriodColor('7') }} value="7">Period 7</option>
+          </select>
+          <button onClick={handleAddTask} className="add-button">
+            <FontAwesomeIcon icon={faPlus} />
+          </button>
+        </div>
       </div>
     </div>
   );

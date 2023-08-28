@@ -72,6 +72,8 @@
     align-items: center;
     color: white;
     margin: 10px 0;
+    overflow: auto;
+    white-space: nowrap;
   }
 
     .task-button {
@@ -89,58 +91,82 @@
       padding: 5px 10px;
       border-radius: 15px;
       margin-left: 10px;
+      margin-right: 10px;
+    }
+
+    .task-due-date {
+      margin-left: auto;
     }
 
 .input-container {
   display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  flex-wrap: wrap;
+  flex-direction: column;
 }
 
   .task-input {
-    width: 100vh;
-    flex: 1;
     font-size: 16px;
     border: 2px solid orange;
     margin-bottom: 5px;
     border-radius: 5px;
     height: 21px;
   }
-
-  .period-select {
-    font-size: 16px;
-    background-color: orange;
-    color: white;
-    border-radius: 5px;
-    height: 25px;
-    margin-right: 10px;
-    border: none;
-    outline: none;
-  }
-
-  .period-select option[value="3"],
-  .period-select option[value="7"] {
-    color: black;
-  }
-
-  .add-button {
+  
+  .input-buttons {
     display: flex;
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
-    background-color: transparent;
-    border: 2px solid orange;
-    border-radius: 5px;
-    color: orange;
-    height: 25px;
-    width: 25px;
-    cursor: pointer;
-    font-size: 18px;
+    align-items: center;
+    justify-content: flex-end;
   }
-  .add-button:hover {
-    background-color: orange;
-    color: white;
-  }
-  .date-popper {
-    width: 330px;
-  }
+
+    .date-popper {
+      width: 330px;
+    }
+
+    .date-picker {
+      flex: 1;
+      margin-right: 10px;
+    }
+
+    .date-button {
+      width: 100%;
+      font-size: 16px;
+      background-color: orange;
+      color: white;
+      border-radius: 5px;
+      height: 25px;
+      border: none;
+      outline: none;
+    }
+
+    .period-select {
+      font-size: 16px;
+      background-color: orange;
+      color: white;
+      border-radius: 5px;
+      height: 25px;
+      margin-right: 10px;
+      border: none;
+      outline: none;
+    }
+
+    .period-select option[value="3"],
+    .period-select option[value="7"] {
+      color: black;
+    }
+
+    .add-button {
+      display: flex;
+      justify-content: center; /* Center horizontally */
+      align-items: center; /* Center vertically */
+      background-color: transparent;
+      border: 2px solid orange;
+      border-radius: 5px;
+      color: orange;
+      height: 25px;
+      width: 25px;
+      cursor: pointer;
+      font-size: 18px;
+    }
+    .add-button:hover {
+      background-color: orange;
+      color: white;
+    }

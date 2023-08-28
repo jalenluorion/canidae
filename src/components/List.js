@@ -3,10 +3,11 @@ import './List.css';
 import Cookies from 'js-cookie';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faBars } from '@fortawesome/free-solid-svg-icons';
+import { faSquareCheck, faSquare } from '@fortawesome/free-regular-svg-icons';
 import DatePicker from 'react-datepicker'; // Import react-datepicker
 import 'react-datepicker/dist/react-datepicker.css'; // Import styles
 import { format, isWithinInterval, addDays, startOfToday, isToday, isTomorrow } from 'date-fns';
-
+ 
 const Task = ({ name, completed, period, periodColor, dueDate }) => ({
   id: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
   name,
@@ -180,22 +181,29 @@ const ListView = () => {
       <ul className="task-list">
         {tasks.map((task) => (
           <li key={task.id} className="task-item">
-            <button
-              onClick={() => handleToggleComplete(task.id)}
-              className="task-button"
-            >
-              {task.completed ? '✓' : '○'}
-            </button>
-            <span className={`task-name ${task.completed ? 'completed' : ''}`}>
-              {task.name}
-            </span>
-            <span className={`task-period`} style={{ backgroundColor: task.periodColor, color: task.periodColor === 'yellow' || task.periodColor === 'pink' ? 'black' : 'white' }}>
-              Period {task.period}
-            </span>
-            <span className="task-due-date">
-              {task.dueDate ? formatDueDate(new Date(task.dueDate)) : "No Due Date"}
-            </span>
-
+            <div className="task-desc">
+              <button
+                onClick={() => handleToggleComplete(task.id)}
+                className={`task-button ${task.completed ? 'completed' : ''}`}
+              >
+                {task.completed ? (
+                  <FontAwesomeIcon icon={faSquareCheck} />
+                ) : (
+                  <FontAwesomeIcon icon={faSquare} />
+                )}
+              </button>
+              <span className={`task-name ${task.completed ? 'completed' : ''}`}>
+                {task.name}
+              </span>
+            </div>
+            <div className="task-tags">
+              <span className={`task-period`} style={{ backgroundColor: task.periodColor, color: task.periodColor === 'yellow' || task.periodColor === 'pink' ? 'black' : 'white' }}>
+                Period {task.period}
+              </span>
+              <span className="task-due-date">
+                {task.dueDate ? formatDueDate(new Date(task.dueDate)) : "No Due Date"}
+              </span>
+            </div>
           </li>
         ))}
       </ul>

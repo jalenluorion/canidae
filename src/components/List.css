@@ -69,34 +69,52 @@
 
   .task-item {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     color: white;
     margin: 10px 0;
-    overflow: auto;
-    white-space: nowrap;
   }
-
-    .task-button {
-      font-size: 15px;
-      margin-right: 10px;
-      background-color: transparent;
-      border: none;
-      color: orange;
-      cursor: pointer;
+    .task-desc {
+      display: flex;
+      font-size: 18px;
     }
 
-    .task-period {
-      background-color: transparent;
-      color: white;
-      padding: 5px 10px;
-      border-radius: 15px;
-      margin-left: 10px;
-      margin-right: 10px;
+      .task-button {
+        font-size: 15px;
+        background-color: transparent;
+        border: none;
+        color: orange;
+        cursor: pointer;
+      }
+      
+      .task-name {
+        display: inline-block;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-word;
+      }
+
+    .task-tags {
+      display: flex;
+      align-items: center;
     }
 
-    .task-due-date {
-      margin-left: auto;
-    }
+      .task-period {
+        background-color: transparent;
+        color: white;
+        padding: 5px 5px;
+        border-radius: 10px;
+        margin-left: 10px;
+        font-size: 12px;
+      }
+
+      .task-due-date {
+        background-color: orange;
+        color: white;
+        padding: 5px 5px;
+        border-radius: 10px;
+        margin-left: 10px;
+        font-size: 12px;
+      }
 
 .input-container {
   display: flex;

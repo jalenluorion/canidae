@@ -23,12 +23,13 @@ const Task = ({ name, completed, period, periodColor, dueDate }) => ({
 const ListView = () => {
   const [tasks, setTasks] = useState([]);
   const [text, setText] = useState('');
-  const [selectedPeriod, setSelectedPeriod] = useState('1');
+  const [selectedPeriod, setSelectedPeriod] = useState('8');
   const [dueDate, setDueDate] = useState(null); // State for due date and time
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
 
   const menuRef = useRef(null);
+  const datePickerRef = useRef(null);
 
   useEffect(() => {
     const storedTasks = Cookies.get('tasks');
@@ -121,6 +122,41 @@ const ListView = () => {
     setDueDate(date);
     setStartDate(date);
   };
+
+  const handlePresetButtonClick = (preset) => {
+    let newDate = new Date();
+
+    switch (preset) {
+      case 'End of Today':
+        newDate.setHours(23, 59, 0, 0);
+        break;
+      case 'End of Tomorrow':
+        newDate.setDate(newDate.getDate() + 1);
+        newDate.setHours(23, 59, 0, 0);
+        break;
+      case 'Before School Tomorrow':
+        newDate.setDate(newDate.getDate() + 1);
+        newDate.setHours(7, 45, 0, 0);
+        break;
+      case 'Before School Monday':
+        // Calculate the date for the next Monday
+        const daysUntilMonday = 8 - newDate.getDay();
+        newDate.setDate(newDate.getDate() + daysUntilMonday);
+        newDate.setHours(7, 45, 0, 0);
+        break;
+      default:
+        break;
+    }
+
+    handleDueDateChange(newDate);
+
+    // Close the date picker when a preset button is clicked
+    if (datePickerRef.current) {
+      datePickerRef.current.setOpen(false);
+    }
+  };
+
+
   const isSelectedDateInFuture = +startDate > +new Date();
 
   const date = new Date();
@@ -147,6 +183,8 @@ const ListView = () => {
         return 'indigo';
       case '7':
         return 'violet';
+      case '8':
+        return 'gray';
       default:
         return 'gray';
     }
@@ -156,9 +194,11 @@ const ListView = () => {
     e.stopPropagation(); // Prevent the click from propagating to the body
     setIsMenuOpen(!isMenuOpen);
   };
+
   const isTaskOverdue = (dueDate) => {
     return dueDate && dueDate < new Date();
   };
+
   const formatDueDate = (dueDate) => {
     const now = startOfToday();
     const oneWeekFromNow = addDays(now, 7);
@@ -176,12 +216,25 @@ const ListView = () => {
     }
   };
 
-
-  const CustomDatePickerInput = ({ value, onClick }) => (
-    <button className="date-button react-datepicker-ignore-onclickoutside" onClick={onClick}>
-      {value || 'Select Due Date'}
-    </button>
-  );
+  const CustomDatePickerInput = ({ value, onClick }) => {
+    const formattedValue = value ? format(new Date(value), 'MMM. dd, h:mm aa') : 'No Due Date';
+  
+    const handleDateButtonClick = () => {
+      // Check if the date picker is open
+      if (datePickerRef.current && datePickerRef.current.state.open) {
+        datePickerRef.current.setOpen(false); // Close the date picker
+      } else {
+        onClick(); // Open the date picker if it's closed
+      }
+    };
+  
+    return (
+      <button className="date-button react-datepicker-ignore-onclickoutside" onClick={handleDateButtonClick}>
+        {formattedValue}
+      </button>
+    );
+  };
+  
 
   return (
     <div className="container">
@@ -230,7 +283,7 @@ const ListView = () => {
               </div>
               <div className="task-tags">
                 <span className={`task-period`} style={{ backgroundColor: task.periodColor, color: task.periodColor === 'yellow' || task.periodColor === 'pink' ? 'black' : 'white' }}>
-                  Period {task.period}
+                  {task.period === '8' ? 'Other' : `Period ${task.period}`}
                 </span>
                 <span className={`task-due-date ${isTaskOverdue(new Date(task.dueDate)) && task.dueDate ? 'overdue' : ''}`}>
                   {task.dueDate ? formatDueDate(new Date(task.dueDate)) : "No Due Date"}
@@ -254,6 +307,7 @@ const ListView = () => {
             selected={dueDate}
             onChange={handleDueDateChange}
             showTimeSelect
+            isClearable
             timeFormat="h:mm aa"
             timeIntervals={15}
             dateFormat="MMMM d, h:mm aa"
@@ -264,7 +318,33 @@ const ListView = () => {
             minDate={new Date()}
             minTime={new Date(new Date().setHours(currentHour, currentMins, 0, 0))}
             maxTime={new Date(new Date().setHours(23, 59, 0, 0))}
-          />
+            includeTimes={[
+              new Date(new Date().setHours(0, 0, 0, 0)),
+              new Date(new Date().setHours(7, 45, 0, 0)),
+              new Date(new Date().setHours(12, 21, 0, 0)),
+              new Date(new Date().setHours(15, 7, 0, 0)),
+              new Date(new Date().setHours(23, 59, 0, 0))
+            ]}
+            injectTimes={[
+              new Date(new Date().setHours(0, 0, 0, 0)),
+              new Date(new Date().setHours(7, 45, 0, 0)),
+              new Date(new Date().setHours(12, 21, 0, 0)),
+              new Date(new Date().setHours(15, 7, 0, 0)),
+              new Date(new Date().setHours(23, 59, 0, 0))
+            ]}
+            ref={datePickerRef} // Assign the ref here
+          >
+            <div className="preset-buttons">
+              <div className="row">
+                <button onClick={() => handlePresetButtonClick('End of Today')}>End of Today</button>
+                <button onClick={() => handlePresetButtonClick('Before School Tomorrow')}>Before School Tomorrow</button>
+              </div>
+              <div className="row">
+                <button onClick={() => handlePresetButtonClick('End of Tomorrow')}>End of Tomorrow</button>
+                <button onClick={() => handlePresetButtonClick('Before School Monday')}>Before School Monday</button>
+              </div>
+            </div>
+          </DatePicker>
           <select
             value={selectedPeriod}
             onChange={handlePeriodChange}
@@ -278,6 +358,7 @@ const ListView = () => {
             <option style={{ backgroundColor: getPeriodColor('5') }} value="5">Period 5</option>
             <option style={{ backgroundColor: getPeriodColor('6') }} value="6">Period 6</option>
             <option style={{ backgroundColor: getPeriodColor('7') }} value="7">Period 7</option>
+            <option style={{ backgroundColor: getPeriodColor('8') }} value="8">Other</option>
           </select>
           <button onClick={handleAddTask} className="add-button">
             <FontAwesomeIcon icon={faPlus} />

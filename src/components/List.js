@@ -96,6 +96,16 @@ const ListView = () => {
     );
   };
 
+  const handleSortByDueDate = () => {
+    setTasks((prevTasks) =>
+      prevTasks.slice().sort((a, b) => {
+        if (!a.dueDate) return 1;
+        if (!b.dueDate) return -1;
+        return new Date(a.dueDate) - new Date(b.dueDate);
+      })
+    );
+  };
+
   const handlePeriodChange = (e) => {
     setSelectedPeriod(e.target.value);
   };
@@ -190,6 +200,7 @@ const ListView = () => {
             <button onClick={handleMarkAllCompleted}>Mark All as Completed</button>
             <button onClick={handleClearCompleted}>Clear Completed</button>
             <button onClick={handleSortByPeriod}>Sort by Period</button>
+            <button onClick={handleSortByDueDate}>Sort by Due Date</button>
           </div>
         )}
       </div>

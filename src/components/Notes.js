@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import './Notes.css';
+import Cookies from 'js-cookie';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
-import Cookies from 'js-cookie';
+
+import './Notes.css';
+import './Component.css'
 
 const NoteView = () => {
   const [note, setNote] = useState('');
@@ -80,7 +83,7 @@ const NoteView = () => {
         </div>
 
         {isPopupOpen && (
-          <div className="menu-dropdown" ref={popupRef}>
+          <div className="menu-dropdown blue-accent" ref={popupRef}>
             <input
               type="text"
               placeholder="Enter a title"
@@ -95,7 +98,7 @@ const NoteView = () => {
 
       <textarea
         value={note}
-        className="text-area"
+        className="text-area main-body"
         onChange={handleNoteChange}
         placeholder="Write your notes here..."
       />

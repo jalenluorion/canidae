@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
-import './List.css';
 import Cookies from 'js-cookie';
+import DatePicker from 'react-datepicker';
+import { format, isWithinInterval, addDays, startOfToday, isToday, isTomorrow } from 'date-fns';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faBars } from '@fortawesome/free-solid-svg-icons';
-import { faSquareCheck, faSquare } from '@fortawesome/free-regular-svg-icons';
-import DatePicker from 'react-datepicker'; // Import react-datepicker
-import 'react-datepicker/dist/react-datepicker.css'; // Import styles
-import { format, isWithinInterval, addDays, startOfToday, isToday, isTomorrow } from 'date-fns';
- 
+import { faSquareCheck, faSquare, faCheckCircle } from '@fortawesome/free-regular-svg-icons';
+
+import 'react-datepicker/dist/react-datepicker.css';
+import './List.css';
+import './Component.css'
+
 const Task = ({ name, completed, period, periodColor, dueDate }) => ({
   id: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
   name,
@@ -23,6 +26,7 @@ const ListView = () => {
   const [selectedPeriod, setSelectedPeriod] = useState('1');
   const [dueDate, setDueDate] = useState(null); // State for due date and time
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [startDate, setStartDate] = useState(new Date());
 
   const menuRef = useRef(null);
 
@@ -105,14 +109,24 @@ const ListView = () => {
   // Function to handle date and time selection
   const handleDueDateChange = (date) => {
     setDueDate(date);
+    setStartDate(date);
   };
+  const isSelectedDateInFuture = +startDate > +new Date();
+
+  const date = new Date();
+  let currentMins = date.getMinutes();
+  let currentHour = date.getHours();
+  if (isSelectedDateInFuture) {
+    currentHour = 0;
+    currentMins = 0;
+  }
 
   const getPeriodColor = (period) => {
     switch (period) {
       case '1':
         return 'red';
       case '2':
-        return 'orange';
+        return 'darkorange';
       case '3':
         return 'yellow';
       case '4':
@@ -120,9 +134,9 @@ const ListView = () => {
       case '5':
         return 'blue';
       case '6':
-        return 'purple';
+        return 'indigo';
       case '7':
-        return 'pink';
+        return 'violet';
       default:
         return 'gray';
     }
@@ -132,7 +146,9 @@ const ListView = () => {
     e.stopPropagation(); // Prevent the click from propagating to the body
     setIsMenuOpen(!isMenuOpen);
   };
-
+  const isTaskOverdue = (dueDate) => {
+    return dueDate && dueDate < new Date();
+  };
   const formatDueDate = (dueDate) => {
     const now = startOfToday();
     const oneWeekFromNow = addDays(now, 7);
@@ -152,7 +168,7 @@ const ListView = () => {
 
 
   const CustomDatePickerInput = ({ value, onClick }) => (
-    <button className="date-button" onClick={onClick}>
+    <button className="date-button react-datepicker-ignore-onclickoutside" onClick={onClick}>
       {value || 'Select Due Date'}
     </button>
   );
@@ -170,43 +186,49 @@ const ListView = () => {
         </div>
 
         {isMenuOpen && (
-          <div ref={menuRef} className="menu-dropdown">
+          <div ref={menuRef} className="menu-dropdown orange-accent">
             <button onClick={handleMarkAllCompleted}>Mark All as Completed</button>
             <button onClick={handleClearCompleted}>Clear Completed</button>
             <button onClick={handleSortByPeriod}>Sort by Period</button>
           </div>
         )}
       </div>
-
-      <ul className="task-list">
-        {tasks.map((task) => (
-          <li key={task.id} className="task-item">
-            <div className="task-desc">
-              <button
-                onClick={() => handleToggleComplete(task.id)}
-                className={`task-button ${task.completed ? 'completed' : ''}`}
-              >
-                {task.completed ? (
-                  <FontAwesomeIcon icon={faSquareCheck} />
-                ) : (
-                  <FontAwesomeIcon icon={faSquare} />
-                )}
-              </button>
-              <span className={`task-name ${task.completed ? 'completed' : ''}`}>
-                {task.name}
-              </span>
-            </div>
-            <div className="task-tags">
-              <span className={`task-period`} style={{ backgroundColor: task.periodColor, color: task.periodColor === 'yellow' || task.periodColor === 'pink' ? 'black' : 'white' }}>
-                Period {task.period}
-              </span>
-              <span className="task-due-date">
-                {task.dueDate ? formatDueDate(new Date(task.dueDate)) : "No Due Date"}
-              </span>
-            </div>
-          </li>
-        ))}
-      </ul>
+      {tasks.length === 0 ? ( // Check if there are no tasks
+        <div className="empty-message main-body">
+          <FontAwesomeIcon icon={faCheckCircle} className="check-icon" />
+          <p>You're all caught up!</p>
+        </div>
+      ) : (
+        <ul className="task-list main-body">
+          {tasks.map((task) => (
+            <li key={task.id} className="task-item">
+              <div className="task-desc">
+                <button
+                  onClick={() => handleToggleComplete(task.id)}
+                  className={`task-button ${task.completed ? 'completed' : ''}`}
+                >
+                  {task.completed ? (
+                    <FontAwesomeIcon icon={faSquareCheck} />
+                  ) : (
+                    <FontAwesomeIcon icon={faSquare} />
+                  )}
+                </button>
+                <span className={`task-name ${task.completed ? 'completed' : ''}`}>
+                  {task.name}
+                </span>
+              </div>
+              <div className="task-tags">
+                <span className={`task-period`} style={{ backgroundColor: task.periodColor, color: task.periodColor === 'yellow' || task.periodColor === 'pink' ? 'black' : 'white' }}>
+                  Period {task.period}
+                </span>
+                <span className={`task-due-date ${isTaskOverdue(new Date(task.dueDate)) && task.dueDate ? 'overdue' : ''}`}>
+                  {task.dueDate ? formatDueDate(new Date(task.dueDate)) : "No Due Date"}
+                </span>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
       <div className="input-container">
         <input
           type="text"
@@ -221,13 +243,16 @@ const ListView = () => {
             selected={dueDate}
             onChange={handleDueDateChange}
             showTimeSelect
-            timeFormat="h:mm aa" // Set the time format to 12-hour clock with AM/PM
+            timeFormat="h:mm aa"
             timeIntervals={15}
-            dateFormat="MMMM d, h:mm aa" // Adjust the date format to include AM/PM
+            dateFormat="MMMM d, h:mm aa"
             wrapperClassName="date-picker"
             customInput={<CustomDatePickerInput />}
             popperClassName='date-popper'
             popperPlacement="top-end"
+            minDate={new Date()}
+            minTime={new Date(new Date().setHours(currentHour, currentMins, 0, 0))}
+            maxTime={new Date(new Date().setHours(23, 59, 0, 0))}
           />
           <select
             value={selectedPeriod}

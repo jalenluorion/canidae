@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
 
 import './Notes.css';
-import './Component.css'
+import './SideView.css'
 
 const NoteView = () => {
   const [note, setNote] = useState('');

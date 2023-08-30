@@ -9,7 +9,7 @@ import { faSquareCheck, faSquare, faCheckCircle } from '@fortawesome/free-regula
 
 import 'react-datepicker/dist/react-datepicker.css';
 import './List.css';
-import './Component.css'
+import './SideView.css'
 
 const Task = ({ name, completed, period, periodColor, dueDate }) => ({
   id: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { RainParticles, FireParticles } from './components/Particles';
-import ListView from './components/List';
-import NoteView from './components/Notes';
-import ControlContainer from './main/Control'; // Import ControlContainer component
+import { RainParticles, FireParticles } from './Components/Particles';
+import ListView from './ViewsSide/List';
+import NoteView from './ViewsSide/Notes';
+import SettingsView from './ViewsSide/Settings'
+import ControlContainer from './ControlView/Control'; // Import ControlContainer component
 
 import './App.css';
 
@@ -29,6 +30,7 @@ function App() {
 
   const [showListView, setShowListView] = useState(false);
   const [showNoteView, setShowNoteView] = useState(false);
+  const [showSettingsView, setShowSettingsView] = useState(false);
 
   useEffect(() => {
     const audioElement = document.getElementById('backgroundAudio');
@@ -52,15 +54,22 @@ function App() {
         {showListView && <ListView />}
       </div>
       <div className="center-view">
+        <SettingsView
+          options={options}
+          selectedBackground={selectedBackground}
+          setSelectedBackground={setSelectedBackground}
+          selectedAudio={selectedAudio}
+          setSelectedAudio={setSelectedAudio}
+          isPopupVisible={showSettingsView}
+          togglePopup={setShowSettingsView}
+        />
         <ControlContainer
           showListView={showListView}
           setShowListView={setShowListView}
           showNoteView={showNoteView}
           setShowNoteView={setShowNoteView}
-          selectedBackground={selectedBackground}
-          setSelectedBackground={setSelectedBackground}
-          selectedAudio={selectedAudio}
-          setSelectedAudio={setSelectedAudio}
+          showSettingsView={showSettingsView}
+          setShowSettingsView={setShowSettingsView}
         />
       </div>
       <div className="right-view">

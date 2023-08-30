@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { RainParticles, FireParticles } from './Components/Particles';
 import ListView from './ViewsSide/List';
 import NoteView from './ViewsSide/Notes';
-import SettingsView from './ViewsSide/Settings'
+import BlankView from './ViewsSide/Blank1'
+import SettingsView from './ViewsTop/Settings'
 import ControlContainer from './ControlView/Control'; // Import ControlContainer component
 
 import './App.css';
@@ -30,6 +31,8 @@ function App() {
 
   const [showListView, setShowListView] = useState(false);
   const [showNoteView, setShowNoteView] = useState(false);
+  const [showBlankView, setShowBlankView] = useState(false);
+  const [showBlank1View, setShowBlank1View] = useState(false);
   const [showSettingsView, setShowSettingsView] = useState(false);
 
   useEffect(() => {
@@ -52,6 +55,7 @@ function App() {
     <div className="App" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/${selectedBackground})` }}>
       <div className="left-view">
         {showListView && <ListView />}
+        {showBlankView && <BlankView />}
       </div>
       <div className="center-view">
         <SettingsView
@@ -68,12 +72,17 @@ function App() {
           setShowListView={setShowListView}
           showNoteView={showNoteView}
           setShowNoteView={setShowNoteView}
+          showBlankView={showBlankView}
+          setShowBlankView={setShowBlankView}
+          showBlank1View={showBlank1View}
+          setShowBlank1View={setShowBlank1View}
           showSettingsView={showSettingsView}
           setShowSettingsView={setShowSettingsView}
         />
       </div>
       <div className="right-view">
         {showNoteView && <NoteView />}
+        {showBlank1View && <BlankView />}
       </div>
       <audio id="backgroundAudio" loop>
         <source src={`${process.env.PUBLIC_URL}/${selectedAudio}`} type="audio/mpeg" />

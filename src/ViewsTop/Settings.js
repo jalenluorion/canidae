@@ -1,6 +1,7 @@
 // SettingsView.js
 
 import React from 'react';
+import './Settings.css';
 
 function SettingsView({
   options,
@@ -9,15 +10,13 @@ function SettingsView({
   selectedAudio,
   setSelectedAudio,
   isPopupVisible,
-  togglePopup,
 }) {
   return (
-    <div className={`settings-view ${isPopupVisible ? 'visible' : ''}`}>
-      <div className="popup-container">
-        <div className="popup-content">
-          <div className="picker-select">
+      <div className="settings-container">
+          <div className="settings-picker">
             {isPopupVisible && (
               <>
+              <div className="settings-group">
                 <h3>Backgrounds:</h3>
                 {options.backgrounds.map((background, index) => (
                   <button
@@ -27,13 +26,13 @@ function SettingsView({
                     }`}
                     onClick={() => {
                       setSelectedBackground(background.value);
-                      togglePopup(null);
                     }}
                   >
                     {background.label}
                   </button>
                 ))}
-
+              </div>
+              <div className="settings-group">
                 <h3>Audio:</h3>
                 {options.audio.map((audioOption, index) => (
                   <button
@@ -43,18 +42,16 @@ function SettingsView({
                     }`}
                     onClick={() => {
                       setSelectedAudio(audioOption.value);
-                      togglePopup(null);
                     }}
                   >
                     {audioOption.label}
                   </button>
                 ))}
+              </div>
               </>
             )}
           </div>
-        </div>
       </div>
-    </div>
   );
 }
 

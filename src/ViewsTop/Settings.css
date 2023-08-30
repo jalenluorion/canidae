@@ -1,0 +1,21 @@
+.settings-container {
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(50, 50, 50, .75);
+    backdrop-filter: blur(20px);
+  }
+
+  .settings-picker {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+  }
+
+  .settings-picker h3 {
+    color: white;
+    margin-top: 0px;
+  }

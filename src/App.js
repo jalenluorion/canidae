@@ -65,7 +65,6 @@ function App() {
           selectedAudio={selectedAudio}
           setSelectedAudio={setSelectedAudio}
           isPopupVisible={showSettingsView}
-          togglePopup={setShowSettingsView}
         />
         <ControlContainer
           showListView={showListView}

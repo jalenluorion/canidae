@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faStickyNote, faClock, faUsers, faPalette, faQuestionCircle, faUniversity } from '@fortawesome/free-solid-svg-icons'; // Import the new icons
+import { faCheck, faStickyNote, faClock, faUsers, faPalette, faQuestionCircle, faUniversity, faExpand, faCompress, faList } from '@fortawesome/free-solid-svg-icons'; // Import the new icons
 import './Control.css';
 
 function ControlContainer({
@@ -15,6 +15,54 @@ function ControlContainer({
     showSettingsView,
     setShowSettingsView
 }) {
+    const [isFullScreen, setIsFullScreen] = useState(false);
+
+    const toggleFullScreen = () => {
+        if (!isFullScreen) {
+            // Request fullscreen
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            } else if (document.documentElement.mozRequestFullScreen) { // Firefox
+                document.documentElement.mozRequestFullScreen();
+            } else if (document.documentElement.webkitRequestFullscreen) { // Chrome, Safari, and Opera
+                document.documentElement.webkitRequestFullscreen();
+            } else if (document.documentElement.msRequestFullscreen) { // IE/Edge
+                document.documentElement.msRequestFullscreen();
+            }
+        } else {
+            // Exit fullscreen
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.mozCancelFullScreen) { // Firefox
+                document.mozCancelFullScreen();
+            } else if (document.webkitExitFullscreen) { // Chrome, Safari, and Opera
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) { // IE/Edge
+                document.msExitFullscreen();
+            }
+        }
+    };
+
+    // Listen for changes in fullscreen state
+    useEffect(() => {
+        const fullscreenChangeHandler = () => {
+            setIsFullScreen(!!document.fullscreenElement);
+        };
+
+        document.addEventListener('fullscreenchange', fullscreenChangeHandler);
+        document.addEventListener('mozfullscreenchange', fullscreenChangeHandler);
+        document.addEventListener('webkitfullscreenchange', fullscreenChangeHandler);
+        document.addEventListener('msfullscreenchange', fullscreenChangeHandler);
+
+        return () => {
+            // Clean up event listeners
+            document.removeEventListener('fullscreenchange', fullscreenChangeHandler);
+            document.removeEventListener('mozfullscreenchange', fullscreenChangeHandler);
+            document.removeEventListener('webkitfullscreenchange', fullscreenChangeHandler);
+            document.removeEventListener('msfullscreenchange', fullscreenChangeHandler);
+        };
+    }, []);
+
     const handleListViewClick = () => {
         setShowListView(!showListView);
         if (showBlankView) setShowBlankView(false); // Close the other picker
@@ -41,7 +89,15 @@ function ControlContainer({
 
     return (
         <div className="control-container">
-            <span className="control-title">Timberline Virtual Study Room</span>
+            <div className="control-title">
+                <button className="">
+                    <FontAwesomeIcon icon={faList} />
+                </button>
+                <h1>Timberline Virtual Study Room</h1>
+                <button className="" onClick={toggleFullScreen}>
+                    <FontAwesomeIcon icon={isFullScreen ? faCompress : faExpand} />
+                </button>
+            </div>
             <div className="button-row">
                 <button className={`control-button button4`}>
                     <FontAwesomeIcon icon={faUsers} />

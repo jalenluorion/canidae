@@ -1,7 +1,6 @@
 .control-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
   border-radius: 15px;
   background: rgba(50, 50, 50, .75);
   backdrop-filter: blur(20px);
@@ -15,10 +14,31 @@
 }
 
 .control-title {
+  display: flex;
+  justify-content: space-between;
+  color: white;
+  margin: 0px 5px;
+}
+
+.control-title h1{
+  margin: 0px;
+  font-size: 20px;
+}
+
+.control-title button {
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
   font-size: 20px;
   color: white;
-  font-weight: bold;
+  transition: transform 0.2s ease-in-out;
 }
+
+.control-title button:hover {
+  transform: scale(1.2);
+}
+
 
 .view-picker {
   display: flex;

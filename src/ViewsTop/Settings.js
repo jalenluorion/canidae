@@ -9,13 +9,10 @@ function SettingsView({
   setSelectedBackground,
   selectedAudio,
   setSelectedAudio,
-  isPopupVisible,
 }) {
   return (
       <div className="settings-container">
           <div className="settings-picker">
-            {isPopupVisible && (
-              <>
               <div className="settings-group">
                 <h3>Backgrounds:</h3>
                 {options.backgrounds.map((background, index) => (
@@ -48,8 +45,6 @@ function SettingsView({
                   </button>
                 ))}
               </div>
-              </>
-            )}
           </div>
       </div>
   );

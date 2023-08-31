@@ -58,14 +58,13 @@ function App() {
         {showBlankView && <BlankView />}
       </div>
       <div className="center-view">
-        <SettingsView
+        {showSettingsView && <SettingsView
           options={options}
           selectedBackground={selectedBackground}
           setSelectedBackground={setSelectedBackground}
           selectedAudio={selectedAudio}
           setSelectedAudio={setSelectedAudio}
-          isPopupVisible={showSettingsView}
-        />
+        />}
         <ControlContainer
           showListView={showListView}
           setShowListView={setShowListView}

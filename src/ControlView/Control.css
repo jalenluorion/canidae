@@ -36,7 +36,9 @@
 }
 
 .control-title button:hover {
-  transform: scale(1.2);
+  transform: scale(1.1);
+  background:rgba(100, 100, 100, 0.8);
+  border-radius: 5px;
 }
 
 

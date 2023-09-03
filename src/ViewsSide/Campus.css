@@ -1,0 +1,42 @@
+/* Styles for the main body - Your Classes */
+.main-body h2 {
+  font-size: 24px;
+  color: white;
+  margin: 0 0 20px;
+}
+
+/* Styles for the class cards */
+.class-cards {
+    padding: 0;
+    overflow-y: auto;
+}
+
+.class-card {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 10px 10px;
+  color: white;
+  margin: 10px 0;
+}
+
+.class-card h3 {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0 0 5px;
+}
+
+.class-card p {
+  margin: 0;
+  font-size: 14px;
+}
+
+/* Styles for links within class cards */
+.class-card a {
+  color: #00bcd4;
+  text-decoration: none;
+}
+
+.class-card a:hover {
+  text-decoration: underline;
+  color: #007c91;
+}

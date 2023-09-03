@@ -10,8 +10,8 @@ function ControlContainer({
     setShowNoteView,
     showBlankView,
     setShowBlankView,
-    showBlank1View,
-    setShowBlank1View,
+    showCampusView,
+    setShowCampusView,
     showSettingsView,
     setShowSettingsView
 }) {
@@ -70,7 +70,7 @@ function ControlContainer({
 
     const handleNoteViewClick = () => {
         setShowNoteView(!showNoteView);
-        if (showBlank1View) setShowBlank1View(false); // Close the other picker
+        if (showCampusView) setShowCampusView(false); // Close the other picker
     };
 
     const handleBlankViewClick = () => {
@@ -78,8 +78,8 @@ function ControlContainer({
         if (showListView) setShowListView(false); // Close the other picker
     };
 
-    const handleBlank1ViewClick = () => {
-        setShowBlank1View(!showBlank1View);
+    const handleCampusViewClick = () => {
+        setShowCampusView(!showCampusView);
         if (showNoteView) setShowNoteView(false); // Close the other picker
     };
 
@@ -115,14 +115,14 @@ function ControlContainer({
                 </div>
                 <button className={`control-button button3`}>
                     <FontAwesomeIcon icon={faClock} />
-                    <span className="button-label">Clock</span>
+                    <span className="button-label">Timer</span>
                 </button>
                 <div className="view-picker">
                     <button className={`control-button button2 ${showNoteView ? 'active' : ''}`} onClick={handleNoteViewClick}>
                         <FontAwesomeIcon icon={faStickyNote} />
                         <span className="button-label">Notes</span>
                     </button>
-                    <button className={`control-button button2 ${showBlank1View ? 'active' : ''}`} onClick={handleBlank1ViewClick}>
+                    <button className={`control-button button2 ${showCampusView ? 'active' : ''}`} onClick={handleCampusViewClick}>
                         <FontAwesomeIcon icon={faUniversity} />
                         <span className="button-label">Campus</span>
                     </button>

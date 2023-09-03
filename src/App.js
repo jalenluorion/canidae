@@ -3,6 +3,7 @@ import { RainParticles, FireParticles } from './Components/Particles';
 import ListView from './ViewsSide/List';
 import NoteView from './ViewsSide/Notes';
 import BlankView from './ViewsSide/Blank1'
+import CampusView from './ViewsSide/Campus'
 import SettingsView from './ViewsTop/Settings'
 import ControlContainer from './ControlView/Control'; // Import ControlContainer component
 
@@ -32,7 +33,7 @@ function App() {
   const [showListView, setShowListView] = useState(false);
   const [showNoteView, setShowNoteView] = useState(false);
   const [showBlankView, setShowBlankView] = useState(false);
-  const [showBlank1View, setShowBlank1View] = useState(false);
+  const [showCampusView, setShowCampusView] = useState(false);
   const [showSettingsView, setShowSettingsView] = useState(false);
 
   useEffect(() => {
@@ -72,15 +73,15 @@ function App() {
           setShowNoteView={setShowNoteView}
           showBlankView={showBlankView}
           setShowBlankView={setShowBlankView}
-          showBlank1View={showBlank1View}
-          setShowBlank1View={setShowBlank1View}
+          showCampusView={showCampusView}
+          setShowCampusView={setShowCampusView}
           showSettingsView={showSettingsView}
           setShowSettingsView={setShowSettingsView}
         />
       </div>
       <div className="right-view">
         {showNoteView && <NoteView />}
-        {showBlank1View && <BlankView />}
+        {showCampusView && <CampusView />}
       </div>
       <audio id="backgroundAudio" loop>
         <source src={`${process.env.PUBLIC_URL}/${selectedAudio}`} type="audio/mpeg" />

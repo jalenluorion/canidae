@@ -28,10 +28,10 @@
   .task-item {
     display: flex;
     flex-direction: column;
-    background-color: #333;
+    background-color: rgba(255, 255, 255, 0.1);
     color: white;
     padding: 10px 10px;
-    border-radius: 5px;
+    border-radius: 10px;
     margin: 10px 0;
   }
 
@@ -42,7 +42,7 @@
     }
 
       .task-button {
-        font-size: 15px;
+        font-size: 16px;
         background-color: transparent;
         border: none;
         color: orange;
@@ -66,13 +66,13 @@
       .task-period {
         margin-right: 10px;
         border-radius: 15px;
-        font-size: 12px;
+        font-size: 14px;
         padding: 5px 10px;
       }
 
       .task-due-date {
         color: white;
-        font-size: 12px;
+        font-size: 14px;
       }
 
       .overdue {

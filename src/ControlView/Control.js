@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faStickyNote, faClock, faUsers, faPalette, faQuestionCircle, faUniversity, faExpand, faCompress, faList } from '@fortawesome/free-solid-svg-icons'; // Import the new icons
+import { faCheck, faStickyNote, faClock, faUsers, faPalette, faPersonMilitaryRifle, faBook, faExpand, faCompress, faList } from '@fortawesome/free-solid-svg-icons'; // Import the new icons
 import './Control.css';
 
 function ControlContainer({
@@ -109,8 +109,8 @@ function ControlContainer({
                         <span className="button-label">To-Do</span>
                     </button>
                     <button className={`control-button button1 ${showBlankView ? 'active' : ''}`} onClick={handleBlankViewClick}>
-                        <FontAwesomeIcon icon={faQuestionCircle} />
-                        <span className="button-label">Unknown</span>
+                        <FontAwesomeIcon icon={faPersonMilitaryRifle} />
+                        <span className="button-label">NATO</span>
                     </button>
                 </div>
                 <button className={`control-button button3`}>
@@ -123,8 +123,8 @@ function ControlContainer({
                         <span className="button-label">Notes</span>
                     </button>
                     <button className={`control-button button2 ${showCampusView ? 'active' : ''}`} onClick={handleCampusViewClick}>
-                        <FontAwesomeIcon icon={faUniversity} />
-                        <span className="button-label">Campus</span>
+                        <FontAwesomeIcon icon={faBook} />
+                        <span className="button-label">Classes</span>
                     </button>
                 </div>
                 <button className={`control-button button5 ${showSettingsView ? 'active' : ''}`} onClick={handleSettingsViewClick}>

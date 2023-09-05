@@ -75,7 +75,7 @@ const BlankView = () => {
       <div className="top-bar">
         <div className="title">
           <h1>
-            PLACEHOLDER
+            Launch Airstrike
           </h1>
           <button className="menu-icon" onClick={handleDownload} style={{ cursor: `pointer` }}>
             <FontAwesomeIcon icon={faDownload} />

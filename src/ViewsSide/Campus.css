@@ -1,20 +1,17 @@
-/* Styles for the main body - Your Classes */
-.main-body h2 {
-  font-size: 24px;
-  color: white;
-  margin: 0 0 20px;
+.nobottom {
+  padding-bottom: 0;
 }
 
-/* Styles for the class cards */
 .class-cards {
-    padding: 0;
-    overflow-y: auto;
+  padding: 0;
+  overflow-y: auto;
 }
 
 .class-card {
+  display: flex;
   background-color: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
-  padding: 10px 10px;
+  padding: 10px;
   color: white;
   margin: 10px 0;
 }
@@ -25,14 +22,9 @@
   margin: 0 0 5px;
 }
 
-.class-card p {
-  margin: 0;
-  font-size: 14px;
-}
-
 /* Styles for links within class cards */
 .class-card a {
-  color: #00bcd4;
+  color: #3498db; /* Change the color to a softer shade of blue */
   text-decoration: none;
 }
 
@@ -40,3 +32,56 @@
   text-decoration: underline;
   color: #007c91;
 }
+
+  .grade {
+    display: flex;
+    flex-direction: column; /* Display letter grade and percent in a column */
+    align-items: center; /* Center-align the content */
+    justify-content: center; /* Center-align the content */
+    margin: 0 5px;
+  }
+
+    .letter-grade {
+      font-size: 30px;
+      font-weight: bold;
+      color: #3498db; /* Change the color to a softer shade of blue */
+    }
+
+    .percent {
+      font-size: 16px;
+      color: #3498db; /* Change the color to a softer shade of blue */
+    }
+
+  .class-details {
+    flex: 3; /* Adjust the flex ratio for the class details */
+    margin-left: 10px; /* Add margin to the left of the class details */
+  }
+    .class-teacher {
+      margin: 0;
+      font-size: 14px;
+    }
+
+      .email-link {
+        color: #3498db; /* Change the color to a softer shade of blue */
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 14px;
+        margin-top: 5px; /* Add margin to separate it from the previous paragraph */
+      }
+
+    .class-tags {
+      display: flex;
+      align-items: center;
+      margin-top: 5px;
+    }
+
+      .period {
+        margin-right: 10px;
+        border-radius: 15px;
+        font-size: 14px;
+        padding: 5px 10px;
+      }
+
+      .room {
+        font-size: 14px;
+      }

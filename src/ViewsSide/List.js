@@ -277,9 +277,9 @@ const ListView = () => {
                     <FontAwesomeIcon icon={faSquare} />
                   )}
                 </button>
-                <span className={`task-name ${task.completed ? 'completed' : ''}`}>
+                <p className={`task-name ${task.completed ? 'completed' : ''}`}>
                   {task.name}
-                </span>
+                </p>
               </div>
               <div className="task-tags">
                 <span className={`task-period`} style={{ backgroundColor: task.periodColor, color: task.periodColor === 'yellow' || task.periodColor === 'pink' ? 'black' : 'white' }}>

@@ -1,62 +1,63 @@
 .App {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
   height: 100vh;
   background-size: cover;
   /* Scale to fit the entire viewport */
   background-position: center;
   /* Center the background image */
   transition: background-image 0.5s fade-in-out;
-  z-index: 0;
-  flex-wrap: wrap;
+  z-index: 1;
 }
 
 .left-view {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
-  z-index: 3;
-  flex: 1;
+  justify-content: flex-start;
+  position: fixed;
+  left: 10px;
+  top: 50%; /* Center the container vertically */
+  transform: translateY(-50%); /* Adjust to center properly */
+  z-index: 2;
 }
 
-.center-view {
+.control-view {
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
   align-items: center;
-  padding: 10px;
   gap: 10px;
-  z-index: 2;
-  flex: 1;
+  z-index: 3;
+  position: fixed;
+  bottom: 10px;
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%);
 }
 
 .right-view {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
-  z-index: 3;
-  flex: 1;
+  justify-content: flex-end;
+  position: fixed;
+  right: 10px;
+  top: 50%; /* Center the container vertically */
+  transform: translateY(-50%); /* Adjust to center properly */
+  z-index: 2;
 }
 
 @media (max-width: 1248px) {
   .App {
+    display: flex;
     flex-direction: row;
     /* Stack the sections vertically */
   }
 
   .left-view,
   .right-view {
+    position: static;
+    transform: none;
     order: 1;
     /* Place them above center-view */
-    min-width: 40vw;
+    min-width: 50vw;
   }
 
   .center-view {
+    position: static;
     order: 2;
     /* Place center-view below left-view and right-view */
   }

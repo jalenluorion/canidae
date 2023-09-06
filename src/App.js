@@ -58,8 +58,8 @@ function App() {
         {showListView && <ListView />}
         {showBlankView && <BlankView />}
       </div>
-      <div className="center-view">
-        {showSettingsView && <SettingsView
+      <div className="control-view">
+      {showSettingsView && <SettingsView
           options={options}
           selectedBackground={selectedBackground}
           setSelectedBackground={setSelectedBackground}

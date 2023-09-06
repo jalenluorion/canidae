@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faStickyNote, faClock, faUsers, faPalette, faPersonMilitaryRifle, faBook, faExpand, faCompress, faList } from '@fortawesome/free-solid-svg-icons'; // Import the new icons
+import { faCheck, faStickyNote, faClock, faPalette, faPersonMilitaryRifle, faBook, faExpand, faCompress, faList } from '@fortawesome/free-solid-svg-icons'; // Import the new icons
 import './Control.css';
 
 function ControlContainer({
@@ -93,15 +93,15 @@ function ControlContainer({
                 <button className="">
                     <FontAwesomeIcon icon={faList} />
                 </button>
-                <h1>Timberline Virtual Study Room</h1>
+                <h1>Virtual Study Room</h1>
                 <button className="" onClick={toggleFullScreen}>
                     <FontAwesomeIcon icon={isFullScreen ? faCompress : faExpand} />
                 </button>
             </div>
             <div className="button-row">
-                <button className={`control-button button4`}>
-                    <FontAwesomeIcon icon={faUsers} />
-                    <span className="button-label">Social</span>
+                <button className="control-button button4">
+                    <div className="inner-circle">
+                    </div>
                 </button>
                 <div className="view-picker">
                     <button className={`control-button button1 ${showListView ? 'active' : ''}`} onClick={handleListViewClick}>

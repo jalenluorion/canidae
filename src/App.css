@@ -1,9 +1,7 @@
 .App {
-  height: 100vh;
+  height: calc(100vh);
   background-size: cover;
-  /* Scale to fit the entire viewport */
   background-position: center;
-  /* Center the background image */
   transition: background-image 0.5s fade-in-out;
   z-index: 1;
   overflow: auto;
@@ -13,14 +11,28 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin-left: 10px;
-  margin-right: 5px;
 
   position: fixed;
+  margin: 5px 5px 5px 20px;
   left: 0px;
-  top: 50%; /* Center the container vertically */
-  transform: translateY(-50%); /* Adjust to center properly */
+  top: 50%;
+  transform: translateY(calc(-50% - 5px));
   z-index: 2;
+}
+
+.top-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  z-index: 3;
+
+  position: fixed;
+  margin: 20px 5px 5px 5px;
+  top: 0;
+  left: 50%;
+  transform: translateX(calc(-50% - 5px));
 }
 
 .control-view {
@@ -32,27 +44,26 @@
   z-index: 3;
 
   position: fixed;
-  margin: 10px;
-  bottom: 0px;
-  left: 50%; /* Center horizontally */
-  transform: translateX(-50%);
+  margin: 5px 5px 10px 5px;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(calc(-50% - 5px));
 }
 
 .right-view {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  margin-left: 5px;
-  margin-right: 10px;
 
   position: fixed;
-  right: 0px;
-  top: 50%; /* Center the container vertically */
-  transform: translateY(-50%); /* Adjust to center properly */
+  margin: 5px 20px 5px 5px;
+  right: 0;
+  top: 50%;
+  transform: translateY(calc(-50% - 5px));
   z-index: 2;
 }
 
-@media (max-width: 1248px) {
+@media (min-width: 690px) and (max-width: 1199px) {
   .App {
     display: flex;
     flex-direction: row;
@@ -64,20 +75,60 @@
   .right-view {
     position: static;
     transform: none;
-    order: 1;
-    flex: calc(50% - 15px);
+    order: 2;
+    flex: calc(50% - 25px);
     /* Place them above center-view */
   }
 
   .control-view {
     position: static;
     transform: none;
-    order: 2;
-    flex: calc(100vw - 20px);
+    order: 3;
+    flex: calc(100vw - 40px);
+    /* Place center-view below left-view and right-view */
+  }
+
+  .top-view {
+    position: static;
+    transform: none;
+    order: 1;
+    flex: calc(100vw - 40px);
     /* Place center-view below left-view and right-view */
   }
 }
+@media (max-width: 689px) {
+  .App {
+    display: flex;
+    flex-direction: column;
+    /* Stack the sections vertically */
+  }
 
+  .left-view,
+  .right-view {
+    justify-content: center;
+    position: static;
+    transform: none;
+    order: 2;
+    margin: 5px 5px 5px 5px;
+    /* Place them above center-view */
+  }
+
+  .control-view {
+    position: static;
+    transform: none;
+    order: 3;
+    margin: 5px 5px 10px 5px;
+    /* Place center-view below left-view and right-view */
+  }
+
+  .top-view {
+    position: static;
+    transform: none;
+    order: 1;
+    margin: 10px 5px 5px 5px;
+    /* Place center-view below left-view and right-view */
+  }
+}
 .backgroundParticles {
   position: absolute;
   top: 0;

@@ -12,6 +12,8 @@ function ControlContainer({
     setShowBlankView,
     showCampusView,
     setShowCampusView,
+    showTimerView,
+    setShowTimerView,
     showSettingsView,
     setShowSettingsView
 }) {
@@ -83,6 +85,10 @@ function ControlContainer({
         if (showNoteView) setShowNoteView(false); // Close the other picker
     };
 
+    const handleTimerViewClick = () => {
+        setShowTimerView(!showTimerView);
+    };
+
     const handleSettingsViewClick = () => {
         setShowSettingsView(!showSettingsView);
     };
@@ -100,8 +106,7 @@ function ControlContainer({
             </div>
             <div className="button-row">
                 <button className="control-button button4">
-                    <div className="inner-circle">
-                    </div>
+                    <img src={`${process.env.PUBLIC_URL}/blank-pfp.png`} className="inner-circle" alt="Profile" />
                 </button>
                 <div className="view-picker">
                     <button className={`control-button button1 ${showListView ? 'active' : ''}`} onClick={handleListViewClick}>
@@ -113,7 +118,7 @@ function ControlContainer({
                         <span className="button-label">NATO</span>
                     </button>
                 </div>
-                <button className={`control-button button3`}>
+                <button className={`control-button button3 ${showTimerView ? 'active' : ''}`} onClick={handleTimerViewClick}>
                     <FontAwesomeIcon icon={faClock} />
                     <span className="button-label">Timer</span>
                 </button>

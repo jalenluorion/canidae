@@ -4,6 +4,7 @@ import ListView from './ViewsSide/List';
 import NoteView from './ViewsSide/Notes';
 import BlankView from './ViewsSide/Blank1'
 import CampusView from './ViewsSide/Campus'
+import TimerView from './ViewsTop/Timer'
 import SettingsView from './ViewsTop/Settings'
 import ControlContainer from './ControlView/Control'; // Import ControlContainer component
 
@@ -34,6 +35,7 @@ function App() {
   const [showNoteView, setShowNoteView] = useState(false);
   const [showBlankView, setShowBlankView] = useState(false);
   const [showCampusView, setShowCampusView] = useState(false);
+  const [showTimerView, setShowTimerView] = useState(false);
   const [showSettingsView, setShowSettingsView] = useState(false);
 
   useEffect(() => {
@@ -54,12 +56,19 @@ function App() {
 
   return (
     <div className="App" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/${selectedBackground})` }}>
+      <div className="backgroundParticles">
+        {isRainPlaying && <RainParticles />}
+        {isFirePlaying && <FireParticles />}
+      </div>
       <div className="left-view">
         {showListView && <ListView />}
         {showBlankView && <BlankView />}
       </div>
+      <div className="top-view">
+        {showTimerView && <TimerView />}
+      </div>
       <div className="control-view">
-      {showSettingsView && <SettingsView
+        {showSettingsView && <SettingsView
           options={options}
           selectedBackground={selectedBackground}
           setSelectedBackground={setSelectedBackground}
@@ -75,6 +84,8 @@ function App() {
           setShowBlankView={setShowBlankView}
           showCampusView={showCampusView}
           setShowCampusView={setShowCampusView}
+          showTimerView={showTimerView}
+          setShowTimerView={setShowTimerView}
           showSettingsView={showSettingsView}
           setShowSettingsView={setShowSettingsView}
         />
@@ -87,10 +98,6 @@ function App() {
         <source src={`${process.env.PUBLIC_URL}/${selectedAudio}`} type="audio/mpeg" />
         Your browser does not support the audio element.
       </audio>
-      <div className="backgroundParticles">
-        {isRainPlaying && <RainParticles />}
-        {isFirePlaying && <FireParticles />}
-      </div>
     </div>
   );
 }

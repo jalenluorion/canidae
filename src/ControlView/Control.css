@@ -73,13 +73,7 @@
 .inner-circle {
   width: 50px; /* Adjust the size of the inner circle as needed */
   height: 50px; /* Adjust the size of the inner circle as needed */
-  border-radius: 10px; /* Make the inner circle round */
-  background-image: url('../../public/blank-pfp.png'); /* Replace 'your-image-url.png' with your image URL */
-  background-size: cover;
-  position: absolute; /* Position the inner circle relative to the button */
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  border-radius: 10px;
 }
 
 .control-button span {

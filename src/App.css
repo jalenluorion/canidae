@@ -13,9 +13,10 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  position: fixed;
   margin-left: 10px;
   margin-right: 5px;
+
+  position: fixed;
   left: 0px;
   top: 50%; /* Center the container vertically */
   transform: translateY(-50%); /* Adjust to center properly */
@@ -29,6 +30,7 @@
   justify-content: flex-end;
   gap: 10px;
   z-index: 3;
+
   position: fixed;
   margin: 10px;
   bottom: 0px;
@@ -40,9 +42,10 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  position: fixed;
   margin-left: 5px;
   margin-right: 10px;
+
+  position: fixed;
   right: 0px;
   top: 50%; /* Center the container vertically */
   transform: translateY(-50%); /* Adjust to center properly */
@@ -70,7 +73,7 @@
     position: static;
     transform: none;
     order: 2;
-    min-width: calc(100vw - 20px);
+    flex: calc(100vw - 20px);
     /* Place center-view below left-view and right-view */
   }
 }

@@ -1,9 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './Timer.css';
 import './ViewsTop.css';
-import TimePicker from 'react-time-picker';
-import 'react-time-picker/dist/TimePicker.css';
-import 'react-clock/dist/Clock.css';
 
 const TimerView = () => {
   const [time, setTime] = useState(1500); // Initial time in seconds (25 minutes)
@@ -11,6 +8,11 @@ const TimerView = () => {
   const [isActive, setIsActive] = useState(false);
   const [isPaused, setIsPaused] = useState(true);
   const [isTimePickerOpen, setTimePickerOpen] = useState(false);
+  const [hours, setHours] = useState('00');
+  const [minutes, setMinutes] = useState('25');
+  const [seconds, setSeconds] = useState('00');
+
+  const menuRef = useRef(null);
 
   useEffect(() => {
     let interval;
@@ -21,11 +23,38 @@ const TimerView = () => {
       }, 1000);
     } else if (isPaused && time !== 0) {
       clearInterval(interval);
-      sendNotification();
+    }
+
+    // Clear the interval when the timer reaches zero
+    if (!isPaused && time === 0) {
+      clearInterval(interval);
+      setIsActive(false);
+      setIsPaused(true);
+      setTimeout(() => {
+        alertUser();
+      }, 100); // Delay the alert for 1 second after reaching zero
     }
 
     return () => clearInterval(interval);
   }, [isPaused, time]);
+
+  useEffect(() => {
+    document.body.addEventListener('click', handleDocumentClick);
+    return () => {
+      document.body.removeEventListener('click', handleDocumentClick);
+    };
+  }, []);
+
+  // This function will close the menu if a click occurs outside of it
+  const handleDocumentClick = (e) => {
+    if (menuRef.current && !menuRef.current.contains(e.target)) {
+      setTimePickerOpen(false);
+    }
+  };
+
+  const alertUser = () => {
+    alert("Your timer has finished!");
+  };
 
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
@@ -49,27 +78,15 @@ const TimerView = () => {
     setTimerLabel('Study');
   };
 
-  const toggleTimePicker = () => {
+  const toggleTimePicker = (e) => {
+    e.stopPropagation();
     setTimePickerOpen(!isTimePickerOpen);
   };
 
-  const updateTimePickerValue = (newTime) => {
-    const [hours, minutes] = newTime.split(':');
-    const newSeconds = parseInt(hours, 10) * 3600 + parseInt(minutes, 10) * 60;
-    setTime(newSeconds);
+  const updateTimePickerValue = () => {
+    const newTotalSeconds = parseInt(hours, 10) * 3600 + parseInt(minutes, 10) * 60 + parseInt(seconds, 10);
+    setTime(newTotalSeconds);
     setTimePickerOpen(false);
-  };
-
-  const sendNotification = () => {
-    if (Notification.permission === 'granted') {
-      new Notification('Timer Ended', { body: 'Your timer has ended.' });
-    } else if (Notification.permission !== 'denied') {
-      Notification.requestPermission().then(function (permission) {
-        if (permission === 'granted') {
-          new Notification('Timer Ended', { body: 'Your timer has ended.' });
-        }
-      });
-    }
   };
 
   const pauseResumeButtons = (
@@ -94,20 +111,13 @@ const TimerView = () => {
           <h1>Study Timer</h1>
         </div>
         {isTimePickerOpen && (
-          <div className="menu-dropdown-top red-accent">
-            <TimePicker
-              onChange={updateTimePickerValue}
-              value={formatTime(time / 60)}
-              clockIcon={null}
-              maxDetail="minute"
-              clearIcon={null}
-              format="HH:mm:ss"
-              hourPlaceholder="hh"
-              minutePlaceholder="mm"
-              showLeadingZeros={true}
-              disableClock={true}
-              isOpen={true}
-            />
+          <div ref={menuRef} className="menu-dropdown-top red-accent">
+            <div className="time-picker">
+              <input type="number" min="0" max="99" placeholder="hh" value={hours} onChange={(e) => setHours(e.target.value)} />
+              <input type="number" min="0" max="59" placeholder="mm" value={minutes} onChange={(e) => setMinutes(e.target.value)} />
+              <input type="number" min="0" max="59" placeholder="ss" value={seconds} onChange={(e) => setSeconds(e.target.value)} />
+              <button onClick={updateTimePickerValue}>Set</button>
+            </div>
           </div>
         )}
       </div>

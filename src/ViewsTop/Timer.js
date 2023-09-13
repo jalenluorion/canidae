@@ -17,7 +17,7 @@ const TimerView = () => {
 
   useEffect(() => {
     let interval;
-  
+
     if (!isPaused) {
       interval = setInterval(() => {
         if (timerLabel === 'Study' && studyTime > 0) {
@@ -29,7 +29,7 @@ const TimerView = () => {
     } else {
       clearInterval(interval);
     }
-  
+
     // Clear the interval when the timer reaches zero
     if (!isPaused && studyTime === 0 && timerLabel === 'Study') {
       clearInterval(interval);
@@ -42,7 +42,7 @@ const TimerView = () => {
         setStudyTime(2700);
       }, 100); // Delay the alert for 1 second after reaching zero
     }
-  
+
     if (!isPaused && breakTime === 0 && timerLabel === 'Break') {
       clearInterval(interval);
       setIsActive(false);
@@ -54,7 +54,7 @@ const TimerView = () => {
         setbreakTime(300);
       }, 100); // Delay the alert for 1 second after reaching zero
     }
-  
+
     return () => clearInterval(interval);
   }, [isPaused, studyTime, breakTime, timerLabel]);
 
@@ -183,28 +183,26 @@ const TimerView = () => {
         <div className="timer-display" onClick={toggleTimePicker}>
           <span className={`timer ${isActive ? 'disabled' : ''}`}>{formatTime(timerLabel === 'Study' ? studyTime : breakTime)}</span>
         </div>
-        <div className="button-container">
-          {isActive ? (
-            <div className="btn-group">
-              <button className="btn btn-pause" onClick={togglePause}>
-                {isPaused ? (
-                  <FontAwesomeIcon icon={faPlay} />
-                ) : (
-                  <FontAwesomeIcon icon={faPause} />
-                )}
-              </button>
-              <button className="btn btn-reset" onClick={resetTimer}>
-                <FontAwesomeIcon icon={faStop} />
-              </button>
-            </div>
-          ) : (
-            <div className="btn-group">
-              <button className="btn btn-start" onClick={startTimer}>
-                <FontAwesomeIcon icon={faHourglassStart} />
-              </button>
-            </div>
-          )}
-        </div>
+        {isActive ? (
+          <div className="btn-group">
+            <button className="btn btn-pause" onClick={togglePause}>
+              {isPaused ? (
+                <FontAwesomeIcon icon={faPlay} />
+              ) : (
+                <FontAwesomeIcon icon={faPause} />
+              )}
+            </button>
+            <button className="btn btn-reset" onClick={resetTimer}>
+              <FontAwesomeIcon icon={faStop} />
+            </button>
+          </div>
+        ) : (
+          <div className="btn-group">
+            <button className="btn btn-start" onClick={startTimer}>
+              <FontAwesomeIcon icon={faHourglassStart} />
+            </button>
+          </div>
+        )}
         {tagButtons}
       </div>
     </div>

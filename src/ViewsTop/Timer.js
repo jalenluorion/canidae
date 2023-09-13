@@ -22,7 +22,7 @@ const TimerView = () => {
       interval = setInterval(() => {
         if (timerLabel === 'Study' && studyTime > 0) {
           setStudyTime(studyTime - 1);
-        } else if (timerLabel === 'break' && breakTime > 0) {
+        } else if (timerLabel === 'Break' && breakTime > 0) {
           setbreakTime(breakTime - 1);
         }
       }, 1000);
@@ -37,7 +37,7 @@ const TimerView = () => {
       setIsPaused(true);
       setTimeout(() => {
         alert("Your study timer has finished. Go take a break!");
-        setTimerLabel('break');
+        setTimerLabel('Break');
         setCurrentMinutes(String(breakTime / 60));
         setStudyTime(2700);
       }, 100); // Delay the alert for 1 second after reaching zero
@@ -89,7 +89,7 @@ const TimerView = () => {
   const resetTimer = () => {
     setIsActive(false);
     setIsPaused(true);
-    if (timerLabel === 'break') {
+    if (timerLabel === 'Break') {
       setbreakTime(300);
       setCurrentMinutes('5');
     } else if (timerLabel === 'Study') {
@@ -109,7 +109,7 @@ const TimerView = () => {
     const newTotalSeconds = parseInt(currentMinutes, 10) * 60;
     if (timerLabel === 'Study') {
       setStudyTime(newTotalSeconds);
-    } else if (timerLabel === 'break') {
+    } else if (timerLabel === 'Break') {
       setbreakTime(newTotalSeconds);
     }
     setTimePickerOpen(false);
@@ -141,12 +141,12 @@ const TimerView = () => {
       <button
         className={`tag-button ${isActive ? 'disabled' : ''}`}
         style={{
-          backgroundColor: timerLabel === 'break' ? 'red' : '',
-          color: timerLabel === 'break' ? 'white' : '',
+          backgroundColor: timerLabel === ' Break' ? 'red' : '',
+          color: timerLabel === 'Break' ? 'white' : '',
         }}
         onClick={() => {
           if (!isActive) {
-            setTimerLabel('break');
+            setTimerLabel('Break');
             setCurrentMinutes(String(breakTime / 60));
           }
         }}

@@ -141,7 +141,7 @@ const TimerView = () => {
       <button
         className={`tag-button ${isActive ? 'disabled' : ''}`}
         style={{
-          backgroundColor: timerLabel === ' Break' ? 'red' : '',
+          backgroundColor: timerLabel === 'Break' ? 'red' : '',
           color: timerLabel === 'Break' ? 'white' : '',
         }}
         onClick={() => {

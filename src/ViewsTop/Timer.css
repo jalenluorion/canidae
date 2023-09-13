@@ -1,6 +1,73 @@
 /* Add appropriate CSS for your TimerView component */
-
+.nobottom-top {
+  padding-bottom: 0;
+}
 .red-accent {
     background-color: rgba(255, 0, 0, 0.9);
   }
  
+  .menu-dropdown-top input[type="number"] {
+    padding: 8px;
+  border: none;
+  border-radius: 3px;
+  }
+  
+  .timer-display {
+  font-size: 48px; /* Increase font size for the timer */
+  font-family: "Courier New", sans-serif; /* Specify a timer font */
+  color: white;
+  text-align: center;
+}
+.timer:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+}
+.btn-group {
+  margin: 5px 0px;
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  gap: 10px;
+}
+.btn {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  background-color: transparent;
+  border: 2px solid red;
+  border-radius: 50%;
+  color: red;
+  height: 30px;
+  width: 30px;
+  cursor: pointer;
+  font-size: 18px;
+}
+.btn:hover {
+  background-color: red;
+  color: white;
+}
+
+.timer-label {
+  display: flex;
+  border-radius: 25px;
+  background-color: rgba(100, 100, 100, 0.8);
+  gap: 10px;
+  margin: 5px 0px;
+}
+
+.tag-button {
+  flex:1;
+  font-size: 16px;
+      background-color: transparent;
+      color: white;
+      border-radius: 25px;
+      height: 25px;
+      border: none;
+      outline: none;
+}
+
+.tag-button:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+.disabled:hover {
+  background-color: transparent;
+}

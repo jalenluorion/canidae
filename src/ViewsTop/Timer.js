@@ -1,42 +1,62 @@
 import React, { useState, useEffect, useRef } from 'react';
-import './Timer.css';
 import './ViewsTop.css';
+import './Timer.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlay, faPause, faStop, faHourglassStart } from '@fortawesome/free-solid-svg-icons';
 
 const TimerView = () => {
-  const [time, setTime] = useState(1500); // Initial time in seconds (25 minutes)
+  const [studyTime, setStudyTime] = useState(2700); // Initial study time in seconds (25 minutes)
+  const [breakTime, setbreakTime] = useState(300); // Initial break time in seconds (5 minutes)
   const [timerLabel, setTimerLabel] = useState('Study');
   const [isActive, setIsActive] = useState(false);
   const [isPaused, setIsPaused] = useState(true);
   const [isTimePickerOpen, setTimePickerOpen] = useState(false);
-  const [hours, setHours] = useState('00');
-  const [minutes, setMinutes] = useState('25');
-  const [seconds, setSeconds] = useState('00');
+  const [currentMinutes, setCurrentMinutes] = useState('45');
 
   const menuRef = useRef(null);
 
   useEffect(() => {
     let interval;
-
-    if (!isPaused && time > 0) {
+  
+    if (!isPaused) {
       interval = setInterval(() => {
-        setTime((prevTime) => prevTime - 1);
+        if (timerLabel === 'Study' && studyTime > 0) {
+          setStudyTime(studyTime - 1);
+        } else if (timerLabel === 'break' && breakTime > 0) {
+          setbreakTime(breakTime - 1);
+        }
       }, 1000);
-    } else if (isPaused && time !== 0) {
+    } else {
       clearInterval(interval);
     }
-
+  
     // Clear the interval when the timer reaches zero
-    if (!isPaused && time === 0) {
+    if (!isPaused && studyTime === 0 && timerLabel === 'Study') {
       clearInterval(interval);
       setIsActive(false);
       setIsPaused(true);
       setTimeout(() => {
-        alertUser();
+        alert("Your study timer has finished. Go take a break!");
+        setTimerLabel('break');
+        setCurrentMinutes(String(breakTime / 60));
+        setStudyTime(2700);
       }, 100); // Delay the alert for 1 second after reaching zero
     }
-
+  
+    if (!isPaused && breakTime === 0 && timerLabel === 'Break') {
+      clearInterval(interval);
+      setIsActive(false);
+      setIsPaused(true);
+      setTimeout(() => {
+        alert("Your break timer has finished. Go study some more!");
+        setTimerLabel('Study');
+        setCurrentMinutes(String(studyTime / 60));
+        setbreakTime(300);
+      }, 100); // Delay the alert for 1 second after reaching zero
+    }
+  
     return () => clearInterval(interval);
-  }, [isPaused, time]);
+  }, [isPaused, studyTime, breakTime, timerLabel]);
 
   useEffect(() => {
     document.body.addEventListener('click', handleDocumentClick);
@@ -45,15 +65,10 @@ const TimerView = () => {
     };
   }, []);
 
-  // This function will close the menu if a click occurs outside of it
   const handleDocumentClick = (e) => {
     if (menuRef.current && !menuRef.current.contains(e.target)) {
       setTimePickerOpen(false);
     }
-  };
-
-  const alertUser = () => {
-    alert("Your timer has finished!");
   };
 
   const formatTime = (seconds) => {
@@ -74,68 +89,123 @@ const TimerView = () => {
   const resetTimer = () => {
     setIsActive(false);
     setIsPaused(true);
-    setTime(1500); // Reset time to 25 minutes
-    setTimerLabel('Study');
+    if (timerLabel === 'break') {
+      setbreakTime(300);
+      setCurrentMinutes('5');
+    } else if (timerLabel === 'Study') {
+      setCurrentMinutes('45');
+      setStudyTime(2700);
+    }
   };
 
   const toggleTimePicker = (e) => {
     e.stopPropagation();
-    setTimePickerOpen(!isTimePickerOpen);
+    if (!isActive) {
+      setTimePickerOpen(!isTimePickerOpen);
+    }
   };
 
   const updateTimePickerValue = () => {
-    const newTotalSeconds = parseInt(hours, 10) * 3600 + parseInt(minutes, 10) * 60 + parseInt(seconds, 10);
-    setTime(newTotalSeconds);
+    const newTotalSeconds = parseInt(currentMinutes, 10) * 60;
+    if (timerLabel === 'Study') {
+      setStudyTime(newTotalSeconds);
+    } else if (timerLabel === 'break') {
+      setbreakTime(newTotalSeconds);
+    }
     setTimePickerOpen(false);
   };
 
-  const pauseResumeButtons = (
-    <div className="btn-group">
-      <button className="btn btn-pause" onClick={togglePause}>
-        {isPaused ? 'Resume' : 'Pause'}
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      updateTimePickerValue();
+    }
+  };
+
+  const tagButtons = (
+    <div className="timer-label">
+      <button
+        className={`tag-button ${isActive ? 'disabled' : ''}`}
+        style={{
+          backgroundColor: timerLabel === 'Study' ? 'red' : '',
+          color: timerLabel === 'Study' ? 'white' : '',
+        }}
+        onClick={() => {
+          if (!isActive) {
+            setTimerLabel('Study');
+            setCurrentMinutes(String(studyTime / 60));
+          }
+        }}
+      >
+        Study
       </button>
-      <button className="btn btn-reset" onClick={resetTimer}>Reset</button>
+      <button
+        className={`tag-button ${isActive ? 'disabled' : ''}`}
+        style={{
+          backgroundColor: timerLabel === 'break' ? 'red' : '',
+          color: timerLabel === 'break' ? 'white' : '',
+        }}
+        onClick={() => {
+          if (!isActive) {
+            setTimerLabel('break');
+            setCurrentMinutes(String(breakTime / 60));
+          }
+        }}
+      >
+        Break
+      </button>
     </div>
   );
 
-  const startButton = (
-    <button className="btn btn-start" onClick={startTimer}>
-      Start
-    </button>
-  );
-
   return (
-    <div className="container-top">
+    <div className="container-top nobottom-top">
       <div className="top-bar">
         <div className="title">
-          <h1>Study Timer</h1>
+          <h1>Timer</h1>
         </div>
         {isTimePickerOpen && (
           <div ref={menuRef} className="menu-dropdown-top red-accent">
-            <div className="time-picker">
-              <input type="number" min="0" max="99" placeholder="hh" value={hours} onChange={(e) => setHours(e.target.value)} />
-              <input type="number" min="0" max="59" placeholder="mm" value={minutes} onChange={(e) => setMinutes(e.target.value)} />
-              <input type="number" min="0" max="59" placeholder="ss" value={seconds} onChange={(e) => setSeconds(e.target.value)} />
-              <button onClick={updateTimePickerValue}>Set</button>
-            </div>
+            <input
+              type="number"
+              size="1"
+              min="1"
+              max="999"
+              placeholder="Minutes"
+              value={currentMinutes}
+              onChange={(e) => setCurrentMinutes(e.target.value)}
+              onInput={(e) => (e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 3))}
+              onKeyDown={handleKeyPress}
+            />
+            <button onClick={updateTimePickerValue}>Set</button>
           </div>
         )}
       </div>
-      <div className="timer-body">
+      <div className="timer-body main-body">
         <div className="timer-display" onClick={toggleTimePicker}>
-          {formatTime(time)}
+          <span className={`timer ${isActive ? 'disabled' : ''}`}>{formatTime(timerLabel === 'Study' ? studyTime : breakTime)}</span>
         </div>
         <div className="button-container">
-          {isActive ? pauseResumeButtons : startButton}
+          {isActive ? (
+            <div className="btn-group">
+              <button className="btn btn-pause" onClick={togglePause}>
+                {isPaused ? (
+                  <FontAwesomeIcon icon={faPlay} />
+                ) : (
+                  <FontAwesomeIcon icon={faPause} />
+                )}
+              </button>
+              <button className="btn btn-reset" onClick={resetTimer}>
+                <FontAwesomeIcon icon={faStop} />
+              </button>
+            </div>
+          ) : (
+            <div className="btn-group">
+              <button className="btn btn-start" onClick={startTimer}>
+                <FontAwesomeIcon icon={faHourglassStart} />
+              </button>
+            </div>
+          )}
         </div>
-        <div className="timer-label">
-          <button className={`btn ${timerLabel === 'Study' ? 'btn-active' : ''}`} onClick={() => setTimerLabel('Study')}>
-            Study
-          </button>
-          <button className={`btn ${timerLabel === 'Rest' ? 'btn-active' : ''}`} onClick={() => setTimerLabel('Rest')}>
-            Rest
-          </button>
-        </div>
+        {tagButtons}
       </div>
     </div>
   );

@@ -12,10 +12,10 @@ import './App.css';
 
 const options = {
   backgrounds: [
-    { value: 'c0_ejQQcrwI?si=9P9O6_z0U819vVLB', label: 'Coffee Shop' },
-    { value: '-VgN7nKx9MU?si=hxXrSfbPnMn2XUqO', label: 'Fireplace' },
-    { value: 'xg1gNlxto2M?si=GB79cFrfOPN--0KV', label: 'New York City' },
-    { value: 'CHFif_y2TyM?si=Jgwua93tWtqUDYch', label: 'Library' },
+    { value: 'c0_ejQQcrwI?', label: 'Coffee Shop' },
+    { value: '-VgN7nKx9MU?', label: 'Fireplace' },
+    { value: 'xg1gNlxto2M?', label: 'New York City' },
+    { value: 'CHFif_y2TyM?', label: 'Library' },
   ],
   audio: [
     { value: 'none', label: 'None' },
@@ -58,6 +58,7 @@ function App() {
     <div className="App">
       <div className="video-container">
         <iframe
+          title='background-video'
           src={`https://www.youtube.com/embed/${selectedBackground}&start=60&controls=0&autoplay=1&loop=1&mute=1&playsinline=1`}
         >
         </iframe>

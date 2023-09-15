@@ -12,10 +12,10 @@ import './App.css';
 
 const options = {
   backgrounds: [
-    { value: 'background1.jpg', label: 'Background 1' },
-    { value: 'background2.jpg', label: 'Background 2' },
-    { value: 'background3.jpg', label: 'Background 3' },
-    { value: 'background4.jpg', label: 'Background 4' },
+    { value: 'c0_ejQQcrwI?si=9P9O6_z0U819vVLB', label: 'Coffee Shop' },
+    { value: '-VgN7nKx9MU?si=hxXrSfbPnMn2XUqO', label: 'Fireplace' },
+    { value: 'xg1gNlxto2M?si=GB79cFrfOPN--0KV', label: 'New York City' },
+    { value: 'CHFif_y2TyM?si=Jgwua93tWtqUDYch', label: 'Library' },
   ],
   audio: [
     { value: 'none', label: 'None' },
@@ -25,7 +25,7 @@ const options = {
 };
 
 function App() {
-  const [selectedBackground, setSelectedBackground] = useState(options.backgrounds[0].value);
+  const [selectedBackground, setSelectedBackground] = useState(options.backgrounds[3].value);
   const [selectedAudio, setSelectedAudio] = useState(options.audio[0].value);
 
   const [isRainPlaying, setIsRainPlaying] = useState(false);
@@ -55,8 +55,14 @@ function App() {
   }, [selectedAudio]);
 
   return (
-    <div className="App" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/${selectedBackground})` }}>
-      <div className="backgroundParticles">
+    <div className="App">
+      <div className="video-container">
+        <iframe
+          src={`https://www.youtube.com/embed/${selectedBackground}&start=60&controls=0&autoplay=1&loop=1&mute=1&playsinline=1`}
+        >
+        </iframe>
+      </div>
+      <div className="particle-container">
         {isRainPlaying && <RainParticles />}
         {isFirePlaying && <FireParticles />}
       </div>

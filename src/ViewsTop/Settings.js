@@ -1,6 +1,4 @@
-// SettingsView.js
-
-import React from 'react';
+import React, { useState } from 'react';
 import './Settings.css';
 
 function SettingsView({
@@ -10,43 +8,69 @@ function SettingsView({
   selectedAudio,
   setSelectedAudio,
 }) {
+  const [activeTab, setActiveTab] = useState('backgrounds');
+
   return (
-      <div className="settings-container">
-          <div className="settings-picker">
-              <div className="settings-group">
-                <h3>Backgrounds:</h3>
-                {options.backgrounds.map((background, index) => (
-                  <button
-                    key={index}
-                    className={`picker-button ${
-                      selectedBackground === background.value ? 'selected' : ''
-                    }`}
-                    onClick={() => {
-                      setSelectedBackground(background.value);
-                    }}
-                  >
-                    {background.label}
-                  </button>
-                ))}
-              </div>
-              <div className="settings-group">
-                <h3>Audio:</h3>
-                {options.audio.map((audioOption, index) => (
-                  <button
-                    key={index}
-                    className={`picker-button ${
-                      selectedAudio === audioOption.value ? 'selected' : ''
-                    }`}
-                    onClick={() => {
-                      setSelectedAudio(audioOption.value);
-                    }}
-                  >
-                    {audioOption.label}
-                  </button>
-                ))}
-              </div>
-          </div>
+    <div className="settings-container">
+      <div className="settings-tab-bar">
+        <button
+          className={`tab-button ${activeTab === 'backgrounds' ? 'active' : ''}`}
+          onClick={() => setActiveTab('backgrounds')}
+          style={{
+            backgroundColor: activeTab === 'backgrounds' ? 'purple' : ''
+          }}
+        >
+          Backgrounds
+        </button>
+        <button
+          className={`tab-button ${activeTab === 'audio' ? 'active' : ''}`}
+          onClick={() => setActiveTab('audio')}
+          style={{
+            backgroundColor: activeTab === 'audio' ? 'purple' : ''
+          }}
+        >
+          Audio
+        </button>
       </div>
+        {activeTab === 'backgrounds' && (
+          <div className="settings-content">
+            {options.backgrounds.map((background, index) => (
+              <button
+                key={index}
+                className={`background-button ${
+                  selectedBackground === background.value ? 'selected' : ''
+                }`}
+                onClick={() => {
+                  setSelectedBackground(background.value);
+                }}
+              >
+                <img
+                  src={`https://img.youtube.com/vi/${background.value}/maxresdefault.jpg`}
+                  alt={background.label}
+                />
+              </button>
+            ))}
+          </div>
+        )}
+        {activeTab === 'audio' && (
+          <div className="settings-content">
+            <h3>Audio:</h3>
+            {options.audio.map((audioOption, index) => (
+              <button
+                key={index}
+                className={`picker-button ${
+                  selectedAudio === audioOption.value ? 'selected' : ''
+                }`}
+                onClick={() => {
+                  setSelectedAudio(audioOption.value);
+                }}
+              >
+                {audioOption.label}
+              </button>
+            ))}
+          </div>
+        )}
+    </div>
   );
 }
 

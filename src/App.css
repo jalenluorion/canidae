@@ -1,9 +1,8 @@
 .App {
   height: calc(100vh);
-  background-size: cover;
-  background-position: center;
-  transition: background-image 0.5s fade-in-out;
-  z-index: 1;
+}
+.item-container {
+  height: calc(100vh);
   overflow: auto;
 }
 
@@ -64,7 +63,7 @@
 }
 
 @media (min-width: 690px) and (max-width: 1199px) {
-  .App {
+  .item-container {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -97,7 +96,7 @@
   }
 }
 @media (max-width: 689px) {
-  .App {
+  .item-container {
     display: flex;
     flex-direction: column;
     /* Stack the sections vertically */

@@ -12,10 +12,10 @@ import './App.css';
 
 const options = {
   backgrounds: [
-    { value: 'c0_ejQQcrwI?', label: 'Coffee Shop' },
-    { value: '-VgN7nKx9MU?', label: 'Fireplace' },
-    { value: 'xg1gNlxto2M?', label: 'New York City' },
-    { value: 'CHFif_y2TyM?', label: 'Library' },
+    { value: 'c0_ejQQcrwI', label: 'Coffee Shop' },
+    { value: '-VgN7nKx9MU', label: 'Fireplace' },
+    { value: 'xg1gNlxto2M', label: 'New York City' },
+    { value: 'CHFif_y2TyM', label: 'Library' },
   ],
   audio: [
     { value: 'none', label: 'None' },
@@ -25,7 +25,7 @@ const options = {
 };
 
 function App() {
-  const [selectedBackground, setSelectedBackground] = useState(options.backgrounds[3].value);
+  const [selectedBackground, setSelectedBackground] = useState(options.backgrounds[0].value);
   const [selectedAudio, setSelectedAudio] = useState(options.audio[0].value);
 
   const [isRainPlaying, setIsRainPlaying] = useState(false);
@@ -59,7 +59,7 @@ function App() {
       <div className="video-container">
         <iframe
           title='background-video'
-          src={`https://www.youtube.com/embed/${selectedBackground}&start=60&controls=0&autoplay=1&loop=1&mute=1&playsinline=1`}
+          src={`https://www.youtube.com/embed/${selectedBackground}?&start=60&controls=0&autoplay=1&loop=1&mute=1&playsinline=1`}
         >
         </iframe>
       </div>
@@ -67,6 +67,7 @@ function App() {
         {isRainPlaying && <RainParticles />}
         {isFirePlaying && <FireParticles />}
       </div>
+      <div className="item-container">
       <div className="left-view">
         {showListView && <ListView />}
         {showBlankView && <BlankView />}
@@ -100,6 +101,7 @@ function App() {
       <div className="right-view">
         {showNoteView && <NoteView />}
         {showCampusView && <CampusView />}
+      </div>
       </div>
       <audio id="backgroundAudio" loop>
         <source src={`${process.env.PUBLIC_URL}/${selectedAudio}`} type="audio/mpeg" />

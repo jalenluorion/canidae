@@ -54,12 +54,11 @@ function SettingsView({
         )}
         {activeTab === 'audio' && (
           <div className="settings-content">
-            <h3>Audio:</h3>
             {options.audio.map((audioOption, index) => (
               <button
                 key={index}
                 className={`picker-button ${
-                  selectedAudio === audioOption.value ? 'selected' : ''
+                  selectedAudio === audioOption.value ? 'selected1' : ''
                 }`}
                 onClick={() => {
                   setSelectedAudio(audioOption.value);

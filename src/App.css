@@ -4,6 +4,8 @@
 .item-container {
   height: calc(100vh);
   overflow: auto;
+  position: relative;
+  z-index: 3;
 }
 
 .left-view {
@@ -129,20 +131,21 @@
     /* Place center-view below left-view and right-view */
   }
 }
-.particle-view {
+.particle-container {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  z-index: 2;
 }
-
 
 .video-container{
   width: 100vw;
   height: 100vh;
   position:absolute;
   overflow:hidden;
+  z-index: 1;
 }
 
 iframe {

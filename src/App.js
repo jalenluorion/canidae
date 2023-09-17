@@ -16,6 +16,11 @@ const options = {
     { value: '-VgN7nKx9MU', label: 'Fireplace' },
     { value: 'xg1gNlxto2M', label: 'New York City' },
     { value: 'CHFif_y2TyM', label: 'Library' },
+    { value: 'mkgylOJSdhE', label: 'Backyard Rain' },
+    { value: 'acsLxmnjMho', label: 'Treehouse' },
+    { value: 'QX9ptr60JFw', label: 'Rainy Woods' },
+    { value: 'bjQUCecur3w', label: 'Starship' },
+
   ],
   audio: [
     { value: 'none', label: 'None' },

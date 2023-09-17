@@ -148,7 +148,7 @@
   z-index: 1;
 }
 
-iframe {
+.video-container iframe {
   position: absolute;
   top: 50%;
   left: 50%;

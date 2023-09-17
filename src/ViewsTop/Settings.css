@@ -3,6 +3,7 @@
     border-radius: 10px;
     background: rgba(50, 50, 50, .75);
     backdrop-filter: blur(20px);
+    width: 520px;
   }
 
   .settings-tab-bar {
@@ -25,11 +26,22 @@
   }
   .settings-content {
     display: flex;
+    flex-wrap: wrap;
   }
-
+  .background-button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .background-label {
+    margin: 0px 0px 5px 8px; /* Adjust the spacing between the image and label */
+    color: white;
+    font-size: 14px;
+  }
   .background-button {
     padding: 0;
     margin: 5px;
+    margin-bottom: 0px;
     background: transparent;
     border: 3px solid transparent;
     outline: none;

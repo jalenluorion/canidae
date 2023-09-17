@@ -35,6 +35,7 @@ function SettingsView({
         {activeTab === 'backgrounds' && (
           <div className="settings-content">
             {options.backgrounds.map((background, index) => (
+              <div className='background-button-container'>
               <button
                 key={index}
                 className={`background-button ${
@@ -49,6 +50,8 @@ function SettingsView({
                   alt={background.label}
                 />
               </button>
+              <div className="background-label">{background.label}</div>
+              </div>
             ))}
           </div>
         )}

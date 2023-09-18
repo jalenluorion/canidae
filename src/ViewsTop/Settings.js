@@ -7,6 +7,7 @@ function SettingsView({
   setSelectedBackground,
   selectedAudio,
   setSelectedAudio,
+  setVideoReady,
 }) {
   const [activeTab, setActiveTab] = useState('backgrounds');
 
@@ -43,6 +44,7 @@ function SettingsView({
                 }`}
                 onClick={() => {
                   setSelectedBackground(background.value);
+                  setVideoReady(false);
                 }}
               >
                 <img

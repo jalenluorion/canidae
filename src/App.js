@@ -7,6 +7,7 @@ import CampusView from './ViewsSide/Campus'
 import TimerView from './ViewsTop/Timer'
 import SettingsView from './ViewsTop/Settings'
 import ControlContainer from './ControlView/Control'; // Import ControlContainer component
+import YouTube from 'react-youtube'; // Import the react-youtube library
 
 import './App.css';
 
@@ -19,8 +20,7 @@ const options = {
     { value: 'mkgylOJSdhE', label: 'Backyard Rain' },
     { value: 'acsLxmnjMho', label: 'Treehouse' },
     { value: 'QX9ptr60JFw', label: 'Rainy Woods' },
-    { value: 'bjQUCecur3w', label: 'Starship' },
-
+    { value: 'jfKfPfyJRdk', label: 'Lofi Hip Hop' },
   ],
   audio: [
     { value: 'none', label: 'None' },
@@ -35,6 +35,7 @@ function App() {
 
   const [isRainPlaying, setIsRainPlaying] = useState(false);
   const [isFirePlaying, setIsFirePlaying] = useState(false);
+  const [isVideoReady, setIsVideoReady] = useState(false); // Track if the video is ready
 
   const [showListView, setShowListView] = useState(false);
   const [showNoteView, setShowNoteView] = useState(false);
@@ -62,51 +63,71 @@ function App() {
   return (
     <div className="App">
       <div className="video-container">
-        <iframe
-          title='background-video'
-          src={`https://www.youtube.com/embed/${selectedBackground}?&start=60&controls=0&autoplay=1&loop=1&mute=1&playsinline=1`}
-        >
-        </iframe>
+          <YouTube
+            videoId={selectedBackground}
+            opts={{
+              playerVars: {
+                autoplay: 1,
+                controls: 0,
+                loop: 1,
+                mute: 1,
+                playsinline: 1,
+                start: 60,
+              },
+            }}
+            onPlay={(event) => {
+              // Video is ready, update the state
+              setIsVideoReady(true);
+            }}
+          />
+        {!isVideoReady && (
+          <img
+            className="video-thumbnail"
+            src={`https://img.youtube.com/vi/${selectedBackground}/maxresdefault.jpg`}
+            alt="Video Thumbnail"
+          />
+        )}
       </div>
       <div className="particle-container">
         {isRainPlaying && <RainParticles />}
         {isFirePlaying && <FireParticles />}
       </div>
       <div className="item-container">
-      <div className="left-view">
-        {showListView && <ListView />}
-        {showBlankView && <BlankView />}
-      </div>
-      <div className="top-view">
-        {showTimerView && <TimerView />}
-      </div>
-      <div className="control-view">
-        {showSettingsView && <SettingsView
-          options={options}
-          selectedBackground={selectedBackground}
-          setSelectedBackground={setSelectedBackground}
-          selectedAudio={selectedAudio}
-          setSelectedAudio={setSelectedAudio}
-        />}
-        <ControlContainer
-          showListView={showListView}
-          setShowListView={setShowListView}
-          showNoteView={showNoteView}
-          setShowNoteView={setShowNoteView}
-          showBlankView={showBlankView}
-          setShowBlankView={setShowBlankView}
-          showCampusView={showCampusView}
-          setShowCampusView={setShowCampusView}
-          showTimerView={showTimerView}
-          setShowTimerView={setShowTimerView}
-          showSettingsView={showSettingsView}
-          setShowSettingsView={setShowSettingsView}
-        />
-      </div>
-      <div className="right-view">
-        {showNoteView && <NoteView />}
-        {showCampusView && <CampusView />}
-      </div>
+        <div className="left-view">
+          {showListView && <ListView />}
+          {showBlankView && <BlankView />}
+        </div>
+        <div className="top-view">
+          {showTimerView && <TimerView />}
+        </div>
+        <div className="control-view">
+          {showSettingsView && <SettingsView
+            options={options}
+            selectedBackground={selectedBackground}
+            setSelectedBackground={setSelectedBackground}
+            selectedAudio={selectedAudio}
+            setSelectedAudio={setSelectedAudio}
+            setVideoReady={setIsVideoReady}
+          />}
+          <ControlContainer
+            showListView={showListView}
+            setShowListView={setShowListView}
+            showNoteView={showNoteView}
+            setShowNoteView={setShowNoteView}
+            showBlankView={showBlankView}
+            setShowBlankView={setShowBlankView}
+            showCampusView={showCampusView}
+            setShowCampusView={setShowCampusView}
+            showTimerView={showTimerView}
+            setShowTimerView={setShowTimerView}
+            showSettingsView={showSettingsView}
+            setShowSettingsView={setShowSettingsView}
+          />
+        </div>
+        <div className="right-view">
+          {showNoteView && <NoteView />}
+          {showCampusView && <CampusView />}
+        </div>
       </div>
       <audio id="backgroundAudio" loop>
         <source src={`${process.env.PUBLIC_URL}/${selectedAudio}`} type="audio/mpeg" />

@@ -6,26 +6,28 @@ import './ViewsSide.css';
 
 const CampusView = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [buttonClicked, setButtonClicked] = useState(false);
 
   const popupRef = useRef(null);
 
   useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (popupRef.current && !popupRef.current.contains(e.target) && !buttonClicked) {
+        setIsPopupOpen(false);
+      }
+      setButtonClicked(false);
+    };
+
     document.addEventListener('click', handleClickOutside);
 
     return () => {
       document.removeEventListener('click', handleClickOutside);
     };
-  }, []);
+  }, [buttonClicked]);
 
-  const handleUpdates = (e) => {
-    e.stopPropagation();
+  const handleUpdates = () => {
     setIsPopupOpen(!isPopupOpen);
-  };
-
-  const handleClickOutside = (e) => {
-    if (popupRef.current && !popupRef.current.contains(e.target)) {
-      setIsPopupOpen(false);
-    }
+    setButtonClicked(true);
   };
 
   // Mock class and grade update data

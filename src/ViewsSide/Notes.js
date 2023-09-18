@@ -11,6 +11,7 @@ const NoteView = () => {
   const [note, setNote] = useState('');
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [title, setTitle] = useState('');
+  const [buttonClicked, setButtonClicked] = useState(false);
 
   const popupRef = useRef(null);
 
@@ -19,13 +20,22 @@ const NoteView = () => {
     if (savedNote) {
       setNote(savedNote);
     }
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (popupRef.current && !popupRef.current.contains(e.target) && !buttonClicked) {
+        setIsPopupOpen(false);
+      }
+      setButtonClicked(false);
+    };
 
     document.addEventListener('click', handleClickOutside);
 
     return () => {
       document.removeEventListener('click', handleClickOutside);
     };
-  }, []);
+  }, [buttonClicked]);
 
   const handleNoteChange = (e) => {
     const updatedNote = e.target.value;
@@ -34,8 +44,8 @@ const NoteView = () => {
   };
 
   const handleDownload = (e) => {
-    e.stopPropagation();
     setIsPopupOpen(!isPopupOpen);
+    setButtonClicked(true);
   };
 
   const closePopup = () => {

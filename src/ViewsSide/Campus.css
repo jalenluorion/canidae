@@ -25,13 +25,13 @@
 
 /* Styles for links within class cards */
 .class-card a {
-  color: #3498db; /* Change the color to a softer shade of blue */
+  color: #038aff  ; /* Change the color to a softer shade of blue */
   text-decoration: none;
 }
 
 .class-card a:hover {
   text-decoration: underline;
-  color: #007c91;
+  color: #2d55ff  ;
 }
 
   .grade {
@@ -45,12 +45,12 @@
     .letter-grade {
       font-size: 30px;
       font-weight: bold;
-      color: #3498db; /* Change the color to a softer shade of blue */
+      color: #038aff ; /* Change the color to a softer shade of blue */
     }
 
     .percent {
       font-size: 16px;
-      color: #3498db; /* Change the color to a softer shade of blue */
+      color: #038aff  ; /* Change the color to a softer shade of blue */
     }
 
   .class-details {
@@ -63,7 +63,7 @@
     }
 
       .email-link {
-        color: #3498db; /* Change the color to a softer shade of blue */
+        color: #038aff; /* Change the color to a softer shade of blue */
         text-decoration: none;
         font-weight: bold;
         font-size: 14px;

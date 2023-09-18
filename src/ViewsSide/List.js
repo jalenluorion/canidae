@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, forwardRef } from 'react';
 import Cookies from 'js-cookie';
 import DatePicker from 'react-datepicker';
 import { format, isWithinInterval, addDays, startOfToday, isToday, isTomorrow } from 'date-fns';
@@ -27,8 +27,9 @@ const ListView = () => {
   const [dueDate, setDueDate] = useState(null); // State for due date and time
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
+  const [buttonClicked, setButtonClicked] = useState(false);
 
-  const menuRef = useRef(null);
+  const popupRef = useRef(null);
   const datePickerRef = useRef(null);
 
   useEffect(() => {
@@ -44,18 +45,19 @@ const ListView = () => {
   }, [tasks]);
 
   useEffect(() => {
-    document.body.addEventListener('click', handleDocumentClick);
-    return () => {
-      document.body.removeEventListener('click', handleDocumentClick);
+    const handleClickOutside = (e) => {
+      if (popupRef.current && !popupRef.current.contains(e.target) && !buttonClicked) {
+        setIsMenuOpen(false);
+      }
+      setButtonClicked(false);
     };
-  }, []);
 
-  // This function will close the menu if a click occurs outside of it
-  const handleDocumentClick = (e) => {
-    if (menuRef.current && !menuRef.current.contains(e.target)) {
-      setIsMenuOpen(false);
-    }
-  };
+    document.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [buttonClicked]);
 
   const handleToggleComplete = (taskId) => {
     setTasks((prevTasks) =>
@@ -191,8 +193,8 @@ const ListView = () => {
   };
 
   const toggleMenu = (e) => {
-    e.stopPropagation(); // Prevent the click from propagating to the body
     setIsMenuOpen(!isMenuOpen);
+    setButtonClicked(true);
   };
 
   const isTaskOverdue = (dueDate) => {
@@ -216,7 +218,7 @@ const ListView = () => {
     }
   };
 
-  const CustomDatePickerInput = ({ value, onClick }) => {
+  const CustomDatePickerInput = forwardRef(({ value, onClick }, ref) => {
     const formattedValue = value ? format(new Date(value), 'MMM. dd, h:mm aa') : 'No Due Date';
   
     const handleDateButtonClick = () => {
@@ -233,7 +235,7 @@ const ListView = () => {
         {formattedValue}
       </button>
     );
-  };
+  });
   
 
   return (
@@ -249,7 +251,7 @@ const ListView = () => {
         </div>
 
         {isMenuOpen && (
-          <div ref={menuRef} className="menu-dropdown orange-accent">
+          <div ref={popupRef} className="menu-dropdown orange-accent">
             <button onClick={handleMarkAllCompleted}>Mark All as Completed</button>
             <button onClick={handleClearCompleted}>Clear Completed</button>
             <button onClick={handleSortByPeriod}>Sort by Period</button>

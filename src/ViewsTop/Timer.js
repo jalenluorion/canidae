@@ -12,6 +12,7 @@ const TimerView = () => {
   const [isPaused, setIsPaused] = useState(true);
   const [isTimePickerOpen, setTimePickerOpen] = useState(false);
   const [currentMinutes, setCurrentMinutes] = useState('45');
+  const [buttonClicked, setButtonClicked] = useState(false);
 
   const menuRef = useRef(null);
 
@@ -59,17 +60,19 @@ const TimerView = () => {
   }, [isPaused, studyTime, breakTime, timerLabel]);
 
   useEffect(() => {
-    document.body.addEventListener('click', handleDocumentClick);
-    return () => {
-      document.body.removeEventListener('click', handleDocumentClick);
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target) && !buttonClicked) {
+        setTimePickerOpen(false);
+      }
+      setButtonClicked(false);
     };
-  }, []);
 
-  const handleDocumentClick = (e) => {
-    if (menuRef.current && !menuRef.current.contains(e.target)) {
-      setTimePickerOpen(false);
-    }
-  };
+    document.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [buttonClicked]);
 
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
@@ -99,8 +102,8 @@ const TimerView = () => {
   };
 
   const toggleTimePicker = (e) => {
-    e.stopPropagation();
     if (!isActive) {
+      setButtonClicked(true);
       setTimePickerOpen(!isTimePickerOpen);
     }
   };

@@ -4,6 +4,7 @@
     background: rgba(50, 50, 50, .75);
     backdrop-filter: blur(20px);
     width: 520px;
+    height: 272px;
   }
 
   .settings-tab-bar {
@@ -19,14 +20,16 @@
     border-radius: 5px;
     border: none;
     outline: none;
+    cursor: pointer;
   }
   .tab-button:hover {
-    background-color: rgba(255, 255, 255, 0.3);
+    background:rgba(100, 100, 100, 0.8);
 
   }
   .settings-content {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
   }
   .background-button-container {
     display: flex;
@@ -51,6 +54,7 @@
     overflow: hidden;
     display: flex;
     justify-content: center;
+    cursor: pointer;
   }
   .background-button img {
     border-radius: 10px;
@@ -58,9 +62,40 @@
     width: auto;
     transition: transform 0.2s ease-in-out;
   }
-  .background-button img:hover {
+  .background-button:hover img{
     transform: scale(1.1);
   }
-  .settings-content .selected {
+  .background-button.selected {
     border: 3px solid white;
   }
+  .background-button:hover {
+    border: 3px solid gray;
+  }
+  
+
+
+  .audio-button {
+    padding: 10px;
+    margin: 5px;
+    background: transparent;
+    border: 3px solid transparent;
+    outline: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* To align the icon and label */
+    flex: 1;
+    cursor: pointer;
+  }
+  
+  .audio-button:hover {
+    border: 3px solid gray;
+  }
+  
+  .audio-button.selected {
+    border: 3px solid white;
+  }
+  
+  

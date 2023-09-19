@@ -26,6 +26,7 @@ const options = {
     { value: 'none', label: 'None' },
     { value: 'rain.mp3', label: 'Rain' },
     { value: 'fireplace.mp3', label: 'Fireplace' },
+    { value: 'lofi', label: 'Lofi Hip Hop' }
   ],
 };
 
@@ -44,42 +45,87 @@ function App() {
   const [showTimerView, setShowTimerView] = useState(false);
   const [showSettingsView, setShowSettingsView] = useState(false);
 
+  const [playLofi, setPlayLofi] = useState(false);
+  const [lofiStatus, setLofiStatus] = useState(false);
+
+  const [activeTab, setActiveTab] = useState('backgrounds');
+
   useEffect(() => {
     const audioElement = document.getElementById('backgroundAudio');
-
-    if (selectedAudio !== 'none') {
+    if (selectedAudio === 'lofi') {
+      audioElement.pause();
+      setIsRainPlaying(false);
+      setIsFirePlaying(false);
+      setPlayLofi(true);
+    } else if (selectedAudio !== 'none') {
       audioElement.src = `${process.env.PUBLIC_URL}/${selectedAudio}`;
       audioElement.play();
 
       setIsRainPlaying(selectedAudio === 'rain.mp3');
       setIsFirePlaying(selectedAudio === 'fireplace.mp3');
+      setPlayLofi(false);
+      setLofiStatus(false);
     } else {
       audioElement.pause();
       setIsRainPlaying(false);
       setIsFirePlaying(false);
+      setPlayLofi(false);
+      setLofiStatus(false);
     }
   }, [selectedAudio]);
 
+  let videoOpts;
+
+  if (selectedBackground === 'jfKfPfyJRdk') {
+    videoOpts = {
+      playerVars: {
+        autoplay: 1,
+        controls: 0,
+        mute: 1,
+        playsinline: 1,
+      },
+    };
+  } else {
+    videoOpts = {
+      playerVars: {
+        autoplay: 1,
+        controls: 0,
+        loop: 1,
+        mute: 1,
+        playsinline: 1,
+        start: 60,
+      },
+    };
+  }
+
   return (
     <div className="App">
+      {playLofi && (
+        <YouTube
+          className='hidden-player'
+          videoId="jfKfPfyJRdk"
+          opts={{
+            playerVars: {
+              autoplay: 1,
+              controls: 0,
+              mute: 0,
+            },
+          }}
+          onPlay={(event) => {
+            // Video is ready, update the state
+            setLofiStatus(true);
+          }}
+        />
+      )}
       <div className="video-container">
-          <YouTube
-            videoId={selectedBackground}
-            opts={{
-              playerVars: {
-                autoplay: 1,
-                controls: 0,
-                loop: 1,
-                mute: 1,
-                playsinline: 1,
-                start: 60,
-              },
-            }}
-            onPlay={(event) => {
-              // Video is ready, update the state
-              setIsVideoReady(true);
-            }}
-          />
+        <YouTube
+          videoId={selectedBackground}
+          opts={videoOpts}
+          onPlay={(event) => {
+            // Video is ready, update the state
+            setIsVideoReady(true);
+          }}
+        />
         {!isVideoReady && (
           <img
             className="video-thumbnail"
@@ -108,6 +154,9 @@ function App() {
             selectedAudio={selectedAudio}
             setSelectedAudio={setSelectedAudio}
             setVideoReady={setIsVideoReady}
+            lofiStatus={lofiStatus}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
           />}
           <ControlContainer
             showListView={showListView}

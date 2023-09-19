@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './Settings.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faVolumeUp, faVolumeMute, faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 function SettingsView({
   options,
@@ -8,8 +10,19 @@ function SettingsView({
   selectedAudio,
   setSelectedAudio,
   setVideoReady,
+  lofiStatus,
+  activeTab,
+  setActiveTab,
 }) {
-  const [activeTab, setActiveTab] = useState('backgrounds');
+
+  const handleAudioButtonClick = (audioOption) => {
+    if (selectedAudio === audioOption) {
+      // If the clicked audio option is already selected, stop the audio and set it to 'none'
+      setSelectedAudio('none');
+    } else {
+      setSelectedAudio(audioOption);
+    }
+  };
 
   return (
     <div className="settings-container">
@@ -44,7 +57,9 @@ function SettingsView({
                 }`}
                 onClick={() => {
                   setSelectedBackground(background.value);
-                  setVideoReady(false);
+                  if (selectedBackground !== background.value){
+                    setVideoReady(false);
+                  }
                 }}
               >
                 <img
@@ -58,24 +73,37 @@ function SettingsView({
           </div>
         )}
         {activeTab === 'audio' && (
-          <div className="settings-content">
-            {options.audio.map((audioOption, index) => (
+        <div className="settings-content">
+          {options.audio.map((audioOption, index) => (
+            audioOption.value !== 'none' && ( // Skip rendering 'None' as a button
               <button
                 key={index}
-                className={`picker-button ${
-                  selectedAudio === audioOption.value ? 'selected1' : ''
+                className={`audio-button ${
+                  selectedAudio === audioOption.value ? 'selected' : ''
                 }`}
-                onClick={() => {
-                  setSelectedAudio(audioOption.value);
-                }}
+                onClick={() => handleAudioButtonClick(audioOption.value)}
               >
+                {selectedAudio === 'lofi' && 'lofi' === audioOption.value && !lofiStatus ? (
+                  <FontAwesomeIcon
+                    icon={faSpinner} // Display buffering icon
+                    className="audio-icon"
+                    spin // Add spin animation to the buffering icon
+                  />
+                ) : (
+                  <FontAwesomeIcon
+                    icon={selectedAudio === audioOption.value ? faVolumeUp : faVolumeMute}
+                    className="audio-icon"
+                  />
+                )}
                 {audioOption.label}
               </button>
-            ))}
-          </div>
-        )}
+            )
+          ))}
+        </div>
+      )}
     </div>
   );
 }
+
 
 export default SettingsView;

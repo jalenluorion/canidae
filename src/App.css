@@ -167,7 +167,9 @@
   transform: translateX(-50%);
 
 }
-
+.hidden-player {
+  display: none;
+} 
 @media (min-aspect-ratio: 16/9) {
   .video-container iframe {
     height: 300%

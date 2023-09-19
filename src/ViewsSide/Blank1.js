@@ -73,13 +73,6 @@ const BlankView = () => {
     setTitle('');
   };
 
-  const handleClickOutside = (e) => {
-    if (popupRef.current && !popupRef.current.contains(e.target)) {
-      setIsPopupOpen(false);
-      setTitle('');
-    }
-  };
-
   return (
     <div className="container">
       <div className="top-bar">

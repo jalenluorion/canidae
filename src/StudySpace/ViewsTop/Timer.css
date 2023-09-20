@@ -9,7 +9,7 @@
   .menu-dropdown-top input[type="number"] {
     padding: 8px;
   border: none;
-  border-radius: 3px;
+  border-radius: 5px;
   }
   
   .timer-display {
@@ -38,7 +38,6 @@
   color: red;
   height: 30px;
   width: 30px;
-  cursor: pointer;
   font-size: 18px;
 }
 .btn:hover {

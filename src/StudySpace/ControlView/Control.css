@@ -6,6 +6,7 @@
   backdrop-filter: blur(20px);
   padding: 5px;
   z-index: 2;
+  width: 490px;
 }
 
 .button-row {
@@ -15,23 +16,27 @@
 
 .control-title {
   display: flex;
-  justify-content: space-between;
+  gap: 5px;
   color: white;
   margin: 0px 5px;
 }
 
 .control-title h1{
   margin: 0px;
-  font-size: 25px;
+  font-size: 24px;
+  flex: 1;
+  text-align: center;
+  align-self: center;
 }
 
 .control-title button {
   background: none;
   border: none;
   outline: none;
-  cursor: pointer;
   font-size: 20px;
   color: white;
+  padding-left: 2px;
+  padding-right: 2px;
 }
 
 .control-title button:hover {
@@ -64,7 +69,6 @@
   align-items: center;
   font-size: 30px;
   color: white;
-  cursor: pointer;
   transition: transform 0.2s ease-in-out, background 0.3s ease-in-out;
 }
 

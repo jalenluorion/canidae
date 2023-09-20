@@ -9,8 +9,7 @@ function SettingsView({
   setSelectedBackground,
   selectedAudio,
   setSelectedAudio,
-  setVideoReady,
-  lofiStatus,
+  audioReady,
   activeTab,
   setActiveTab,
 }) {
@@ -18,7 +17,7 @@ function SettingsView({
   const handleAudioButtonClick = (audioOption) => {
     if (selectedAudio === audioOption) {
       // If the clicked audio option is already selected, stop the audio and set it to 'none'
-      setSelectedAudio('none');
+      setSelectedAudio({ value: 'none', label: 'None' });
     } else {
       setSelectedAudio(audioOption);
     }
@@ -53,13 +52,10 @@ function SettingsView({
               <button
                 key={index}
                 className={`background-button ${
-                  selectedBackground === background.value ? 'selected' : ''
+                  selectedBackground === background ? 'selected' : ''
                 }`}
                 onClick={() => {
-                  setSelectedBackground(background.value);
-                  if (selectedBackground !== background.value){
-                    setVideoReady(false);
-                  }
+                  setSelectedBackground(background);
                 }}
               >
                 <img
@@ -79,11 +75,11 @@ function SettingsView({
               <button
                 key={index}
                 className={`audio-button ${
-                  selectedAudio === audioOption.value ? 'selected' : ''
+                  selectedAudio === audioOption ? 'selected' : ''
                 }`}
-                onClick={() => handleAudioButtonClick(audioOption.value)}
+                onClick={() => handleAudioButtonClick(audioOption)}
               >
-                {selectedAudio === 'lofi' && 'lofi' === audioOption.value && !lofiStatus ? (
+                {selectedAudio === audioOption && !audioReady ? (
                   <FontAwesomeIcon
                     icon={faSpinner} // Display buffering icon
                     className="audio-icon"
@@ -91,7 +87,7 @@ function SettingsView({
                   />
                 ) : (
                   <FontAwesomeIcon
-                    icon={selectedAudio === audioOption.value ? faVolumeUp : faVolumeMute}
+                    icon={selectedAudio === audioOption ? faVolumeUp : faVolumeMute}
                     className="audio-icon"
                   />
                 )}

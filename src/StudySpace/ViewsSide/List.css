@@ -46,7 +46,6 @@
         background-color: transparent;
         border: none;
         color: orange;
-        cursor: pointer;
         margin-right: 10px;
       }
 
@@ -128,8 +127,10 @@
         border: none;
         border-radius: 5px;
         height: 30px; /* Adjust button height */
-        cursor: pointer;
         white-space: nowrap;
+      }
+      .preset-buttons button:hover {
+        background-color: #e69900; /* Change button hover color */
       }
     
     .date-picker {
@@ -179,6 +180,9 @@
       border: none;
       outline: none;
     }
+    .date-button:hover {
+      background-color: #e69900; /* Change button hover color */
+    }
 
     .period-select {
       font-size: 16px;
@@ -206,7 +210,6 @@
       color: orange;
       height: 25px;
       width: 25px;
-      cursor: pointer;
       font-size: 18px;
     }
     .add-button:hover {

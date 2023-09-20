@@ -20,11 +20,9 @@
     border-radius: 5px;
     border: none;
     outline: none;
-    cursor: pointer;
   }
   .tab-button:hover {
     background:rgba(100, 100, 100, 0.8);
-
   }
   .settings-content {
     display: flex;
@@ -54,7 +52,6 @@
     overflow: hidden;
     display: flex;
     justify-content: center;
-    cursor: pointer;
   }
   .background-button img {
     border-radius: 10px;
@@ -65,19 +62,20 @@
   .background-button:hover img{
     transform: scale(1.1);
   }
-  .background-button.selected {
-    border: 3px solid white;
-  }
   .background-button:hover {
     border: 3px solid gray;
   }
+  .background-button.selected {
+    border: 3px solid white;
+  }
+
   
 
 
   .audio-button {
     padding: 10px;
     margin: 5px;
-    background: transparent;
+    background-color: rgba(255, 255, 255, 0.1);
     border: 3px solid transparent;
     outline: none;
     border-radius: 10px;
@@ -87,7 +85,6 @@
     align-items: center;
     justify-content: space-between; /* To align the icon and label */
     flex: 1;
-    cursor: pointer;
   }
   
   .audio-button:hover {

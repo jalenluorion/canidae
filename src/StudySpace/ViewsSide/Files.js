@@ -7,7 +7,7 @@ import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import './Notes.css';
 import './ViewsSide.css'
 
-const BlankView = () => {
+const FilesView = () => {
   const [note, setNote] = useState('');
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [title, setTitle] = useState('');
@@ -78,7 +78,7 @@ const BlankView = () => {
       <div className="top-bar">
         <div className="title">
           <h1>
-            Launch Airstrike
+            Files (Coming Soon)
           </h1>
           <button className="menu-icon" onClick={handleDownload} style={{ cursor: `pointer` }}>
             <FontAwesomeIcon icon={faDownload} />
@@ -109,4 +109,4 @@ const BlankView = () => {
   );
 };
 
-export default BlankView;
+export default FilesView;

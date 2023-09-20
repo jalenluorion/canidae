@@ -5,7 +5,7 @@ import { options, views } from './Data';
 
 function App() {
     return (
-        <StudySpace 
+        <StudySpace
             options={options}
             views={views}
         />

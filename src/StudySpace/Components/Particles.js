@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 // Rain Particles
 function RainParticles() {
   const [particles, setParticles] = useState([]);
-  
+
   useEffect(() => {
     const timer = setInterval(() => {
       setParticles(prevParticles => {
@@ -18,10 +18,10 @@ function RainParticles() {
         return updatedParticles.map(particle => ({ ...particle, y: particle.y + particle.speed }));
       });
     }, 10);
-    
+
     return () => clearInterval(timer);
   }, []);
-  
+
   return (
     <div style={{ position: 'fixed', width: '100%', height: '100%', pointerEvents: 'none' }}>
       {particles.map(particle => (
@@ -46,7 +46,7 @@ function RainParticles() {
 // Fire Particles
 function FireParticles() {
   const [particles, setParticles] = useState([]);
-  
+
   useEffect(() => {
     const timer = setInterval(() => {
       setParticles(prevParticles => {
@@ -65,10 +65,10 @@ function FireParticles() {
         }));
       });
     }, 10);
-    
+
     return () => clearInterval(timer);
   }, []);
-  
+
   return (
     <div style={{ position: 'fixed', width: '100%', height: '100%', pointerEvents: 'none' }}>
       {particles.map(particle => (

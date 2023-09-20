@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { RainParticles, FireParticles } from './Components/Particles';
 
-import ControlContainer from './ControlView/Control'; 
-import YouTube from 'react-youtube'; 
+import ControlContainer from './ControlView/Control';
+import YouTube from 'react-youtube';
 
 import './Space.css';
 
@@ -11,21 +11,21 @@ function StudySpace({
   views,
 }) {
   const [selectedBackground, setSelectedBackground] = useState(options.backgrounds[0]);
-  const [selectedAudio, setSelectedAudio] = useState({value: 'none', label: 'None'});
+  const [videoReady, setVideoReady] = useState(false);
+
+  const [selectedAudio, setSelectedAudio] = useState({ value: 'none', label: 'None' });
+  const [playAudio, setPlayAudio] = useState(false);
+  const [audioReady, setAudioReady] = useState(false);
 
   const [isRainPlaying, setIsRainPlaying] = useState(false);
   const [isFirePlaying, setIsFirePlaying] = useState(false);
-  const [videoReady, setVideoReady] = useState(false); // Track if the video is ready
 
   const [showLeft1View, setShowLeft1View] = useState(false);
-  const [showRight1View, setShowRight1View] = useState(false);
   const [showLeft2View, setShowLeft2View] = useState(false);
-  const [showRight2View, setShowRight2View] = useState(false);
   const [showTopView, setShowTopView] = useState(false);
+  const [showRight1View, setShowRight1View] = useState(false);
+  const [showRight2View, setShowRight2View] = useState(false);
   const [showFarRightView, setShowFarRightView] = useState(false);
-
-  const [playAudio, setPlayAudio] = useState(false);
-  const [audioReady, setAudioReady] = useState(false);
 
   const [activeTab, setActiveTab] = useState('backgrounds');
 

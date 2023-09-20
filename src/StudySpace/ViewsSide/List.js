@@ -220,7 +220,7 @@ const ListView = () => {
 
   const CustomDatePickerInput = forwardRef(({ value, onClick }, ref) => {
     const formattedValue = value ? format(new Date(value), 'MMM. dd, h:mm aa') : 'No Due Date';
-  
+
     const handleDateButtonClick = () => {
       // Check if the date picker is open
       if (datePickerRef.current && datePickerRef.current.state.open) {
@@ -229,14 +229,14 @@ const ListView = () => {
         onClick(); // Open the date picker if it's closed
       }
     };
-  
+
     return (
       <button className="date-button react-datepicker-ignore-onclickoutside" onClick={handleDateButtonClick}>
         {formattedValue}
       </button>
     );
   });
-  
+
 
   return (
     <div className="container">

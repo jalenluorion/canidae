@@ -21,7 +21,12 @@ const options = {
     audio: [
       { value: 'yIQd2Ya0Ziw', label: 'Rain' },
       { value: 'qsOUv9EzKsg', label: 'Fireplace' },
-      { value: 'jfKfPfyJRdk', label: 'Lofi Hip Hop' }
+      { value: 'jfKfPfyJRdk', label: 'Lo-fi' },
+      { value: 'WPni755-Krg', label: 'Ambience' },
+      { value: 'BMuknRb7woc', label: 'Classical' },
+      { value: '3NycM9lYdRI', label: 'Piano' },
+      { value: 'Y-JQ-RCyPpQ', label: 'Jazz' },
+      { value: 'LVbUNRwpXzw', label: 'Techno' },
     ],
 };
 const views = {

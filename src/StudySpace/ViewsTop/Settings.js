@@ -45,15 +45,14 @@ function SettingsView({
           Audio
         </button>
       </div>
-        {activeTab === 'backgrounds' && (
-          <div className="settings-content">
-            {options.backgrounds.map((background, index) => (
-              <div className='background-button-container'>
+      {activeTab === 'backgrounds' && (
+        <div className="settings-content">
+          {options.backgrounds.map((background, index) => (
+            <div className='background-button-container'>
               <button
                 key={index}
-                className={`background-button ${
-                  selectedBackground === background ? 'selected' : ''
-                }`}
+                className={`background-button ${selectedBackground === background ? 'selected' : ''
+                  }`}
                 onClick={() => {
                   setSelectedBackground(background);
                 }}
@@ -64,19 +63,18 @@ function SettingsView({
                 />
               </button>
               <div className="background-label">{background.label}</div>
-              </div>
-            ))}
-          </div>
-        )}
-        {activeTab === 'audio' && (
+            </div>
+          ))}
+        </div>
+      )}
+      {activeTab === 'audio' && (
         <div className="settings-content">
           {options.audio.map((audioOption, index) => (
             audioOption.value !== 'none' && ( // Skip rendering 'None' as a button
               <button
                 key={index}
-                className={`audio-button ${
-                  selectedAudio === audioOption ? 'selected' : ''
-                }`}
+                className={`audio-button ${selectedAudio === audioOption ? 'selected' : ''
+                  }`}
                 onClick={() => handleAudioButtonClick(audioOption)}
               >
                 {selectedAudio === audioOption && !audioReady ? (

@@ -44,13 +44,13 @@
 }
 
 .control-title button {
+  align-self: center;
   background: none;
   border: none;
   outline: none;
   font-size: 20px;
   color: white;
-  padding-left: 2px;
-  padding-right: 2px;
+  padding: 3px 2px;
 }
 
 .control-title button:hover {

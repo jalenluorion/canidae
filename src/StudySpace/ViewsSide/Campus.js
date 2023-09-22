@@ -172,10 +172,10 @@ const CampusView = () => {
   };
 
   return (
-    <div className="container nobottom">
+    <div className="container nobottom slide-left">
       <div className="top-bar">
         <div className="title">
-          <h1>Classes</h1>
+          <h1>My Classes</h1>
           <button className="menu-icon" onClick={handleUpdates} style={{ cursor: 'pointer' }}>
             <FontAwesomeIcon icon={faBell} />
           </button>

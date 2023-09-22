@@ -239,7 +239,7 @@ const ListView = () => {
 
 
   return (
-    <div className="container">
+    <div className="container slide-right">
       <div className="top-bar">
         <div className="title">
           <h1>

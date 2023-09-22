@@ -8,6 +8,30 @@
     background: rgba(50, 50, 50, .75);
     backdrop-filter: blur(20px);
   }
+
+  .slide-right {
+    animation: slide-in-right 0.1s ease-out;
+  }
+  .slide-left {
+    animation: slide-in-left 0.1s ease-out;
+  }
+  
+  @keyframes slide-in-right {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+  @keyframes slide-in-left {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
   
   .top-bar {
     position:relative;

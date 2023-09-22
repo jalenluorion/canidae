@@ -3,18 +3,48 @@ import './ViewsTop.css';
 import './Timer.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faPause, faStop, faHourglassStart } from '@fortawesome/free-solid-svg-icons';
+import Cookies from 'js-cookie';
 
 const TimerView = () => {
-  const [studyTime, setStudyTime] = useState(2700); // Initial study time in seconds (25 minutes)
+  const [studyTime, setStudyTime] = useState(1500); // Initial study time in seconds (25 minutes)
   const [breakTime, setbreakTime] = useState(300); // Initial break time in seconds (5 minutes)
   const [timerLabel, setTimerLabel] = useState('Study');
   const [isActive, setIsActive] = useState(false);
   const [isPaused, setIsPaused] = useState(true);
   const [isTimePickerOpen, setTimePickerOpen] = useState(false);
-  const [currentMinutes, setCurrentMinutes] = useState('45');
+  const [currentMinutes, setCurrentMinutes] = useState('25');
   const [buttonClicked, setButtonClicked] = useState(false);
 
   const menuRef = useRef(null);
+
+  useEffect(() => {
+    const savedTimerState = Cookies.get('timerState');
+    if (savedTimerState === "paused") {
+      setIsActive(true);
+      setIsPaused(true);
+    } else if (savedTimerState === "active") {
+      setIsActive(true);
+      setIsPaused(false);
+    } else {
+      setIsActive(false);
+      setIsPaused(true);
+    }
+
+    const savedStudyTime = parseInt(Cookies.get('studyTime'), 10);
+    if (!isNaN(savedStudyTime)) {
+      setStudyTime(savedStudyTime);
+    }
+
+    const savedBreakTime = parseInt(Cookies.get('breakTime'), 10);
+    if (!isNaN(savedBreakTime)) {
+      setbreakTime(savedBreakTime);
+    }
+    
+    const savedTimerLabel = Cookies.get('timerLabel');
+    if (savedTimerLabel === 'Study' || savedTimerLabel === 'Break') {
+      setTimerLabel(savedTimerLabel);
+    }
+  }, []);
 
   useEffect(() => {
     let interval;
@@ -40,7 +70,7 @@ const TimerView = () => {
         alert("Your study timer has finished. Go take a break!");
         setTimerLabel('Break');
         setCurrentMinutes(String(breakTime / 60));
-        setStudyTime(2700);
+        setStudyTime(1500);
       }, 100); // Delay the alert for 1 second after reaching zero
     }
 
@@ -56,8 +86,12 @@ const TimerView = () => {
       }, 100); // Delay the alert for 1 second after reaching zero
     }
 
+    Cookies.set('timerState', isActive ? (isPaused ? 'paused' : 'active') : 'inactive', { expires: 7 });
+    Cookies.set('studyTime', studyTime.toString(), { expires: 7 });
+    Cookies.set('breakTime', breakTime.toString(), { expires: 7 });
+    Cookies.set('timerLabel', timerLabel, { expires: 7 });
     return () => clearInterval(interval);
-  }, [isPaused, studyTime, breakTime, timerLabel]);
+  }, [isActive, isPaused, studyTime, breakTime, timerLabel]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -96,8 +130,8 @@ const TimerView = () => {
       setbreakTime(300);
       setCurrentMinutes('5');
     } else if (timerLabel === 'Study') {
-      setCurrentMinutes('45');
-      setStudyTime(2700);
+      setCurrentMinutes('25');
+      setStudyTime(1500);
     }
   };
 
@@ -159,10 +193,10 @@ const TimerView = () => {
   );
 
   return (
-    <div className="container-top nobottom-top">
+    <div className="container-top nobottom-top slide-bottom">
       <div className="top-bar">
-        <div className="title">
-          <h1>Timer</h1>
+        <div className="title centered">
+          <h1>Pomodoro Timer</h1>
         </div>
         {isTimePickerOpen && (
           <div ref={menuRef} className="menu-dropdown-top red-accent">

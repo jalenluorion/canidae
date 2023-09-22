@@ -14,6 +14,20 @@
   align-items: center;
 }
 
+.button-row {
+  transition: max-height 0.1s ease-in-out, opacity 0.1s ease-in-out;
+  overflow: hidden;
+  max-height: 70px; /* Adjust this value to accommodate your content */
+  opacity: 1;
+}
+
+.button-row-hidden {
+  transition: max-height 0.1s ease-in-out, opacity 0.1s ease-in-out;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+
 .control-title {
   display: flex;
   gap: 5px;

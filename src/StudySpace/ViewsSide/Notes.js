@@ -104,11 +104,11 @@ const NoteView = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container slide-left">
       <div className="top-bar">
         <div className="title">
           <h1>
-            Notes
+            Focused Notes
           </h1>
           <button className="menu-icon" onClick={handleDownload} style={{ cursor: `pointer` }}>
             <FontAwesomeIcon icon={faDownload} />

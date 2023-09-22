@@ -123,8 +123,7 @@ function ControlContainer({
                     <FontAwesomeIcon icon={isFullScreen ? faCompress : faExpand} fixedWidth />
                 </button>
             </div>
-            {buttonRowDisplayed && (
-                <div className="button-row">
+                <div className={`button-row ${buttonRowDisplayed ? '' : 'button-row-hidden'}`}>
                     <button className="control-button button4">
                         <FontAwesomeIcon icon={views.farLeftView.icon} />
                         <span className="button-label">{views.farLeftView.label}</span>
@@ -158,7 +157,6 @@ function ControlContainer({
                         <span className="button-label">{views.farRightView.label}</span>
                     </button>
                 </div>
-            )}
         </div>
     );
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './Settings.css';
 import { CSSTransition } from 'react-transition-group';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -6,6 +6,7 @@ import { faVolumeUp, faVolumeMute, faSpinner } from '@fortawesome/free-solid-svg
 
 function SettingsView({
   visible,
+  setVisible,
   options,
   selectedBackground,
   setSelectedBackground,
@@ -15,6 +16,24 @@ function SettingsView({
   activeTab,
   setActiveTab,
 }) {
+  const containerRef = useRef(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (containerRef.current && !containerRef.current.contains(event.target) && mounted) {
+          setVisible(false);
+        } else {
+          setMounted(true);
+        }
+      };
+
+      document.addEventListener('click', handleClickOutside);
+
+      return () => {
+        document.removeEventListener('click', handleClickOutside);
+      };
+  }, [containerRef, setVisible, mounted]);
 
   const handleAudioButtonClick = (audioOption) => {
     if (selectedAudio === audioOption) {
@@ -31,82 +50,84 @@ function SettingsView({
       timeout={200}
       classNames="alert"
       unmountOnExit
+      onEntering={() => {setMounted(false);}}
     >
-      <div className="settings-container">
-        <div className="settings-tab-bar">
-          <button
-            className={`tab-button ${activeTab === 'backgrounds' ? 'active' : ''}`}
-            onClick={() => setActiveTab('backgrounds')}
-            style={{
-              backgroundColor: activeTab === 'backgrounds' ? 'purple' : ''
-            }}
-          >
-            Backgrounds
-          </button>
-          <button
-            className={`tab-button ${activeTab === 'audio' ? 'active' : ''}`}
-            onClick={() => setActiveTab('audio')}
-            style={{
-              backgroundColor: activeTab === 'audio' ? 'purple' : ''
-            }}
-          >
-            Audio
-          </button>
+      <div className="settings-view">
+        <div className="settings-container" ref={containerRef}>
+          <div className="settings-tab-bar">
+            <button
+              className={`tab-button ${activeTab === 'backgrounds' ? 'active' : ''}`}
+              onClick={() => setActiveTab('backgrounds')}
+              style={{
+                backgroundColor: activeTab === 'backgrounds' ? 'purple' : ''
+              }}
+            >
+              Backgrounds
+            </button>
+            <button
+              className={`tab-button ${activeTab === 'audio' ? 'active' : ''}`}
+              onClick={() => setActiveTab('audio')}
+              style={{
+                backgroundColor: activeTab === 'audio' ? 'purple' : ''
+              }}
+            >
+              Audio
+            </button>
+          </div>
+          {activeTab === 'backgrounds' && (
+            <div className="settings-content">
+              {options.backgrounds.map((background, index) => (
+                <div className='background-button-container'>
+                  <button
+                    key={index}
+                    className={`background-button ${selectedBackground === background ? 'selected' : ''
+                      }`}
+                    onClick={() => {
+                      setSelectedBackground(background);
+                    }}
+                  >
+                    <img
+                      src={`https://img.youtube.com/vi/${background.value}/maxresdefault.jpg`}
+                      alt={background.label}
+                    />
+                  </button>
+                  <div className="background-label">{background.label}</div>
+                </div>
+              ))}
+            </div>
+          )}
+          {activeTab === 'audio' && (
+            <div className="settings-content">
+              {options.audio.map((audioOption, index) => (
+                audioOption.value !== 'none' && ( // Skip rendering 'None' as a button
+                  <button
+                    key={index}
+                    className={`audio-button ${selectedAudio === audioOption ? 'selected' : ''
+                      }`}
+                    onClick={() => handleAudioButtonClick(audioOption)}
+                  >
+                    {selectedAudio === audioOption && !audioReady ? (
+                      <FontAwesomeIcon
+                        icon={faSpinner} // Display buffering icon
+                        className="audio-icon"
+                        spin // Add spin animation to the buffering icon
+                      />
+                    ) : (
+                      <FontAwesomeIcon
+                        icon={selectedAudio === audioOption ? faVolumeUp : faVolumeMute}
+                        className="audio-icon"
+                      />
+                    )}
+                    {audioOption.label}
+                  </button>
+                )
+              ))}
+            </div>
+          )}
         </div>
-        {activeTab === 'backgrounds' && (
-          <div className="settings-content">
-            {options.backgrounds.map((background, index) => (
-              <div className='background-button-container'>
-                <button
-                  key={index}
-                  className={`background-button ${selectedBackground === background ? 'selected' : ''
-                    }`}
-                  onClick={() => {
-                    setSelectedBackground(background);
-                  }}
-                >
-                  <img
-                    src={`https://img.youtube.com/vi/${background.value}/maxresdefault.jpg`}
-                    alt={background.label}
-                  />
-                </button>
-                <div className="background-label">{background.label}</div>
-              </div>
-            ))}
-          </div>
-        )}
-        {activeTab === 'audio' && (
-          <div className="settings-content">
-            {options.audio.map((audioOption, index) => (
-              audioOption.value !== 'none' && ( // Skip rendering 'None' as a button
-                <button
-                  key={index}
-                  className={`audio-button ${selectedAudio === audioOption ? 'selected' : ''
-                    }`}
-                  onClick={() => handleAudioButtonClick(audioOption)}
-                >
-                  {selectedAudio === audioOption && !audioReady ? (
-                    <FontAwesomeIcon
-                      icon={faSpinner} // Display buffering icon
-                      className="audio-icon"
-                      spin // Add spin animation to the buffering icon
-                    />
-                  ) : (
-                    <FontAwesomeIcon
-                      icon={selectedAudio === audioOption ? faVolumeUp : faVolumeMute}
-                      className="audio-icon"
-                    />
-                  )}
-                  {audioOption.label}
-                </button>
-              )
-            ))}
-          </div>
-        )}
       </div>
     </CSSTransition>
   );
 }
-
 
 export default SettingsView;

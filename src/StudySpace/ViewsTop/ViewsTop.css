@@ -23,22 +23,36 @@
     transform: translateY(-150%);
     transition: transform 0.2s ease-in-out;
   }
-  .alert-enter {
+  .alert-enter .settings-container{
     opacity: 0;
     transform: scale(0.9);
   }
-  .alert-enter-active {
+  .alert-enter-active .settings-container{
     opacity: 1;
     transform: translateX(0);
     transition: opacity 200ms, transform 200ms;
   }
-  .alert-exit {
+  .alert-exit .settings-container{
     opacity: 1;
   }
-  .alert-exit-active {
+  .alert-exit-active .settings-container{
     opacity: 0;
     transform: scale(0.9);
     transition: opacity 200ms, transform 200ms;
+  }
+  .alert-enter{
+    opacity: 0;
+  }
+  .alert-enter-active{
+    opacity: 1;
+    transition: opacity 200ms;
+  }
+  .alert-exit{
+    opacity: 1;
+  }
+  .alert-exit-active{
+    opacity: 0;
+    transition: opacity 200ms;
   }
 
   .top-bar {

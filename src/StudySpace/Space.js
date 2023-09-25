@@ -118,17 +118,6 @@ function StudySpace({
           <views.topView.component visible={showTopView} />
         </div>
         <div className="control-view">
-          <views.farRightView.component
-            visible={showFarRightView}
-            options={options}
-            selectedBackground={selectedBackground}
-            setSelectedBackground={setSelectedBackground}
-            selectedAudio={selectedAudio}
-            setSelectedAudio={setSelectedAudio}
-            audioReady={audioReady}
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-          />
           <ControlContainer
             views={views}
             showLeft1View={showLeft1View}
@@ -150,6 +139,18 @@ function StudySpace({
           <views.right2View.component visible={showRight2View} />
         </div>
       </div>
+      <views.farRightView.component
+        visible={showFarRightView}
+        setVisible={setShowFarRightView}
+        options={options}
+        selectedBackground={selectedBackground}
+        setSelectedBackground={setSelectedBackground}
+        selectedAudio={selectedAudio}
+        setSelectedAudio={setSelectedAudio}
+        audioReady={audioReady}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+      />
     </div>
   );
 }

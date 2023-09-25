@@ -1,6 +1,7 @@
 .App {
   height: calc(100vh);
 }
+
 .item-container {
   height: calc(100vh);
   overflow: auto;
@@ -64,6 +65,48 @@
   z-index: 2;
 }
 
+
+.particle-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
+.video-container {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100vw;
+  height: 300%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.video-thumbnail {
+  z-index: 2;
+  position: absolute;
+  left: 50%;
+  height: 100vh;
+  width: auto;
+  transform: translateX(-50%);
+}
+
+.hidden-player {
+  display: none;
+}
+
 @media (min-width: 690px) and (max-width: 1199px) {
   .item-container {
     display: flex;
@@ -82,6 +125,11 @@
     /* Place them above center-view */
   }
 
+  .left-view:empty,
+  .right-view:empty {
+    min-height: auto;
+  }
+
   .control-view {
     position: static;
     transform: none;
@@ -98,6 +146,7 @@
     /* Place center-view below left-view and right-view */
   }
 }
+
 @media (max-width: 689px) {
   .item-container {
     display: flex;
@@ -114,6 +163,11 @@
     padding: 5px 5px 5px 5px;
     min-height: 420px;
     /* Place them above center-view */
+  }
+
+  .left-view:empty,
+  .right-view:empty {
+    min-height: auto;
   }
 
   .control-view {
@@ -133,58 +187,24 @@
     /* Place center-view below left-view and right-view */
   }
 }
-.particle-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 2;
-}
 
-.video-container{
-  width: 100vw;
-  height: 100vh;
-  position:absolute;
-  overflow:hidden;
-  z-index: 1;
-}
-
-.video-container iframe {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 100vw;
-  height: 300%;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  z-index: 1;
-}
-.video-thumbnail {
-  z-index: 2;
-  position: absolute;
-  left: 50%;
-  height: 100vh;
-  width: auto;
-  transform: translateX(-50%);
-
-}
-.hidden-player {
-  display: none;
-} 
 @media (min-aspect-ratio: 16/9) {
   .video-container iframe {
     height: 300%
   }
+
   .video-thumbnail {
     width: 100vw;
-    height:auto;
+    height: auto;
     top: 50%;
     transform: translate(-50%, -50%);
   }
 }
+
 @media (max-aspect-ratio: 16/9) {
   .video-container iframe {
     width: 177.78vh;
   }
 }
+
+/* I HATE CSS I HATE CSS */

@@ -78,6 +78,7 @@
     transform: none;
     order: 2;
     flex: calc(50% - 25px);
+    min-height: 420px;
     /* Place them above center-view */
   }
 
@@ -111,6 +112,7 @@
     transform: none;
     order: 2;
     padding: 5px 5px 5px 5px;
+    min-height: 420px;
     /* Place them above center-view */
   }
 

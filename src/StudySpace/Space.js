@@ -111,14 +111,15 @@ function StudySpace({
       </div>
       <div className="item-container">
         <div className="left-view">
-          {showLeft1View && <views.left1View.component />}
-          {showLeft2View && <views.left2View.component />}
+          <views.left1View.component visible={showLeft1View} />
+          <views.left2View.component visible={showLeft2View} />
         </div>
         <div className="top-view">
-          {showTopView && <views.topView.component />}
+          <views.topView.component visible={showTopView} />
         </div>
         <div className="control-view">
-          {showFarRightView && <views.farRightView.component
+          <views.farRightView.component
+            visible={showFarRightView}
             options={options}
             selectedBackground={selectedBackground}
             setSelectedBackground={setSelectedBackground}
@@ -127,7 +128,7 @@ function StudySpace({
             audioReady={audioReady}
             activeTab={activeTab}
             setActiveTab={setActiveTab}
-          />}
+          />
           <ControlContainer
             views={views}
             showLeft1View={showLeft1View}
@@ -145,8 +146,8 @@ function StudySpace({
           />
         </div>
         <div className="right-view">
-          {showRight1View && <views.right1View.component />}
-          {showRight2View && <views.right2View.component />}
+          <views.right1View.component visible={showRight1View} />
+          <views.right2View.component visible={showRight2View} />
         </div>
       </div>
     </div>

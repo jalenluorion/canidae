@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, forwardRef } from 'react';
 import Cookies from 'js-cookie';
 import DatePicker from 'react-datepicker';
 import { format, isWithinInterval, addDays, startOfToday, isToday, isTomorrow } from 'date-fns';
+import { CSSTransition } from 'react-transition-group';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faBars } from '@fortawesome/free-solid-svg-icons';
@@ -20,7 +21,7 @@ const Task = ({ name, completed, period, periodColor, dueDate }) => ({
   dueDate,
 });
 
-const ListView = () => {
+const ListView = ({ visible }) => {
   const [tasks, setTasks] = useState([]);
   const [text, setText] = useState('');
   const [selectedPeriod, setSelectedPeriod] = useState('8');
@@ -239,135 +240,142 @@ const ListView = () => {
 
 
   return (
-    <div className="container slide-right">
-      <div className="top-bar">
-        <div className="title">
-          <h1>
-            To-Do List
-          </h1>
-          <button className="menu-icon" onClick={toggleMenu} style={{ cursor: `pointer` }}>
-            <FontAwesomeIcon icon={faBars} />
-          </button>
-        </div>
-
-        {isMenuOpen && (
-          <div ref={popupRef} className="menu-dropdown orange-accent">
-            <button onClick={handleMarkAllCompleted}>Mark All as Completed</button>
-            <button onClick={handleClearCompleted}>Clear Completed</button>
-            <button onClick={handleSortByPeriod}>Sort by Period</button>
-            <button onClick={handleSortByDueDate}>Sort by Due Date</button>
+    <CSSTransition
+      in={visible}
+      timeout={200}
+      classNames="slide-left"
+      unmountOnExit
+    >
+      <div className="container slide-right" style={{ zIndex: visible ? 1 : 0 }}>
+        <div className="top-bar">
+          <div className="title">
+            <h1>
+              To-Do List
+            </h1>
+            <button className="menu-icon" onClick={toggleMenu} style={{ cursor: `pointer` }}>
+              <FontAwesomeIcon icon={faBars} />
+            </button>
           </div>
-        )}
-      </div>
-      {tasks.length === 0 ? ( // Check if there are no tasks
-        <div className="empty-message main-body">
-          <FontAwesomeIcon icon={faCheckCircle} className="check-icon" />
-          <p>You're all caught up!</p>
-        </div>
-      ) : (
-        <ul className="task-list main-body">
-          {tasks.map((task) => (
-            <li key={task.id} className="task-item">
-              <div className="task-desc">
-                <button
-                  onClick={() => handleToggleComplete(task.id)}
-                  className={`task-button ${task.completed ? 'completed' : ''}`}
-                >
-                  {task.completed ? (
-                    <FontAwesomeIcon icon={faSquareCheck} />
-                  ) : (
-                    <FontAwesomeIcon icon={faSquare} />
-                  )}
-                </button>
-                <p className={`task-name ${task.completed ? 'completed' : ''}`}>
-                  {task.name}
-                </p>
-              </div>
-              <div className="task-tags">
-                <span className={`task-period`} style={{ backgroundColor: task.periodColor, color: task.periodColor === 'yellow' || task.periodColor === 'pink' ? 'black' : 'white' }}>
-                  {task.period === '8' ? 'Other' : `Period ${task.period}`}
-                </span>
-                <span className={`task-due-date ${isTaskOverdue(new Date(task.dueDate)) && task.dueDate ? 'overdue' : ''}`}>
-                  {task.dueDate ? formatDueDate(new Date(task.dueDate)) : "No Due Date"}
-                </span>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
-      <div className="input-container">
-        <input
-          type="text"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          onKeyDown={handleKeyPress}
-          className="task-input"
-          placeholder="Reading Assignment..."
-        />
-        <div className="input-buttons">
-          <DatePicker
-            selected={dueDate}
-            onChange={handleDueDateChange}
-            showTimeSelect
-            isClearable
-            timeFormat="h:mm aa"
-            timeIntervals={15}
-            dateFormat="MMMM d, h:mm aa"
-            wrapperClassName="date-picker"
-            customInput={<CustomDatePickerInput />}
-            popperClassName='date-popper'
-            popperPlacement="top-end"
-            minDate={new Date()}
-            minTime={new Date(new Date().setHours(currentHour, currentMins, 0, 0))}
-            maxTime={new Date(new Date().setHours(23, 59, 0, 0))}
-            includeTimes={[
-              new Date(new Date().setHours(0, 0, 0, 0)),
-              new Date(new Date().setHours(7, 45, 0, 0)),
-              new Date(new Date().setHours(12, 21, 0, 0)),
-              new Date(new Date().setHours(15, 7, 0, 0)),
-              new Date(new Date().setHours(23, 59, 0, 0))
-            ]}
-            injectTimes={[
-              new Date(new Date().setHours(0, 0, 0, 0)),
-              new Date(new Date().setHours(7, 45, 0, 0)),
-              new Date(new Date().setHours(12, 21, 0, 0)),
-              new Date(new Date().setHours(15, 7, 0, 0)),
-              new Date(new Date().setHours(23, 59, 0, 0))
-            ]}
-            ref={datePickerRef} // Assign the ref here
-          >
-            <div className="preset-buttons">
-              <div className="row">
-                <button onClick={() => handlePresetButtonClick('End of Today')}>End of Today</button>
-                <button onClick={() => handlePresetButtonClick('Before School Tomorrow')}>Before School Tomorrow</button>
-              </div>
-              <div className="row">
-                <button onClick={() => handlePresetButtonClick('End of Tomorrow')}>End of Tomorrow</button>
-                <button onClick={() => handlePresetButtonClick('Before School Monday')}>Before School Monday</button>
-              </div>
+
+          {isMenuOpen && (
+            <div ref={popupRef} className="menu-dropdown orange-accent">
+              <button onClick={handleMarkAllCompleted}>Mark All as Completed</button>
+              <button onClick={handleClearCompleted}>Clear Completed</button>
+              <button onClick={handleSortByPeriod}>Sort by Period</button>
+              <button onClick={handleSortByDueDate}>Sort by Due Date</button>
             </div>
-          </DatePicker>
-          <select
-            value={selectedPeriod}
-            onChange={handlePeriodChange}
-            className="period-select"
-            style={{ backgroundColor: getPeriodColor(selectedPeriod), color: getPeriodColor(selectedPeriod) === 'yellow' || getPeriodColor(selectedPeriod) === 'pink' ? 'black' : 'white' }}
-          >
-            <option style={{ backgroundColor: getPeriodColor('1') }} value="1">Period 1</option>
-            <option style={{ backgroundColor: getPeriodColor('2') }} value="2">Period 2</option>
-            <option style={{ backgroundColor: getPeriodColor('3') }} value="3">Period 3</option>
-            <option style={{ backgroundColor: getPeriodColor('4') }} value="4">Period 4</option>
-            <option style={{ backgroundColor: getPeriodColor('5') }} value="5">Period 5</option>
-            <option style={{ backgroundColor: getPeriodColor('6') }} value="6">Period 6</option>
-            <option style={{ backgroundColor: getPeriodColor('7') }} value="7">Period 7</option>
-            <option style={{ backgroundColor: getPeriodColor('8') }} value="8">Other</option>
-          </select>
-          <button onClick={handleAddTask} className="add-button">
-            <FontAwesomeIcon icon={faPlus} />
-          </button>
+          )}
+        </div>
+        {tasks.length === 0 ? ( // Check if there are no tasks
+          <div className="empty-message main-body">
+            <FontAwesomeIcon icon={faCheckCircle} className="check-icon" />
+            <p>You're all caught up!</p>
+          </div>
+        ) : (
+          <ul className="task-list main-body">
+            {tasks.map((task) => (
+              <li key={task.id} className="task-item">
+                <div className="task-desc">
+                  <button
+                    onClick={() => handleToggleComplete(task.id)}
+                    className={`task-button ${task.completed ? 'completed' : ''}`}
+                  >
+                    {task.completed ? (
+                      <FontAwesomeIcon icon={faSquareCheck} />
+                    ) : (
+                      <FontAwesomeIcon icon={faSquare} />
+                    )}
+                  </button>
+                  <p className={`task-name ${task.completed ? 'completed' : ''}`}>
+                    {task.name}
+                  </p>
+                </div>
+                <div className="task-tags">
+                  <span className={`task-period`} style={{ backgroundColor: task.periodColor, color: task.periodColor === 'yellow' || task.periodColor === 'pink' ? 'black' : 'white' }}>
+                    {task.period === '8' ? 'Other' : `Period ${task.period}`}
+                  </span>
+                  <span className={`task-due-date ${isTaskOverdue(new Date(task.dueDate)) && task.dueDate ? 'overdue' : ''}`}>
+                    {task.dueDate ? formatDueDate(new Date(task.dueDate)) : "No Due Date"}
+                  </span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+        <div className="input-container">
+          <input
+            type="text"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            onKeyDown={handleKeyPress}
+            className="task-input"
+            placeholder="Reading Assignment..."
+          />
+          <div className="input-buttons">
+            <DatePicker
+              selected={dueDate}
+              onChange={handleDueDateChange}
+              showTimeSelect
+              isClearable
+              timeFormat="h:mm aa"
+              timeIntervals={15}
+              dateFormat="MMMM d, h:mm aa"
+              wrapperClassName="date-picker"
+              customInput={<CustomDatePickerInput />}
+              popperClassName='date-popper'
+              popperPlacement="top-end"
+              minDate={new Date()}
+              minTime={new Date(new Date().setHours(currentHour, currentMins, 0, 0))}
+              maxTime={new Date(new Date().setHours(23, 59, 0, 0))}
+              includeTimes={[
+                new Date(new Date().setHours(0, 0, 0, 0)),
+                new Date(new Date().setHours(7, 45, 0, 0)),
+                new Date(new Date().setHours(12, 21, 0, 0)),
+                new Date(new Date().setHours(15, 7, 0, 0)),
+                new Date(new Date().setHours(23, 59, 0, 0))
+              ]}
+              injectTimes={[
+                new Date(new Date().setHours(0, 0, 0, 0)),
+                new Date(new Date().setHours(7, 45, 0, 0)),
+                new Date(new Date().setHours(12, 21, 0, 0)),
+                new Date(new Date().setHours(15, 7, 0, 0)),
+                new Date(new Date().setHours(23, 59, 0, 0))
+              ]}
+              ref={datePickerRef} // Assign the ref here
+            >
+              <div className="preset-buttons">
+                <div className="row">
+                  <button onClick={() => handlePresetButtonClick('End of Today')}>End of Today</button>
+                  <button onClick={() => handlePresetButtonClick('Before School Tomorrow')}>Before School Tomorrow</button>
+                </div>
+                <div className="row">
+                  <button onClick={() => handlePresetButtonClick('End of Tomorrow')}>End of Tomorrow</button>
+                  <button onClick={() => handlePresetButtonClick('Before School Monday')}>Before School Monday</button>
+                </div>
+              </div>
+            </DatePicker>
+            <select
+              value={selectedPeriod}
+              onChange={handlePeriodChange}
+              className="period-select"
+              style={{ backgroundColor: getPeriodColor(selectedPeriod), color: getPeriodColor(selectedPeriod) === 'yellow' || getPeriodColor(selectedPeriod) === 'pink' ? 'black' : 'white' }}
+            >
+              <option style={{ backgroundColor: getPeriodColor('1') }} value="1">Period 1</option>
+              <option style={{ backgroundColor: getPeriodColor('2') }} value="2">Period 2</option>
+              <option style={{ backgroundColor: getPeriodColor('3') }} value="3">Period 3</option>
+              <option style={{ backgroundColor: getPeriodColor('4') }} value="4">Period 4</option>
+              <option style={{ backgroundColor: getPeriodColor('5') }} value="5">Period 5</option>
+              <option style={{ backgroundColor: getPeriodColor('6') }} value="6">Period 6</option>
+              <option style={{ backgroundColor: getPeriodColor('7') }} value="7">Period 7</option>
+              <option style={{ backgroundColor: getPeriodColor('8') }} value="8">Other</option>
+            </select>
+            <button onClick={handleAddTask} className="add-button">
+              <FontAwesomeIcon icon={faPlus} />
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </CSSTransition>
   );
 };
 

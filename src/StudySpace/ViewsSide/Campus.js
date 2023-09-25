@@ -3,8 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import './Campus.css';
 import './ViewsSide.css';
+import { CSSTransition } from 'react-transition-group';
 
-const CampusView = () => {
+const CampusView = ({ visible }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [buttonClicked, setButtonClicked] = useState(false);
 
@@ -172,52 +173,59 @@ const CampusView = () => {
   };
 
   return (
-    <div className="container nobottom slide-left">
-      <div className="top-bar">
-        <div className="title">
-          <h1>My Classes</h1>
-          <button className="menu-icon" onClick={handleUpdates} style={{ cursor: 'pointer' }}>
-            <FontAwesomeIcon icon={faBell} />
-          </button>
+    <CSSTransition
+      in={visible}
+      timeout={200}
+      classNames="slide-right"
+      unmountOnExit
+    >
+      <div className="container nobottom slide-left" style={{ zIndex: visible ? 1 : 0 }}>
+        <div className="top-bar">
+          <div className="title">
+            <h1>My Classes</h1>
+            <button className="menu-icon" onClick={handleUpdates} style={{ cursor: 'pointer' }}>
+              <FontAwesomeIcon icon={faBell} />
+            </button>
+          </div>
+
+          {isPopupOpen && (
+            <div className="menu-dropdown blue-accent" ref={popupRef}>
+              <h2>Grade Updates</h2>
+              <ul>
+                {gradeUpdates.map((update) => (
+                  <li key={update.id}>{update.description}</li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
 
-        {isPopupOpen && (
-          <div className="menu-dropdown blue-accent" ref={popupRef}>
-            <h2>Grade Updates</h2>
-            <ul>
-              {gradeUpdates.map((update) => (
-                <li key={update.id}>{update.description}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </div>
-
-      <div className="class-cards main-body">
-        {classes.map((classInfo) => (
-          <div key={classInfo.id} className="class-card">
-            <div className="grade">
-              <span className="letter-grade">{classInfo.currentGrade.letterGrade}</span>
-              <span className="percent">{classInfo.currentGrade.percent}%</span>
-            </div>
-            <div className="class-details">
-              <h3>{classInfo.name}</h3>
-              <p className="class-teacher">
-                {classInfo.teacher.name}{' '}
-                <a href={`mailto:${classInfo.teacher.email}`} className="email-link">
-                  <FontAwesomeIcon icon={faEnvelope} />
-                </a>
-              </p>
-              <div className="class-tags">
-                <span className="period" style={{ backgroundColor: getPeriodColor(classInfo.period), color: getPeriodColor(classInfo.period) === 'yellow' || getPeriodColor(classInfo.period) === 'pink' ? 'black' : 'white' }}>
-                  Period {classInfo.period}</span>
-                <span className="room">Room {classInfo.room}</span>
+        <div className="class-cards main-body">
+          {classes.map((classInfo) => (
+            <div key={classInfo.id} className="class-card">
+              <div className="grade">
+                <span className="letter-grade">{classInfo.currentGrade.letterGrade}</span>
+                <span className="percent">{classInfo.currentGrade.percent}%</span>
+              </div>
+              <div className="class-details">
+                <h3>{classInfo.name}</h3>
+                <p className="class-teacher">
+                  {classInfo.teacher.name}{' '}
+                  <a href={`mailto:${classInfo.teacher.email}`} className="email-link">
+                    <FontAwesomeIcon icon={faEnvelope} />
+                  </a>
+                </p>
+                <div className="class-tags">
+                  <span className="period" style={{ backgroundColor: getPeriodColor(classInfo.period), color: getPeriodColor(classInfo.period) === 'yellow' || getPeriodColor(classInfo.period) === 'pink' ? 'black' : 'white' }}>
+                    Period {classInfo.period}</span>
+                  <span className="room">Room {classInfo.room}</span>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
+    </CSSTransition>
   );
 };
 

@@ -4,8 +4,9 @@ import './Timer.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faPause, faStop, faHourglassStart } from '@fortawesome/free-solid-svg-icons';
 import Cookies from 'js-cookie';
+import { CSSTransition } from 'react-transition-group';
 
-const TimerView = () => {
+const TimerView = ({ visible }) => {
   const [studyTime, setStudyTime] = useState(1500); // Initial study time in seconds (25 minutes)
   const [breakTime, setbreakTime] = useState(300); // Initial break time in seconds (5 minutes)
   const [timerLabel, setTimerLabel] = useState('Study');
@@ -39,7 +40,7 @@ const TimerView = () => {
     if (!isNaN(savedBreakTime)) {
       setbreakTime(savedBreakTime);
     }
-    
+
     const savedTimerLabel = Cookies.get('timerLabel');
     if (savedTimerLabel === 'Study' || savedTimerLabel === 'Break') {
       setTimerLabel(savedTimerLabel);
@@ -193,55 +194,62 @@ const TimerView = () => {
   );
 
   return (
-    <div className="container-top nobottom-top slide-bottom">
-      <div className="top-bar">
-        <div className="title centered">
-          <h1>Pomodoro Timer</h1>
+    <CSSTransition
+      in={visible}
+      timeout={200}
+      classNames="slide-bottom"
+      unmountOnExit
+    >
+      <div className="container-top nobottom-top">
+        <div className="top-bar">
+          <div className="title centered">
+            <h1>Pomodoro Timer</h1>
+          </div>
+          {isTimePickerOpen && (
+            <div ref={menuRef} className="menu-dropdown-top red-accent">
+              <input
+                type="number"
+                size="1"
+                min="1"
+                max="999"
+                placeholder="Minutes"
+                value={currentMinutes}
+                onChange={(e) => setCurrentMinutes(e.target.value)}
+                onInput={(e) => (e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 3))}
+                onKeyDown={handleKeyPress}
+              />
+              <button onClick={updateTimePickerValue}>Set</button>
+            </div>
+          )}
         </div>
-        {isTimePickerOpen && (
-          <div ref={menuRef} className="menu-dropdown-top red-accent">
-            <input
-              type="number"
-              size="1"
-              min="1"
-              max="999"
-              placeholder="Minutes"
-              value={currentMinutes}
-              onChange={(e) => setCurrentMinutes(e.target.value)}
-              onInput={(e) => (e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 3))}
-              onKeyDown={handleKeyPress}
-            />
-            <button onClick={updateTimePickerValue}>Set</button>
+        <div className="timer-body main-body">
+          <div className="timer-display" onClick={toggleTimePicker}>
+            <span className={`timer ${isActive ? 'disabled' : ''}`}>{formatTime(timerLabel === 'Study' ? studyTime : breakTime)}</span>
           </div>
-        )}
-      </div>
-      <div className="timer-body main-body">
-        <div className="timer-display" onClick={toggleTimePicker}>
-          <span className={`timer ${isActive ? 'disabled' : ''}`}>{formatTime(timerLabel === 'Study' ? studyTime : breakTime)}</span>
+          {isActive ? (
+            <div className="btn-group">
+              <button className="btn btn-pause" onClick={togglePause}>
+                {isPaused ? (
+                  <FontAwesomeIcon icon={faPlay} />
+                ) : (
+                  <FontAwesomeIcon icon={faPause} />
+                )}
+              </button>
+              <button className="btn btn-reset" onClick={resetTimer}>
+                <FontAwesomeIcon icon={faStop} />
+              </button>
+            </div>
+          ) : (
+            <div className="btn-group">
+              <button className="btn btn-start" onClick={startTimer}>
+                <FontAwesomeIcon icon={faHourglassStart} />
+              </button>
+            </div>
+          )}
+          {tagButtons}
         </div>
-        {isActive ? (
-          <div className="btn-group">
-            <button className="btn btn-pause" onClick={togglePause}>
-              {isPaused ? (
-                <FontAwesomeIcon icon={faPlay} />
-              ) : (
-                <FontAwesomeIcon icon={faPause} />
-              )}
-            </button>
-            <button className="btn btn-reset" onClick={resetTimer}>
-              <FontAwesomeIcon icon={faStop} />
-            </button>
-          </div>
-        ) : (
-          <div className="btn-group">
-            <button className="btn btn-start" onClick={startTimer}>
-              <FontAwesomeIcon icon={faHourglassStart} />
-            </button>
-          </div>
-        )}
-        {tagButtons}
       </div>
-    </div>
+    </CSSTransition>
   );
 };
 

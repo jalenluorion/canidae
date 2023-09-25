@@ -7,30 +7,37 @@
     flex-direction: column;
     background: rgba(50, 50, 50, .75);
     backdrop-filter: blur(20px);
+    position: absolute;
   }
 
-  .slide-right {
-    animation: slide-in-right 0.1s ease-out;
+  .slide-left-enter {
+    transform: translateX(-150%);
   }
-  .slide-left {
-    animation: slide-in-left 0.1s ease-out;
+  .slide-left-enter-active {
+    transform: translateX(0);
+    transition: transform 0.2s ease-in-out;
   }
-  
-  @keyframes slide-in-right {
-    from {
-      transform: translateX(-100%);
-    }
-    to {
-      transform: translateX(0);
-    }
+  .slide-left-exit {
+    transform: translateX(0);
   }
-  @keyframes slide-in-left {
-    from {
-      transform: translateX(100%);
-    }
-    to {
-      transform: translateX(0);
-    }
+  .slide-left-exit-active {
+    transform: translateX(-150%);
+    transition: transform 0.2s ease-in-out;
+  }
+
+  .slide-right-enter {
+    transform: translateX(150%);
+  }
+  .slide-right-enter-active {
+    transform: translateX(0);
+    transition: transform 0.2s ease-in-out;
+  }
+  .slide-right-exit {
+    transform: translateX(0);
+  }
+  .slide-right-exit-active {
+    transform: translateX(150%);
+    transition: transform 0.2s ease-in-out;
   }
   
   .top-bar {

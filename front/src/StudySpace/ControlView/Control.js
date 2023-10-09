@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp, faUser, faExpand, faCompress, faList } from '@fortawesome/free-solid-svg-icons'; // Import the new icons
+import { useNavigate } from 'react-router-dom';
 import './Control.css';
 
 function ControlContainer({
+    spaceName,
     views,
     showFarLeftView,
     setShowFarLeftView,
@@ -22,6 +24,7 @@ function ControlContainer({
 }) {
     const [isFullScreen, setIsFullScreen] = useState(false);
     const [buttonRowDisplayed, setButtonRowDisplayed] = useState(true);
+    const navigate = useNavigate();
 
     const toggleFullScreen = () => {
         if (!isFullScreen) {
@@ -106,16 +109,20 @@ function ControlContainer({
         setShowFarRightView(!showFarRightView);
     };
 
+    const handleLoginButtonClick = () => {
+        navigate("/login", {state: {button: true, visible: true}})
+    }
+
     return (
         <div className="control-container">
             <div className="control-title">
                 <button className="">
                     <FontAwesomeIcon icon={faList} fixedWidth />
                 </button>
-                <button className="">
+                <button className="" onClick={handleLoginButtonClick}>
                     <FontAwesomeIcon icon={faUser} fixedWidth />
                 </button>
-                <h1>Virtual Study Room</h1>
+                <h1>{spaceName}</h1>
                 <button className="" onClick={handleButtonBarClick}>
                     <FontAwesomeIcon icon={buttonRowDisplayed ? faChevronDown : faChevronUp} fixedWidth />
                 </button>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Outlet, useParams } from 'react-router-dom';
 import { RainParticles, FireParticles } from './Components/Particles';
 
 import ControlContainer from './ControlView/Control';
@@ -7,6 +8,7 @@ import YouTube from 'react-youtube';
 import './Space.css';
 
 function StudySpace({
+  loggedIn,
   options,
   views,
 }) {
@@ -28,6 +30,8 @@ function StudySpace({
   const [showFarRightView, setShowFarRightView] = useState(false);
 
   const [activeTab, setActiveTab] = useState('backgrounds');
+
+  const [spaceName, setSpaceName] = useState('Virtual Study Room');
 
   useEffect(() => {
     setAudioReady(false);
@@ -68,6 +72,13 @@ function StudySpace({
       },
     };
   }
+
+  let { userID } = useParams();
+  useEffect(() => {
+    if (loggedIn === true) {
+      setSpaceName('Virtual Study Room logged');
+    }
+  }, [loggedIn]);
 
   return (
     <div className="App">
@@ -119,6 +130,7 @@ function StudySpace({
         </div>
         <div className="control-view">
           <ControlContainer
+            spaceName={spaceName}
             views={views}
             showLeft1View={showLeft1View}
             setShowLeft1View={setShowLeft1View}
@@ -151,6 +163,7 @@ function StudySpace({
         activeTab={activeTab}
         setActiveTab={setActiveTab}
       />
+        <Outlet />
     </div>
   );
 }

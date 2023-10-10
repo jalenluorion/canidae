@@ -24,10 +24,13 @@ function LoginView() {
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (containerRef.current && !containerRef.current.contains(event.target) && !buttonClicked) {
-        setMatch(false);
-        setTimeout(() => {
-          navigate('/');
-        }, 200);
+        
+        if (match === true) {
+          setMatch(false);
+          setTimeout(() => {
+            navigate('..');
+          }, 200);
+        }
 
       } else {
         setButtonClicked(false);
@@ -40,7 +43,7 @@ function LoginView() {
     return () => {
       document.removeEventListener('click', handleClickOutside);
     };
-  }, [containerRef, navigate, buttonClicked, location]);
+  }, [containerRef, navigate, buttonClicked, location, match]);
 
   const api = axios.create({
     baseURL: 'http://localhost:3001'
@@ -68,7 +71,7 @@ function LoginView() {
           path: "/",
         });
         setTimeout(() => {
-          navigate('/users/welcome');
+          navigate('..');
         }, 2000);
       } else {
         if (response.data && response.data.message) {
@@ -101,7 +104,7 @@ function LoginView() {
             path: "/",
           });
           setTimeout(() => {
-            navigate('/users/' + response.data.userId);
+            navigate('..');
           }, 2000);
         } else {
           if (response.data && response.data.message) {

@@ -110,7 +110,7 @@ function ControlContainer({
     };
 
     const handleLoginButtonClick = () => {
-        navigate("/login", {state: {button: true, visible: true}})
+        navigate("login", {state: {button: true, visible: true}})
     }
 
     return (

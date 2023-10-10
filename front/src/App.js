@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Navigate, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Navigate, Routes, Link } from 'react-router-dom';
 import StudySpace from './StudySpace/Space';
 import LoginView from './StudySpace/ViewsTop/Login';
 import { options, views } from './Data';
@@ -22,32 +22,48 @@ function App() {
     return (
         <Router>
             <Routes>
-                <Route path="/" element={
-                    <DefaultRoute /> }>
-                    <Route path="login" element={<LoginView />} />
-                </Route>
-                <Route path="users/:userID" element={
-                    <ProtectedRoute /> }
-                />
+                <Route path="/" element={<IndexPage /> } />
+                <Route path="space/*" element={<SpacePage /> } />
             </Routes>
         </Router>
     );
 }
 
-function ProtectedRoute() {
-    if (!checkIfUserIsLoggedIn()) {
-      return <Navigate to="/" replace />;
-    }
-  
-    return <StudySpace loggedIn={true} options={options} views={views}/>;
-};
+function IndexPage() {
+    return (
+        <div>
+            <h1>Welcome to Canidae!</h1>
+            <Link to="space">Open Canidae</Link>
+        </div>
+    );
+}
 
-function DefaultRoute() {
+function SpacePage() {
+    return (
+        <Routes>
+            <Route path="/" element={<GuestRoute />} >
+                <Route path="login" element={<LoginView />} />
+            </Route>
+            
+            <Route path=":userID" element={<UserRoute />} />
+        </Routes>
+    );
+}
+
+function GuestRoute() {
     if (checkIfUserIsLoggedIn()) {
-      return <Navigate to="users/:userID" replace />;
+      return <Navigate to=":userID" replace />;
     }
   
     return <StudySpace loggedIn={false} options={options} views={views}/>;
 }
+
+function UserRoute() {
+    if (!checkIfUserIsLoggedIn()) {
+      return <Navigate to=".." replace />;
+    }
+  
+    return <StudySpace loggedIn={true} options={options} views={views}/>;
+};
 
 export default App;

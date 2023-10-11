@@ -3,17 +3,23 @@ import { BrowserRouter as Router, Route, Navigate, Routes, Link } from 'react-ro
 import StudySpace from './StudySpace/Space';
 import LoginView from './StudySpace/ViewsTop/Login';
 import { options, views } from './Data';
-import Cookies from "universal-cookie";
+import axios from 'axios';
 
-function checkIfUserIsLoggedIn() {
-    const cookies = new Cookies();
-    const token = cookies.get("TOKEN");
-    if (token) {
-        console.log("User is logged in")
-        return true;
+const checkIfUserIsLoggedIn = () => {
+    const api = axios.create({
+        baseURL: 'http://localhost:3001'
+    });
+    
+    try {
+        const response = api.get('/user', { withCredentials: true })
+        if (response.status === 200) {
+            return response.data._id;
+        } else {
+            return false;
+        }
+    } catch (error) {
+        return false;
     }
-    console.log("User is not logged in")
-    return false;
 }
 
 function App() {
@@ -51,15 +57,17 @@ function SpacePage() {
 }
 
 function GuestRoute() {
-    if (checkIfUserIsLoggedIn()) {
-      return <Navigate to=":userID" replace />;
+    const userID = checkIfUserIsLoggedIn();
+    if (userID !== false) {
+      return <Navigate to={`${userID}`} replace />;
     }
   
     return <StudySpace loggedIn={false} options={options} views={views}/>;
 }
 
 function UserRoute() {
-    if (!checkIfUserIsLoggedIn()) {
+    const userID = checkIfUserIsLoggedIn();
+    if (userID === false) {
       return <Navigate to=".." replace />;
     }
   

@@ -2,22 +2,26 @@ const jwt = require("jsonwebtoken");
 
 module.exports = async (request, response, next) => {
   try {
-    //   get the token from the authorization header
-    const token = await request.headers.authorization.split(" ")[1];
+    // Get the token from the 'token' cookie
+    const token = request.cookies.token;
 
-    //check if the token matches the supposed origin
-    const decodedToken = await jwt.verify(token, process.env.JWT_SECRET);
+    if (!token) {
+      return response.status(401).send({ message: "Unauthorized: Token not found" });
+    }
 
-    // retrieve the user details of the logged in user
-    const user = await decodedToken;
+    // Check if the token is valid
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
-    // pass the the user down to the endpoints here
+    // Retrieve the user details of the logged-in user
+    const user = decodedToken;
+
+    // Pass the user information down to the endpoints
     request.user = user;
 
-    // pass down functionality to the endpoint
+    // Pass down functionality to the endpoint
     next();
     
   } catch (error) {
-    response.status(401).send({ message: "Invalid request!" });
+    response.status(401).send({ message: "Unauthorized: Invalid token" });
   }
 };

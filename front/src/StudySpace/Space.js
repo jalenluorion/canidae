@@ -4,6 +4,7 @@ import { RainParticles, FireParticles } from './Components/Particles';
 
 import ControlContainer from './ControlView/Control';
 import YouTube from 'react-youtube';
+import axios from 'axios';
 
 import './Space.css';
 
@@ -74,9 +75,16 @@ function StudySpace({
   }
 
   let { userID } = useParams();
+
   useEffect(() => {
     if (loggedIn === true) {
-      setSpaceName('Virtual Study Room logged');
+      axios.get(`http://localhost:3001/user/`)
+        .then((response) => {
+          setSpaceName(response.data.name + "'s Virtual Study Room");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   }, [loggedIn]);
 

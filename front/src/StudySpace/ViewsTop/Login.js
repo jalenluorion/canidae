@@ -3,8 +3,6 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import './Login.css';
 import { CSSTransition } from 'react-transition-group';
-import Cookies from "universal-cookie";
-const cookies = new Cookies();
 
 function LoginView() {
   const containerRef = useRef(null);
@@ -67,9 +65,6 @@ function LoginView() {
   
       if (response.status === 200) {
         setMessage(response.data.message);
-        cookies.set("TOKEN", response.data.token, {
-          path: "/",
-        });
         setTimeout(() => {
           navigate('..');
         }, 2000);
@@ -100,9 +95,6 @@ function LoginView() {
       .then((response) => {
         if (response.status === 201) {
           setMessage(response.data.message);
-          cookies.set("TOKEN", response.data.token, {
-            path: "/",
-          });
           setTimeout(() => {
             navigate('..');
           }, 2000);

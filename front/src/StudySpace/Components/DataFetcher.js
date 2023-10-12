@@ -1,12 +1,27 @@
-import React from 'react';
-// Dummy asynchronous function that simulates data fetching
-const fetchData = () => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(<h2>Data Fetcher</h2>);
-      }, 2000); // Simulate a 2-second delay
-    });
-  };
-  
+let status = "pending";
+let result = null;
 
-  export default fetchData;
+function fetchShows () {
+const suspender = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    const data = <p>hi</p>
+    status = "success";
+    result = data;
+    resolve();
+  }, 4000);
+});
+
+return {
+  read() {
+    if (status === "pending") {
+      throw suspender;
+    } else if (status === "error") {
+      throw result;
+    } else if (status === "success") {
+      return result;
+    }
+  },
+};
+}
+
+export default fetchShows;

@@ -23,6 +23,8 @@ function StudySpace({
   const [isRainPlaying, setIsRainPlaying] = useState(false);
   const [isFirePlaying, setIsFirePlaying] = useState(false);
 
+  const [showUserView, setShowUserView] = useState(false);
+
   const [showLeft1View, setShowLeft1View] = useState(false);
   const [showLeft2View, setShowLeft2View] = useState(false);
   const [showTopView, setShowTopView] = useState(false);
@@ -32,7 +34,7 @@ function StudySpace({
 
   const [activeTab, setActiveTab] = useState('backgrounds');
 
-  const [spaceName, setSpaceName] = useState('Virtual Study Room');
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     setAudioReady(false);
@@ -74,16 +76,20 @@ function StudySpace({
     };
   }
 
-  let { userID } = useParams();
+  let { userId } = useParams();
 
   useEffect(() => {
+    const api = axios.create({
+      baseURL: 'http://localhost:3001'
+    });
+
     if (loggedIn === true) {
-      axios.get(`http://localhost:3001/user/`)
+      api.get(`user/`, { withCredentials: true })
         .then((response) => {
-          setSpaceName(response.data.name + "'s Virtual Study Room");
+          setUser(response.data);
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
         });
     }
   }, [loggedIn]);
@@ -138,8 +144,11 @@ function StudySpace({
         </div>
         <div className="control-view">
           <ControlContainer
-            spaceName={spaceName}
+            loggedIn={loggedIn}
+            user={user}
             views={views}
+            showUserView={showUserView}
+            setShowUserView={setShowUserView}
             showLeft1View={showLeft1View}
             setShowLeft1View={setShowLeft1View}
             showRight1View={showRight1View}
@@ -170,6 +179,11 @@ function StudySpace({
         audioReady={audioReady}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
+      />
+      <views.userView.component
+        visible={showUserView}
+        setVisible={setShowUserView}
+        user={user}
       />
         <Outlet />
     </div>

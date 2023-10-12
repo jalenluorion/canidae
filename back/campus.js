@@ -1,6 +1,6 @@
 const InfiniteCampus = require('infinite-campus')
 // log in                          District Name    State  Username  Password
-const user = new InfiniteCampus('Boise School District', 'ID', '25jalen.lu@boiseschools.net', 'applecomputer')
+const user = new InfiniteCampus('Boise School District', 'Id', '25jalen.lu@boiseschools.net', 'applecomputer')
 
 // wait until we are done logging in
 user.on('ready', () => {

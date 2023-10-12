@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import './Login.css';
+import './ViewsFull.css'
 import { CSSTransition } from 'react-transition-group';
 
 function LoginView() {
@@ -22,7 +23,7 @@ function LoginView() {
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (containerRef.current && !containerRef.current.contains(event.target) && !buttonClicked) {
-        
+
         if (match === true) {
           setMatch(false);
           setTimeout(() => {
@@ -41,7 +42,7 @@ function LoginView() {
     return () => {
       document.removeEventListener('click', handleClickOutside);
     };
-  }, [containerRef, navigate, buttonClicked, location, match]);
+  }, [containerRef, navigate, buttonClicked, match]);
 
   const api = axios.create({
     baseURL: 'http://localhost:3001'
@@ -55,43 +56,43 @@ function LoginView() {
     return formDataJSON;
   };
 
-  const handleLoginFormSubmit = async (event) => {
+  const handleLoginFormSubmit = (event) => {
     event.preventDefault();
     const form = event.target;
     const formData = new FormData(form);
-  
-    try {
-      const response = await api.post('/login', formDataToJson(formData));
-  
-      if (response.status === 200) {
-        setMessage(response.data.message);
-        setTimeout(() => {
-          navigate('..');
-        }, 2000);
-      } else {
-        if (response.data && response.data.message) {
+
+    api.post('/login', formDataToJson(formData), { withCredentials: true })
+      .then((response) => {
+        if (response.status === 200) {
           setMessage(response.data.message);
+          setTimeout(() => {
+            navigate('..');
+          }, 2000);
+        } else {
+          if (response.data && response.data.message) {
+            setMessage(response.data.message);
+          } else {
+            setMessage('Error logging in. Please try again later.');
+          }
+        }
+      })
+      .catch((error) => {
+        if (error.response) {
+          console.error(error.response);
+          setMessage(error.response.data.message);
         } else {
           setMessage('Error logging in. Please try again later.');
+          console.error(error);
         }
-      }
-    } catch (error) {
-      if (error.response) {
-        console.log(error.response);
-        setMessage(error.response.data.message);
-      } else {
-        setMessage('Error logging in. Please try again later.');
-        console.error(error);
-      }
-    }
-  };
+      });
+  }
 
   const handleRegisterFormSubmit = (event) => {
     event.preventDefault();
     const form = event.target;
     const formData = new FormData(form);
-  
-    api.post('/register', formDataToJson(formData))
+
+    api.post('/register', formDataToJson(formData), { withCredentials: true })
       .then((response) => {
         if (response.status === 201) {
           setMessage(response.data.message);
@@ -108,7 +109,7 @@ function LoginView() {
       })
       .catch((error) => {
         if (error.response) {
-          console.log(error.response);
+          console.error(error.response);
           setMessage(error.response.data.message);
         } else {
           setMessage('Error registering. Please try again later.');

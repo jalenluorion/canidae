@@ -1,26 +1,19 @@
-import React, { Suspense, lazy, useEffect } from 'react';
+import React, { Suspense } from 'react';
 
-import fetchData from './DataFetcher';
+const fetchShows = React.lazy(() => import("./DataFetcher"));
 
-// Lazy load DataFetcher component
-const LazyDataFetcher = lazy(() => fetchData());
-
-
-// Main App component
 function App() {
-
-    useEffect(() => {
-        console.log(LazyDataFetcher);
-    }, []);
-
-  return (
-    <div className="App">
-      <h1>Suspense Demo</h1>
-      <Suspense fallback={<div>Loading...</div>}>
-        <LazyDataFetcher />
-      </Suspense>
-    </div>
-  );
+  const bruh = fetchShows();
+ return (
+   <div className="App">
+     <header className="App-header">
+       <h1 className="App-title">React Suspense Demo</h1>
+     </header>
+     <Suspense fallback={<p>loading...</p>}>
+     {bruh.read()}
+     </Suspense>
+   </div>
+ );
 }
 
 export default App;

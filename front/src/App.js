@@ -1,26 +1,9 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Navigate, Routes, Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Route, Navigate, Routes, Link, useParams, useLocation } from 'react-router-dom';
 import StudySpace from './StudySpace/Space';
-import LoginView from './StudySpace/ViewsTop/Login';
+import LoginView from './StudySpace/ViewsFull/Login';
 import { options, views } from './Data';
 import axios from 'axios';
-
-const checkIfUserIsLoggedIn = () => {
-    const api = axios.create({
-        baseURL: 'http://localhost:3001'
-    });
-    
-    try {
-        const response = api.get('/user', { withCredentials: true })
-        if (response.status === 200) {
-            return response.data._id;
-        } else {
-            return false;
-        }
-    } catch (error) {
-        return false;
-    }
-}
 
 function App() {
     // Assuming you have a function to check if the user is logged in
@@ -51,26 +34,63 @@ function SpacePage() {
                 <Route path="login" element={<LoginView />} />
             </Route>
             
-            <Route path=":userID" element={<UserRoute />} />
+            <Route path=":userId" element={<UserRoute />} />
         </Routes>
     );
 }
 
 function GuestRoute() {
-    const userID = checkIfUserIsLoggedIn();
-    if (userID !== false) {
-      return <Navigate to={`${userID}`} replace />;
+    const [userId, setUserId] = useState(null);
+    const { state } = useLocation();
+
+    useEffect(() => {
+        const api = axios.create({
+            baseURL: 'http://localhost:3001'
+        });
+
+        api.get('/user', { withCredentials: true })
+            .then((response) => {
+                if (response.status === 200) {
+                    setUserId(response.data._id);
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }, [state]);
+    
+    if (userId !== null) {
+        return <Navigate to={`${userId}`} replace />;
     }
-  
+
     return <StudySpace loggedIn={false} options={options} views={views}/>;
 }
 
 function UserRoute() {
-    const userID = checkIfUserIsLoggedIn();
-    if (userID === false) {
-      return <Navigate to=".." replace />;
+    let { userId } = useParams();
+    const [loggedIn, setLoggedIn] = useState(true);
+
+    useEffect(() => {
+        const api = axios.create({
+            baseURL: 'http://localhost:3001'
+        });
+
+        api.get('/verify?id=' + userId, { withCredentials: true })
+            .then((response) => {
+                if (response.status === 200) {
+                    setLoggedIn(true);
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+                setLoggedIn(false);
+            });
+    }, [userId]);
+
+    if (!loggedIn) {
+        return <Navigate to=".." replace />;
     }
-  
+
     return <StudySpace loggedIn={true} options={options} views={views}/>;
 };
 

@@ -21,7 +21,7 @@ app.use(cookieParser());
 
 // Middleware to handle CORS
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   res.setHeader(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization"
@@ -30,6 +30,7 @@ app.use((req, res, next) => {
     "Access-Control-Allow-Methods",
     "GET, POST, PUT, DELETE, PATCH, OPTIONS"
   );
+  res.setHeader("Access-Control-Allow-Credentials", true);
   next();
 });
 
@@ -46,7 +47,7 @@ app.get("/", (request, response) => {
 app.post("/register", async (request, response) => {
   try {
     const hashedPassword = await bcrypt.hash(request.body.password, 10);
-    const userID = new mongoose.Types.ObjectId();
+    const userId = new mongoose.Types.ObjectId();
 
     const periodsData = [
       { period: 0 },
@@ -64,17 +65,17 @@ app.post("/register", async (request, response) => {
       password: hashedPassword,
       name: request.body.name,
       username: request.body.username,
-      _id: userID,
+      _id: userId,
     });
     const toDo = new ToDo({
-      owner: userID, // You may replace this with a valid user ID
+      owner: userId, // You may replace this with a valid user Id
       toDoLists: periodsData.map((periodData) => ({
         period: periodData.period,
         tasks: [],
       })),
     });
     const note = new Note({
-      owner: userID,
+      owner: userId,
       noteLists: periodsData.map((periodData) => ({
         period: periodData.period,
         note: "",
@@ -136,7 +137,7 @@ app.post("/login", async (request, response) => {
 // Logout endpoint
 app.post("/logout", (request, response) => {
   // Delete the token cookie by setting it to null and expiring it
-  response.cookie("token", null, { httpOnly: true, expires: new Date(0) });
+  response.clearCookie("token", "null", { httpOnly: true });
 
   response.status(200).json({ message: "Logout Successful" });
 });
@@ -160,18 +161,19 @@ app.get("/user", auth, async (request, response) => {
 // Verify if cookie user id equal to request user id
 app.get("/verify", auth, async (request, response) => {
   try {
+    const queryId = request.query.id;
     const loggedInUser = await User.findOne({ _id: request.user.userId });
-    const requestedUser = await User.findOne({ _id: request.body.userId });
+    const requestedUser = await User.findOne({ _id: queryId });
 
     if (!requestedUser) {
       return response.status(404).json({ message: "Requested user not found" });
     }
 
-    if (loggedInUser._id !== requestedUser._id) {
-      return response.status(404).json({ message: "User not validated" });
+    if (loggedInUser._id.equals(requestedUser._id)) { 
+      return response.status(200).json({ message: "User verified" });
     }
 
-    response.status(200).json({ message: "User verified" });
+    response.status(404).json({ message: "User not validated" });
   } catch (error) {
     console.error(error);
     response.status(500).json({ message: "Internal server error" });
@@ -193,7 +195,7 @@ app.get("/todo", auth, async (request, response) => {
 // Update to-do lists for a user
 app.patch("/todo/:listPeriod", auth, async (request, response) => {
   try {
-    // Find the user by their ID
+    // Find the user by their Id
     const toDoLists = await ToDo.findOne({ owner: request.user.userId });
 
     if (!toDoLists) {
@@ -236,7 +238,7 @@ app.get("/notes", auth, async (request, response) => {
 // Update notes for a user
 app.patch("/notes/:listPeriod", auth, async (request, response) => {
   try {
-    // Find the user by their ID
+    // Find the user by their Id
     const noteLists = await Note.findOne({ owner: request.user.userId });
 
     if (!noteLists) {

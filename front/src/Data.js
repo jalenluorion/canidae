@@ -3,7 +3,8 @@ import NoteView from './StudySpace/ViewsSide/Notes';
 import FilesView from './StudySpace/ViewsSide/Files'
 import CampusView from './StudySpace/ViewsSide/Campus'
 import TimerView from './StudySpace/ViewsTop/Timer'
-import SettingsView from './StudySpace/ViewsTop/Settings'
+import SettingsView from './StudySpace/ViewsFull/Settings'
+import UserView from './StudySpace/ViewsFull/User'
 
 import { faListCheck, faUsers, faStickyNote, faClock, faPalette, faBook, faBoxArchive } from '@fortawesome/free-solid-svg-icons'; // Import the new icons
 
@@ -37,6 +38,7 @@ const views = {
     right1View: { label: 'Notes', icon: faStickyNote, component: NoteView },
     right2View: { label: 'Classes', icon: faBook, component: CampusView },
     farRightView: { label: 'Settings', icon: faPalette, component: SettingsView },
+    userView: { component: UserView },
 }
 
 export {

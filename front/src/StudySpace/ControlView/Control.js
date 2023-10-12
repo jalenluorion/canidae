@@ -5,8 +5,11 @@ import { useNavigate } from 'react-router-dom';
 import './Control.css';
 
 function ControlContainer({
-    spaceName,
+    loggedIn,
+    user,
     views,
+    showUserView,
+    setShowUserView,
     showFarLeftView,
     setShowFarLeftView,
     showLeft1View,
@@ -110,7 +113,11 @@ function ControlContainer({
     };
 
     const handleLoginButtonClick = () => {
-        navigate("login", {state: {button: true, visible: true}})
+        if (loggedIn) {
+            setShowUserView(!showUserView);
+        } else {
+            navigate("login", {state: {button: true, visible: true}})
+        }
     }
 
     return (
@@ -122,7 +129,7 @@ function ControlContainer({
                 <button className="" onClick={handleLoginButtonClick}>
                     <FontAwesomeIcon icon={faUser} fixedWidth />
                 </button>
-                <h1>{spaceName}</h1>
+                <h1>{user == null ? "Virtual Study Space" : user.name + '\'s Space'}</h1>
                 <button className="" onClick={handleButtonBarClick}>
                     <FontAwesomeIcon icon={buttonRowDisplayed ? faChevronDown : faChevronUp} fixedWidth />
                 </button>

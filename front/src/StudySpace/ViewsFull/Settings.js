@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './Settings.css';
+import './ViewsFull.css'
 import { CSSTransition } from 'react-transition-group';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faVolumeUp, faVolumeMute, faSpinner } from '@fortawesome/free-solid-svg-icons';
@@ -20,19 +21,19 @@ function SettingsView({
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-      const handleClickOutside = (event) => {
-        if (containerRef.current && !containerRef.current.contains(event.target) && mounted) {
-          setVisible(false);
-        } else {
-          setMounted(true);
-        }
-      };
+    const handleClickOutside = (event) => {
+      if (containerRef.current && !containerRef.current.contains(event.target) && mounted) {
+        setVisible(false);
+      } else {
+        setMounted(true);
+      }
+    };
 
-      document.addEventListener('click', handleClickOutside);
+    document.addEventListener('click', handleClickOutside);
 
-      return () => {
-        document.removeEventListener('click', handleClickOutside);
-      };
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
   }, [containerRef, setVisible, mounted]);
 
   const handleAudioButtonClick = (audioOption) => {
@@ -50,7 +51,7 @@ function SettingsView({
       timeout={200}
       classNames="alert"
       unmountOnExit
-      onEntering={() => {setMounted(false);}}
+      onEntering={() => { setMounted(false); }}
     >
       <div className="settings-view">
         <div className="settings-container" ref={containerRef}>
@@ -76,12 +77,10 @@ function SettingsView({
           </div>
           {activeTab === 'backgrounds' && (
             <div className="settings-content">
-              {options.backgrounds.map((background, index) => (
-                <div className='background-button-container'>
+              {options.backgrounds.map((background) => (
+                <div className='background-button-container' key={background.value}>
                   <button
-                    key={index}
-                    className={`background-button ${selectedBackground === background ? 'selected' : ''
-                      }`}
+                    className={`background-button ${selectedBackground === background ? 'selected' : ''}`}
                     onClick={() => {
                       setSelectedBackground(background);
                     }}
@@ -94,14 +93,14 @@ function SettingsView({
                   <div className="background-label">{background.label}</div>
                 </div>
               ))}
+
             </div>
           )}
           {activeTab === 'audio' && (
             <div className="settings-content">
-              {options.audio.map((audioOption, index) => (
-                audioOption.value !== 'none' && ( // Skip rendering 'None' as a button
+              {options.audio.map((audioOption) => (
                   <button
-                    key={index}
+                    key={audioOption.value}
                     className={`audio-button ${selectedAudio === audioOption ? 'selected' : ''
                       }`}
                     onClick={() => handleAudioButtonClick(audioOption)}
@@ -120,7 +119,6 @@ function SettingsView({
                     )}
                     {audioOption.label}
                   </button>
-                )
               ))}
             </div>
           )}

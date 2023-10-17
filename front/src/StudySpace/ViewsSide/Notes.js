@@ -1,29 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Cookies from 'js-cookie';
 import { CSSTransition } from 'react-transition-group';
-
+import { useAsyncValue } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
-
+import { api } from '../../Helper';
 import './Notes.css';
 import './ViewsSide.css';
 
 const NoteView = ({ visible }) => {
-  const [notes, setNotes] = useState({});
+  const noteList = useAsyncValue();
+  const [notes, setNotes] = useState(noteList ? (noteList.lists) : (Cookies.get('savedNotes') ? JSON.parse(Cookies.get('savedNotes')) : {}));
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [buttonClicked, setButtonClicked] = useState(false);
   const [selectedPeriod, setSelectedPeriod] = useState('8');
+  const [noteTimeout, setNoteTimeout] = useState(null);
 
   const popupRef = useRef(null);
-
-  useEffect(() => {
-    // Load saved notes from cookies
-    const savedNotes = Cookies.get('savedNotes');
-    if (savedNotes) {
-      setNotes(JSON.parse(savedNotes));
-    }
-  }, []);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -43,7 +37,16 @@ const NoteView = ({ visible }) => {
   const handleNoteChange = (e) => {
     const updatedNote = e.target.value;
     setNotes({ ...notes, [selectedPeriod]: updatedNote });
-    Cookies.set('savedNotes', JSON.stringify({ ...notes, [selectedPeriod]: updatedNote }), { expires: 7 });
+
+    // create timeout
+    clearTimeout(noteTimeout);
+    setNoteTimeout(setTimeout(() => {
+      if (noteList) {
+        api.post('/notes', notes, { withCredentials: true });
+      } else {
+        Cookies.set('savedNotes', JSON.stringify(notes), { expires: 7 });
+      }
+    }, 5000));
   };
 
   const handleDownload = (e) => {

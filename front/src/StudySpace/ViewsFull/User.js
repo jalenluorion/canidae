@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './User.css';
 import './ViewsFull.css'
 import { CSSTransition } from 'react-transition-group';
-import axios from 'axios';
+import { api } from '../../Helper';
 
 function UserView({
   visible,
@@ -33,20 +33,16 @@ function UserView({
   const handleLogoutClick = (event) => {
     event.preventDefault();
 
-    const api = axios.create({
-      baseURL: 'http://localhost:3001'
-    });
-
     api.post('/logout', {}, { withCredentials: true })
       .then(() => {
-        navigate('..');
+        navigate('../space');
       })
       .catch((error) => {
         console.error(error);
       });
   }
 
-  if (!user) {
+  if (user == null) {
     return null;
   }
 

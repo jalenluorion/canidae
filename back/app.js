@@ -21,7 +21,8 @@ app.use(cookieParser());
 
 // Middleware to handle CORS
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000/");
+  res.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:3000/");
   res.setHeader(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization"
@@ -69,17 +70,11 @@ app.post("/register", async (request, response) => {
     });
     const toDo = new ToDo({
       owner: userId, // You may replace this with a valid user Id
-      toDoLists: periodsData.map((periodData) => ({
-        period: periodData.period,
-        tasks: [],
-      })),
+      tasks: [],
     });
     const note = new Note({
       owner: userId,
-      noteLists: periodsData.map((periodData) => ({
-        period: periodData.period,
-        note: "",
-      })),
+      lists: {},
     });
 
     await user.save();
@@ -98,7 +93,7 @@ app.post("/register", async (request, response) => {
     response.cookie("token", token);
 
     // Respond with a success message and the JWT token
-    response.status(201).json({ message: "User Created and Logged In Successfully" });
+    response.status(201).json({ message: "User Created and Logged In Successfully", userId: user._id });
   } catch (error) {
     console.error(error);
     response.status(500).json({ message: "Internal server error" });
@@ -127,7 +122,7 @@ app.post("/login", async (request, response) => {
 
     response.cookie("token", token, { httpOnly: true });
 
-    response.status(200).json({ message: "Login Successful" });
+    response.status(200).json({ message: "Login Successful", userId: user._id });
   } catch (error) {
     console.error(error);
     response.status(500).json({ message: "Internal server error" });
@@ -151,7 +146,7 @@ app.get("/user", auth, async (request, response) => {
       return response.status(404).json({ message: "User not found" });
     }
 
-    response.status(200).json(user)
+    response.status(200).json({ message: "User found", user: user})
   } catch (error) {
     console.error(error);
     response.status(500).json({ message: "Internal server error" });
@@ -170,7 +165,7 @@ app.get("/verify", auth, async (request, response) => {
     }
 
     if (loggedInUser._id.equals(requestedUser._id)) { 
-      return response.status(200).json({ message: "User verified" });
+      return response.status(200).json({ message: "User verified", user: loggedInUser });
     }
 
     response.status(404).json({ message: "User not validated" });
@@ -183,7 +178,7 @@ app.get("/verify", auth, async (request, response) => {
 // Get to-do lists for a user
 app.get("/todo", auth, async (request, response) => {
   try {
-    const toDoLists = await ToDo.find({ owner: request.user.userId });
+    const toDoLists = await ToDo.findOne({ owner: request.user.userId });
 
     response.status(200).json(toDoLists);
   } catch (error) {
@@ -193,7 +188,7 @@ app.get("/todo", auth, async (request, response) => {
 });
 
 // Update to-do lists for a user
-app.patch("/todo/:listPeriod", auth, async (request, response) => {
+app.post("/todo", auth, async (request, response) => {
   try {
     // Find the user by their Id
     const toDoLists = await ToDo.findOne({ owner: request.user.userId });
@@ -202,16 +197,8 @@ app.patch("/todo/:listPeriod", auth, async (request, response) => {
       return response.status(404).json({ message: "User not found" });
     }
 
-    const listPeriod = request.params.listPeriod;
-    
-    const listIndex = toDoLists.toDoLists.findIndex((list) => list.period.toString() === listPeriod);
-
-    if (listIndex === -1) {
-      return response.status(404).json({ message: "To-do list not found" });
-    }
-
     // Update the specified list with the updatedSingleList
-    toDoLists.toDoLists[listIndex].tasks = request.body.updatedList;
+    toDoLists.tasks = request.body;
 
     // Save the updated toDoLists document
     await toDoLists.save();
@@ -226,7 +213,7 @@ app.patch("/todo/:listPeriod", auth, async (request, response) => {
 // Get notes for a user
 app.get("/notes", auth, async (request, response) => {
   try {
-    const noteLists = await Note.find({ owner: request.user.userId });
+    const noteLists = await Note.findOne({ owner: request.user.userId });
 
     response.status(200).json(noteLists);
   } catch (error) {
@@ -236,7 +223,7 @@ app.get("/notes", auth, async (request, response) => {
 });
 
 // Update notes for a user
-app.patch("/notes/:listPeriod", auth, async (request, response) => {
+app.post("/notes", auth, async (request, response) => {
   try {
     // Find the user by their Id
     const noteLists = await Note.findOne({ owner: request.user.userId });
@@ -245,16 +232,8 @@ app.patch("/notes/:listPeriod", auth, async (request, response) => {
       return response.status(404).json({ message: "User not found" });
     }
 
-    const listPeriod = request.params.listPeriod;
-    
-    const listIndex = noteLists.noteLists.findIndex((list) => list.period.toString() === listPeriod);
-
-    if (listIndex === -1) {
-      return response.status(404).json({ message: "Note list not found" });
-    }
-
     // Update the specified list with the updatedSingleList
-    noteLists.noteLists[listIndex].note = request.body.updatedList;
+    noteLists.lists = request.body;
 
     // Save the updated noteLists document
     await noteLists.save();

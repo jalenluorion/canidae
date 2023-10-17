@@ -1,19 +1,24 @@
-import React, { Suspense } from 'react';
+// DataFetcher.js
+import React from 'react';
 
-const fetchShows = React.lazy(() => import("./DataFetcher"));
+const fetchData = () =>
+  fetch('https://jsonplaceholder.typicode.com/posts/1').then(response =>
+    response.json()
+  );
 
-function App() {
-  const bruh = fetchShows();
- return (
-   <div className="App">
-     <header className="App-header">
-       <h1 className="App-title">React Suspense Demo</h1>
-     </header>
-     <Suspense fallback={<p>loading...</p>}>
-     {bruh.read()}
-     </Suspense>
-   </div>
- );
-}
+const DataFetcher = () => {
+  const data = fetchData();
+  return <div>{data.title}</div>;
+};
 
-export default App;
+const DataFetcherWrapper = () => {
+  const resource = fetchData();
+
+  return (
+    <React.Suspense fallback={<div>Loading...</div>}>
+        <DataFetcher />
+    </React.Suspense>
+  );
+};
+
+export default DataFetcherWrapper;

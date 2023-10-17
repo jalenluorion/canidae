@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef, forwardRef } from 'react';
-import Cookies from 'js-cookie';
+import { useAsyncValue } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import { format, isWithinInterval, addDays, startOfToday, isToday, isTomorrow } from 'date-fns';
 import { CSSTransition } from 'react-transition-group';
+import Cookies from 'js-cookie';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faBars } from '@fortawesome/free-solid-svg-icons';
 import { faSquareCheck, faSquare, faCheckCircle } from '@fortawesome/free-regular-svg-icons';
+import { api } from '../../Helper';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import './List.css';
@@ -22,7 +24,8 @@ const Task = ({ name, completed, period, periodColor, dueDate }) => ({
 });
 
 const ListView = ({ visible }) => {
-  const [tasks, setTasks] = useState([]);
+  const tasklist = useAsyncValue();
+  const [tasks, setTasks] = useState(tasklist ? (tasklist.tasks) : (Cookies.get('tasks') ? JSON.parse(Cookies.get('tasks')) : []));
   const [text, setText] = useState('');
   const [selectedPeriod, setSelectedPeriod] = useState('8');
   const [dueDate, setDueDate] = useState(null); // State for due date and time
@@ -34,16 +37,16 @@ const ListView = ({ visible }) => {
   const datePickerRef = useRef(null);
 
   useEffect(() => {
-    const storedTasks = Cookies.get('tasks');
-    if (storedTasks) {
-      setTasks(JSON.parse(storedTasks));
-    }
     handleClearCompleted();
   }, []);
 
   useEffect(() => {
-    Cookies.set('tasks', JSON.stringify(tasks), { expires: 7 });
-  }, [tasks]);
+    if (tasklist){
+      api.post('/todo', tasks, { withCredentials: true });
+    } else {
+      Cookies.set('tasks', JSON.stringify(tasks), { expires: 7 });
+    }
+  }, [tasks, tasklist]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {

@@ -1,18 +1,5 @@
 const mongoose = require("mongoose");
 
-// To-Do List schema
-const NoteSchema = new mongoose.Schema({
-    period: {
-        type: Number,
-        required: true,
-    },
-
-    note: {
-        type: String,
-        required: true,
-    },
-});
-
 // User schema
 const NoteListSchema = new mongoose.Schema({
     owner: {
@@ -20,10 +7,12 @@ const NoteListSchema = new mongoose.Schema({
         required: true,
     },
 
-    toDoLists: {
-        type: [NoteSchema],
+    lists: {
+        type: Object,
         required: true,
     },
+}, {
+    minimize: false,
 });
 
 // Export User model

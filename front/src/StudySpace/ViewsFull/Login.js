@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import axios from 'axios';
+import { api } from '../../Helper';
 import './Login.css';
 import './ViewsFull.css'
 import { CSSTransition } from 'react-transition-group';
@@ -44,10 +44,6 @@ function LoginView() {
     };
   }, [containerRef, navigate, buttonClicked, match]);
 
-  const api = axios.create({
-    baseURL: 'http://localhost:3001'
-  })
-
   const formDataToJson = (formData) => {
     const formDataJSON = {};
     formData.forEach((value, key) => {
@@ -66,7 +62,7 @@ function LoginView() {
         if (response.status === 200) {
           setMessage(response.data.message);
           setTimeout(() => {
-            navigate('..');
+            navigate('../' + response.data.userId);
           }, 2000);
         } else {
           if (response.data && response.data.message) {
@@ -97,7 +93,7 @@ function LoginView() {
         if (response.status === 201) {
           setMessage(response.data.message);
           setTimeout(() => {
-            navigate('..');
+            navigate('../' + response.data.userId);
           }, 2000);
         } else {
           if (response.data && response.data.message) {

@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import './Control.css';
 
 function ControlContainer({
-    loggedIn,
     user,
     views,
     showUserView,
@@ -113,7 +112,7 @@ function ControlContainer({
     };
 
     const handleLoginButtonClick = () => {
-        if (loggedIn) {
+        if (user != null) {
             setShowUserView(!showUserView);
         } else {
             navigate("login", {state: {button: true, visible: true}})

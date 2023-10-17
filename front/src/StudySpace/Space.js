@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { Outlet, useParams } from 'react-router-dom';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { RainParticles, FireParticles } from './Components/Particles';
-
-import ControlContainer from './ControlView/Control';
+import { Await } from 'react-router-dom';
 import YouTube from 'react-youtube';
-import axios from 'axios';
-
+import { resolvePromise } from '../Helper';
 import './Space.css';
+import Loading from './ViewsFull/Loading';
+
+const Controls = lazy(() => import('./Controls'));
 
 function StudySpace({
-  loggedIn,
+  data,
   options,
   views,
 }) {
@@ -22,19 +22,6 @@ function StudySpace({
 
   const [isRainPlaying, setIsRainPlaying] = useState(false);
   const [isFirePlaying, setIsFirePlaying] = useState(false);
-
-  const [showUserView, setShowUserView] = useState(false);
-
-  const [showLeft1View, setShowLeft1View] = useState(false);
-  const [showLeft2View, setShowLeft2View] = useState(false);
-  const [showTopView, setShowTopView] = useState(false);
-  const [showRight1View, setShowRight1View] = useState(false);
-  const [showRight2View, setShowRight2View] = useState(false);
-  const [showFarRightView, setShowFarRightView] = useState(false);
-
-  const [activeTab, setActiveTab] = useState('backgrounds');
-
-  const [user, setUser] = useState(null);
 
   useEffect(() => {
     setAudioReady(false);
@@ -76,24 +63,6 @@ function StudySpace({
     };
   }
 
-  let { userId } = useParams();
-
-  useEffect(() => {
-    const api = axios.create({
-      baseURL: 'http://localhost:3001'
-    });
-
-    if (loggedIn === true) {
-      api.get(`user/`, { withCredentials: true })
-        .then((response) => {
-          setUser(response.data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
-  }, [loggedIn]);
-
   return (
     <div className="App">
       {playAudio && (
@@ -107,8 +76,7 @@ function StudySpace({
               mute: 0,
             },
           }}
-          onPlay={(event) => {
-            // Video is ready, update the state
+          onPlay={() => {
             setAudioReady(true);
           }}
         />
@@ -117,9 +85,9 @@ function StudySpace({
         <YouTube
           videoId={selectedBackground.value}
           opts={videoOpts}
-          onPlay={(event) => {
-            // Video is ready, update the state
+          onPlay={() => {
             setVideoReady(true);
+            resolvePromise();
           }}
         />
         {!videoReady && (
@@ -134,58 +102,24 @@ function StudySpace({
         {isRainPlaying && <RainParticles />}
         {isFirePlaying && <FireParticles />}
       </div>
-      <div className="item-container">
-        <div className="left-view">
-          <views.left1View.component visible={showLeft1View} />
-          <views.left2View.component visible={showLeft2View} />
-        </div>
-        <div className="top-view">
-          <views.topView.component visible={showTopView} />
-        </div>
-        <div className="control-view">
-          <ControlContainer
-            loggedIn={loggedIn}
-            user={user}
-            views={views}
-            showUserView={showUserView}
-            setShowUserView={setShowUserView}
-            showLeft1View={showLeft1View}
-            setShowLeft1View={setShowLeft1View}
-            showRight1View={showRight1View}
-            setShowRight1View={setShowRight1View}
-            showLeft2View={showLeft2View}
-            setShowLeft2View={setShowLeft2View}
-            showRight2View={showRight2View}
-            setShowRight2View={setShowRight2View}
-            showTopView={showTopView}
-            setShowTopView={setShowTopView}
-            showFarRightView={showFarRightView}
-            setShowFarRightView={setShowFarRightView}
-          />
-        </div>
-        <div className="right-view">
-          <views.right1View.component visible={showRight1View} />
-          <views.right2View.component visible={showRight2View} />
-        </div>
-      </div>
-      <views.farRightView.component
-        visible={showFarRightView}
-        setVisible={setShowFarRightView}
-        options={options}
-        selectedBackground={selectedBackground}
-        setSelectedBackground={setSelectedBackground}
-        selectedAudio={selectedAudio}
-        setSelectedAudio={setSelectedAudio}
-        audioReady={audioReady}
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-      />
-      <views.userView.component
-        visible={showUserView}
-        setVisible={setShowUserView}
-        user={user}
-      />
-        <Outlet />
+      <Suspense fallback={<Loading />}>
+        <Await
+          resolve={data.isVideoReady}
+          errorElement={
+            <p>Error loading package location!</p>
+          }
+        />
+        <Controls
+          data={data}
+          options={options}
+          views={views}
+          selectedBackground={selectedBackground}
+          setSelectedBackground={setSelectedBackground}
+          selectedAudio={selectedAudio}
+          setSelectedAudio={setSelectedAudio}
+          audioReady={audioReady}
+        />
+      </Suspense>
     </div>
   );
 }

@@ -21,8 +21,6 @@ app.use(cookieParser());
 
 // Middleware to handle CORS
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000/");
-  res.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:3000/");
   res.setHeader(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization"
@@ -40,12 +38,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Root endpoint
-app.get("/", (request, response) => {
+app.get("/api", (request, response) => {
   response.json({ message: "Hey! This is your server response!" });
 });
 
 // Register endpoint with input validation
-app.post("/register", async (request, response) => {
+app.post("/api/register", async (request, response) => {
   try {
     const hashedPassword = await bcrypt.hash(request.body.password, 10);
     const userId = new mongoose.Types.ObjectId();
@@ -101,7 +99,7 @@ app.post("/register", async (request, response) => {
 });
 
 // Login endpoint with input validation
-app.post("/login", async (request, response) => {
+app.post("/api/login", async (request, response) => {
   try {
     const user = await User.findOne({ username: request.body.username });
     if (!user) {
@@ -130,7 +128,7 @@ app.post("/login", async (request, response) => {
 });
 
 // Logout endpoint
-app.post("/logout", (request, response) => {
+app.post("/api/logout", (request, response) => {
   // Delete the token cookie by setting it to null and expiring it
   response.clearCookie("token", "null", { httpOnly: true });
 
@@ -138,7 +136,7 @@ app.post("/logout", (request, response) => {
 });
 
 // Get user details
-app.get("/user", auth, async (request, response) => {
+app.get("/api/user", auth, async (request, response) => {
   try {
     const user = await User.findOne({ _id: request.user.userId });
 
@@ -154,7 +152,7 @@ app.get("/user", auth, async (request, response) => {
 });
 
 // Verify if cookie user id equal to request user id
-app.get("/verify", auth, async (request, response) => {
+app.get("/api/verify", auth, async (request, response) => {
   try {
     const queryId = request.query.id;
     const loggedInUser = await User.findOne({ _id: request.user.userId });
@@ -176,7 +174,7 @@ app.get("/verify", auth, async (request, response) => {
 });
 
 // Get to-do lists for a user
-app.get("/todo", auth, async (request, response) => {
+app.get("/api/todo", auth, async (request, response) => {
   try {
     const toDoLists = await ToDo.findOne({ owner: request.user.userId });
 
@@ -188,7 +186,7 @@ app.get("/todo", auth, async (request, response) => {
 });
 
 // Update to-do lists for a user
-app.post("/todo", auth, async (request, response) => {
+app.post("/api/todo", auth, async (request, response) => {
   try {
     // Find the user by their Id
     const toDoLists = await ToDo.findOne({ owner: request.user.userId });
@@ -211,7 +209,7 @@ app.post("/todo", auth, async (request, response) => {
 });
 
 // Get notes for a user
-app.get("/notes", auth, async (request, response) => {
+app.get("/api/notes", auth, async (request, response) => {
   try {
     const noteLists = await Note.findOne({ owner: request.user.userId });
 
@@ -223,7 +221,7 @@ app.get("/notes", auth, async (request, response) => {
 });
 
 // Update notes for a user
-app.post("/notes", auth, async (request, response) => {
+app.post("/api/notes", auth, async (request, response) => {
   try {
     // Find the user by their Id
     const noteLists = await Note.findOne({ owner: request.user.userId });

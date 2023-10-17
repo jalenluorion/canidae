@@ -1,7 +1,7 @@
 {
   "name": "canidae-v2",
   "version": "0.1.0",
-  "homepage": "https://jalenluorion.github.io/canidae",
+  "homepage": "https://jalenluorion.github.io/",
   "private": true,
   "proxy": "http://localhost:3001",
   "dependencies": {

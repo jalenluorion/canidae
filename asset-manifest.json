@@ -1,19 +1,19 @@
 {
   "files": {
     "main.css": "/canidae/static/css/main.6eb72a91.css",
-    "main.js": "/canidae/static/js/main.bb1f2ecb.js",
+    "main.js": "/canidae/static/js/main.2ef33d46.js",
     "static/css/285.eb73498d.chunk.css": "/canidae/static/css/285.eb73498d.chunk.css",
     "static/js/285.d5999759.chunk.js": "/canidae/static/js/285.d5999759.chunk.js",
     "static/js/787.39c75e1e.chunk.js": "/canidae/static/js/787.39c75e1e.chunk.js",
     "index.html": "/canidae/index.html",
     "main.6eb72a91.css.map": "/canidae/static/css/main.6eb72a91.css.map",
-    "main.bb1f2ecb.js.map": "/canidae/static/js/main.bb1f2ecb.js.map",
+    "main.2ef33d46.js.map": "/canidae/static/js/main.2ef33d46.js.map",
     "285.eb73498d.chunk.css.map": "/canidae/static/css/285.eb73498d.chunk.css.map",
     "285.d5999759.chunk.js.map": "/canidae/static/js/285.d5999759.chunk.js.map",
     "787.39c75e1e.chunk.js.map": "/canidae/static/js/787.39c75e1e.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.6eb72a91.css",
-    "static/js/main.bb1f2ecb.js"
+    "static/js/main.2ef33d46.js"
   ]
 }

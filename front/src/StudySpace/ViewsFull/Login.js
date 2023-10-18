@@ -154,7 +154,7 @@ function LoginView() {
                   type="checkbox"
                   onChange={handleRememberMeChange}
                 />
-                Remember Me
+                <p>Remember Me</p>
               </label>
               <button type="submit">Log In</button>
             </form>
@@ -178,7 +178,7 @@ function LoginView() {
               <label className="login-label">Email</label>
               <input className="login-input" required type="email" name="email" />
               <label className="login-label">Username</label>
-              <input className="login-input" required autoComplete="off" type="text" name="username" />
+              <input className="login-input" required autoComplete="username" type="text" name="username" />
               <label className="login-label">Password</label>
               <input className="login-input" required autoComplete="new-password" type="password" name="password" />
               <label className="login-label">

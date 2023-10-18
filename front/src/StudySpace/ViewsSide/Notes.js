@@ -20,6 +20,16 @@ const NoteView = ({ visible }) => {
   const popupRef = useRef(null);
 
   useEffect(() => {
+    setNoteTimeout(setTimeout(() => {
+      if (noteList) {
+        api.post('/notes', notes, { withCredentials: true });
+      } else {
+        Cookies.set('savedNotes', JSON.stringify(notes), { expires: 7 });
+      }
+    }, 3000));
+  }, [notes, noteList]);
+
+  useEffect(() => {
     const handleClickOutside = (e) => {
       if (popupRef.current && !popupRef.current.contains(e.target) && !buttonClicked) {
         setIsPopupOpen(false);
@@ -37,16 +47,7 @@ const NoteView = ({ visible }) => {
   const handleNoteChange = (e) => {
     const updatedNote = e.target.value;
     setNotes({ ...notes, [selectedPeriod]: updatedNote });
-
-    // create timeout
     clearTimeout(noteTimeout);
-    setNoteTimeout(setTimeout(() => {
-      if (noteList) {
-        api.post('/notes', notes, { withCredentials: true });
-      } else {
-        Cookies.set('savedNotes', JSON.stringify(notes), { expires: 7 });
-      }
-    }, 5000));
   };
 
   const handleDownload = (e) => {

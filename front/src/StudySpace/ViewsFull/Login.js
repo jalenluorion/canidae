@@ -13,6 +13,8 @@ function LoginView() {
   const [match, setMatch] = useState(!buttonClicked);
   const [isLogin, setIsLogin] = useState(true);
   const [message, setMessage] = useState('');
+  const [success, setSuccess] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
 
   useEffect(() => {
     if (buttonClicked) {
@@ -46,10 +48,27 @@ function LoginView() {
 
   const formDataToJson = (formData) => {
     const formDataJSON = {};
+
     formData.forEach((value, key) => {
-      formDataJSON[key] = value;
+      if (key === 'firstname') {
+        // Check for the 'firstname' field
+        if (formData.has('lastname')) {
+          // Check if 'lastname' is also present
+          const lastnameValue = formData.get('lastname');
+          formDataJSON['name'] = value + ' ' + lastnameValue;
+        } else {
+          formDataJSON[key] = value;
+        }
+      } else if (key !== 'lastname') {
+        // Skip 'lastname' field if present
+        formDataJSON[key] = value;
+      }
     });
     return formDataJSON;
+  };
+
+  const handleRememberMeChange = () => {
+    setRememberMe(!rememberMe);
   };
 
   const handleLoginFormSubmit = (event) => {
@@ -60,6 +79,7 @@ function LoginView() {
     api.post('/login', formDataToJson(formData), { withCredentials: true })
       .then((response) => {
         if (response.status === 200) {
+          setSuccess(true);
           setMessage(response.data.message);
           setTimeout(() => {
             navigate('../' + response.data.userId);
@@ -73,13 +93,12 @@ function LoginView() {
         }
       })
       .catch((error) => {
-        if (error.response) {
-          console.error(error.response);
+        if (error.response.data && error.response.data.message) {
           setMessage(error.response.data.message);
         } else {
           setMessage('Error logging in. Please try again later.');
-          console.error(error);
         }
+        console.error(error);
       });
   }
 
@@ -91,6 +110,7 @@ function LoginView() {
     api.post('/register', formDataToJson(formData), { withCredentials: true })
       .then((response) => {
         if (response.status === 201) {
+          setSuccess(true);
           setMessage(response.data.message);
           setTimeout(() => {
             navigate('../' + response.data.userId);
@@ -104,16 +124,14 @@ function LoginView() {
         }
       })
       .catch((error) => {
-        if (error.response) {
-          console.error(error.response);
+        if (error.response.data && error.response.data.message) {
           setMessage(error.response.data.message);
         } else {
-          setMessage('Error registering. Please try again later.');
-          console.error(error);
+          setMessage('Error registering in. Please try again later.');
         }
+        console.error(error);
       });
   }
-
   return (
     <CSSTransition
       in={match}
@@ -122,44 +140,62 @@ function LoginView() {
       unmountOnExit
     >
       <div className="login-view">
-        <div className="login-container" ref={containerRef}>
-          <button type="button" onClick={() => setIsLogin(!isLogin)}>Toggle Login/Register</button>
-          {isLogin ? (
-            <form onSubmit={handleLoginFormSubmit} className="loginform">
-              <label>
-                Username:
-                <input type="text" name="username" />
+        {isLogin ? (
+          <div className="login-container" ref={containerRef}>
+            <h1 className="login-title">Welcome Back!</h1>
+
+            <form className="login-form" onSubmit={handleLoginFormSubmit}>
+              <label className="login-label">Username</label>
+              <input className="login-input" required autoComplete="username" type="text" name="username" />
+              <label className="login-label">Password</label>
+              <input className="login-input" required autoComplete="current-password" type="password" name="password" />
+              <label className="login-label">
+                <input
+                  type="checkbox"
+                  onChange={handleRememberMeChange}
+                />
+                Remember Me
               </label>
-              <label>
-                Password:
-                <input type="password" name="password" />
-              </label>
-              <button type="submit">Login</button>
+              <button type="submit">Log In</button>
             </form>
-          ) : (
-            <form onSubmit={handleRegisterFormSubmit} className="loginform">
-              <label>
-                Name:
-                <input type="text" name="name" />
+            <div className="login-swap"><p>Don't have an account?&nbsp;</p><p className="login-link" onClick={() => { setIsLogin(!isLogin); setMessage(""); }}>Sign Up</p></div>
+            {success ? <div className="login-success">{message}</div> : <div className="login-error">{message}</div>}
+          </div>
+        ) : (
+          <div className="login-container" ref={containerRef}>
+            <h1 className="login-title">Welcome to Canidae!</h1>
+            <form className="login-form" onSubmit={handleRegisterFormSubmit}>
+              <div className="login-split">
+                <div className="login-split-column">
+                  <label className="login-label">First Name</label>
+                  <input className="login-input" required type="text" name="firstname" />
+                </div>
+                <div className="login-split-column">
+                  <label className="login-label">Last Name</label>
+                  <input className="login-input" required type="text" name="lastname" />
+                </div>
+              </div>
+              <label className="login-label">Email</label>
+              <input className="login-input" required type="email" name="email" />
+              <label className="login-label">Username</label>
+              <input className="login-input" required autoComplete="off" type="text" name="username" />
+              <label className="login-label">Password</label>
+              <input className="login-input" required autoComplete="new-password" type="password" name="password" />
+              <label className="login-label">
+                <input
+                  type="checkbox"
+                  onChange={handleRememberMeChange}
+                />
+                Remember Me
               </label>
-              <label>
-                Username:
-                <input type="text" name="username" />
-              </label>
-              <label>
-                Email:
-                <input type="email" name="email" />
-              </label>
-              <label>
-                Password:
-                <input type="password" name="password" />
-              </label>
-              <button type="submit">Register</button>
+              <button type="submit">Sign Up</button>
             </form>
-          )}
-          <h3 style={{ color: 'white' }}>{message}</h3>
-        </div>
+            <div className="login-swap"><p>Already have an account?&nbsp;</p><p className="login-link" onClick={() => { setIsLogin(!isLogin); setMessage(""); }}>Log In</p></div>
+            {success ? <div className="login-success">{message}</div> : <div className="login-error">{message}</div>}
+          </div>
+        )}
       </div>
+
     </CSSTransition>
   );
 }

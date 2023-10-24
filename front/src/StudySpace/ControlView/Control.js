@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp, faUser, faExpand, faCompress, faList } from '@fortawesome/free-solid-svg-icons'; // Import the new icons
 import { useNavigate } from 'react-router-dom';
 import './Control.css';
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 function ControlContainer({
     user,
@@ -123,7 +124,7 @@ function ControlContainer({
         <div className="control-container">
             <div className="control-title">
                 <button className="">
-                    <FontAwesomeIcon icon={faList} fixedWidth />
+                    <i class="bi bi-grid-fill"></i>
                 </button>
                 <button className="" onClick={handleLoginButtonClick}>
                     <FontAwesomeIcon icon={faUser} fixedWidth />

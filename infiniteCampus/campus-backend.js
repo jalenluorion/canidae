@@ -312,7 +312,7 @@ class User extends EventEmitter {
               }
             }
           }
-          
+
           // loop over terms from /grades
           grades[schoolIndex].terms.forEach((term, i) => {
             let termResult = {
@@ -326,28 +326,30 @@ class User extends EventEmitter {
             // loop over classes in a term
             term.courses.forEach((course, ii) => {
               let grade = course.gradingTasks[1] // IMPORTANT
-
               let courseResult = {
                 name: course.courseName,
                 courseNumber: course.courseNumber,
                 roomName: course.roomName,
                 teacher: course.teacherDisplay,
                 // seq: null, // set this to null so we can add placement data later
-                grades: {
+                _id: course._id
+              }
+
+              if (grade) {
+                courseResult.grades = {
                   score: (grade.progressScore !== undefined) ? grade.progressScore : grade.score,
                   percent: (grade.progressPercent !== undefined) ? grade.progressPercent : grade.percent,
                   totalPoints: (grade.progressTotalPoints !== undefined) ? grade.progressTotalPoints : grade.totalPoints,
                   pointsEarned: (grade.progressPointsEarned !== undefined) ? grade.progressPointsEarned : grade.pointsEarned
-                },
-                comments: grade.comments,
-                _id: course._id
-              }
+                }
+                courseResult.comments = grade.comments;
 
-              // remove grades for courses without grades
-              if (!(grade.progressScore || grade.score) &&
-                !(grade.progressPercent || grade.percent) &&
-                !(grade.progressTotalPoints || grade.totalPoints) &&
-                !(grade.progressPointsEarned || grade.pointsEarned)) courseResult.grades = undefined;
+                // remove grades for courses without grades
+                if (!(grade.progressScore || grade.score) &&
+                  !(grade.progressPercent || grade.percent) &&
+                  !(grade.progressTotalPoints || grade.totalPoints) &&
+                  !(grade.progressPointsEarned || grade.pointsEarned)) courseResult.grades = undefined;
+              }
 
               // push class to term array
               termResult.courses.push(courseResult)

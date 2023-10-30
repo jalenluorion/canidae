@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
+const getCourseInfo = require("./infiniteCampus/campus.js"); 
 
 // require database connection
 const dbConnect = require("./db/dbConnect");
@@ -237,6 +238,25 @@ app.post("/api/notes", auth, async (request, response) => {
     await noteLists.save();
 
     response.status(200).json({ message: "Note list updated successfully", noteLists });
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+app.post("/api/campus", async (request, response) => {
+  try {
+    const courseInfo = await getCourseInfo(request.body.district, request.body.state, request.body.email, request.body.password);
+
+    courseInfo.forEach((course) => {
+      const teacherName = course.teacher.split(", ");
+      const teacherFirstName = teacherName[1].split(" ")[0];
+      const teacherLastName = teacherName[0];
+      const teacherEmail = `${teacherFirstName.toLowerCase()}.${teacherLastName.toLowerCase()}@boiseschools.org`;
+      course.teacherEmail = teacherEmail;
+    });
+    
+    response.status(200).json(courseInfo);
   } catch (error) {
     console.error(error);
     response.status(500).json({ message: "Internal server error" });

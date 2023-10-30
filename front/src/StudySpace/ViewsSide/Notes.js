@@ -64,9 +64,7 @@ const NoteView = ({ visible }) => {
     setTitle(e.target.value);
   };
 
-  const downloadNote = (e) => {
-    e.stopPropagation();
-
+  const downloadNote = () => {
     const downloadTitle = title.trim() ? title : 'Notes';
     const blob = new Blob([notes[selectedPeriod]], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
@@ -129,13 +127,14 @@ const NoteView = ({ visible }) => {
           {isPopupOpen && (
             <div className="menu-dropdown blue-accent" ref={popupRef}>
               <input
+                className="notes"
                 type="text"
                 placeholder="Enter a title"
                 value={title}
                 onChange={handleTitleChange}
               />
-              <button onClick={downloadNote}>Download</button>
-              <button onClick={closePopup}>Cancel</button>
+              <button className="button" onClick={downloadNote}>Download</button>
+              <button className="button" onClick={closePopup}>Cancel</button>
             </div>
           )}
         </div>

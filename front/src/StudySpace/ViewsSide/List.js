@@ -262,16 +262,16 @@ const ListView = ({ visible }) => {
 
           {isMenuOpen && (
             <div ref={popupRef} className="menu-dropdown orange-accent">
-              <button onClick={handleMarkAllCompleted}>Mark All as Completed</button>
-              <button onClick={handleClearCompleted}>Clear Completed</button>
-              <button onClick={handleSortByPeriod}>Sort by Period</button>
-              <button onClick={handleSortByDueDate}>Sort by Due Date</button>
+              <button className="button" onClick={handleMarkAllCompleted}>Mark All as Completed</button>
+              <button className="button" onClick={handleClearCompleted}>Clear Completed</button>
+              <button className="button" onClick={handleSortByPeriod}>Sort by Period</button>
+              <button className="button" onClick={handleSortByDueDate}>Sort by Due Date</button>
             </div>
           )}
         </div>
         {tasks.length === 0 ? ( // Check if there are no tasks
           <div className="empty-message main-body">
-            <FontAwesomeIcon icon={faCheckCircle} className="check-icon" />
+            <FontAwesomeIcon icon={faCheckCircle} className="check-icon-orange" />
             <p>You're all caught up!</p>
           </div>
         ) : (

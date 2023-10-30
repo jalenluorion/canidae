@@ -3,6 +3,35 @@
   height: 410px;
 }
 
+.check-icon-blue {
+  font-size: 50px;
+  color: #038aff;
+  margin-bottom: 10px;
+}
+
+.login-image img{
+  max-width: 50px;
+  max-height: 50px;
+}
+.login-image {
+  width:60px;
+  height:60px;
+  border-radius: 10px;
+  outline: none;
+  border: none;
+  background-color: white;
+}
+.login-image:hover {
+  background-color: #e6e6e6;
+}
+
+.campus-login {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .class-cards {
   padding: 0;
   overflow-y: auto;
@@ -21,6 +50,7 @@
   font-size: 18px;
   font-weight: bold;
   margin: 0 0 5px;
+  overflow-wrap: break-word;
 }
 
 /* Styles for links within class cards */
@@ -40,6 +70,7 @@
     align-items: center; /* Center-align the content */
     justify-content: center; /* Center-align the content */
     margin: 0 5px;
+    width: 55px;
   }
 
     .letter-grade {
@@ -56,6 +87,7 @@
   .class-details {
     flex: 3; /* Adjust the flex ratio for the class details */
     margin-left: 10px; /* Add margin to the left of the class details */
+    overflow: auto;
   }
     .class-teacher {
       margin: 0;

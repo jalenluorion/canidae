@@ -85,6 +85,10 @@
   height: 42px;
 }
 
+.login-form button[type="submit"]:hover {
+  background-color: #2980b9;
+}
+
 .close-button {
   background-color: #e74c3c;
   color: #fff;

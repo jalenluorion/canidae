@@ -51,7 +51,7 @@
   font-size: 20px;
   color: white;
   padding: 3px 2px;
-  min-width: 28px;
+  width: 29px;
 }
 
 .control-title button:hover {

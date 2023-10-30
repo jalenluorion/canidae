@@ -163,7 +163,7 @@ function LoginView() {
           </div>
         ) : (
           <div className="login-container" ref={containerRef}>
-            <h1 className="login-title">Welcome to Canidae!</h1>
+            <h1 className="login-title">Welcome to Studace!</h1>
             <form className="login-form" onSubmit={handleRegisterFormSubmit}>
               <div className="login-split">
                 <div className="login-split-column">

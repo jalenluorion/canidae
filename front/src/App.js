@@ -1,14 +1,15 @@
 import React from 'react';
-import { createBrowserRouter, defer, createRoutesFromElements, Route, RouterProvider, Navigate, Link, useLoaderData} from 'react-router-dom';
+import { createBrowserRouter, defer, createRoutesFromElements, Route, RouterProvider, Navigate, useLoaderData} from 'react-router-dom';
 import StudySpace from './StudySpace/Space';
 import LoginView from './StudySpace/ViewsFull/Login';
 import { options, views } from './Data';
 import { api, fetchPromise } from './Helper';
+import Landing from './Landing';
 
 const router = createBrowserRouter(
     createRoutesFromElements(
         <>
-            <Route path="/" element={<IndexPage />} />
+            <Route path="/" element={<Landing />} />
             <Route path="space" element={<GuestRoute />} loader={LoaderGuest}>
                 <Route path="login" element={<LoginView />} />
             </Route>
@@ -49,15 +50,6 @@ async function LoaderUser({ params }){
     } catch (error) {
         return({ loggedIn: false });
     }
-}
-
-function IndexPage() {
-    return (
-        <div>
-            <h1>Welcome to Canidae!</h1>
-            <Link to="space">Open Canidae</Link>
-        </div>
-    );
 }
 
 function GuestRoute() {

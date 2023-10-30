@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown, faChevronUp, faUser, faExpand, faCompress, faList } from '@fortawesome/free-solid-svg-icons'; // Import the new icons
+import { faChevronDown, faChevronUp, faUser, faExpand, faCompress } from '@fortawesome/free-solid-svg-icons'; // Import the new icons
 import { useNavigate } from 'react-router-dom';
 import './Control.css';
 import "bootstrap-icons/font/bootstrap-icons.css";

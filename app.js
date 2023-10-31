@@ -255,6 +255,14 @@ app.post("/api/campus", async (request, response) => {
       const teacherEmail = `${teacherFirstName.toLowerCase()}.${teacherLastName.toLowerCase()}@boiseschools.org`;
       course.teacherEmail = teacherEmail;
     });
+
+    // take course.name, and if there is a / sign, add zero width space after it but keep the / sign
+    courseInfo.forEach((course) => {
+      const courseName = course.name.split("/");
+      if (courseName.length > 1) {
+        course.name = courseName[0] + "\u200B/" + courseName[1];
+      }
+    });
     
     response.status(200).json(courseInfo);
   } catch (error) {

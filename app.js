@@ -12,6 +12,7 @@ const dbConnect = require("./db/dbConnect");
 const User = require("./db/userModel");
 const ToDo = require("./db/toDoModel");
 const Note = require("./db/notesModel");
+const Space = require("./db/spaceModel");
 const auth = require("./auth");
 
 // execute database connection
@@ -47,7 +48,9 @@ app.get("/api", (request, response) => {
 app.post("/api/register", async (request, response) => {
   try {
     const hashedPassword = await bcrypt.hash(request.body.password, 10);
+
     const userId = new mongoose.Types.ObjectId();
+    const defaultSpace = new mongoose.Types.ObjectId();
 
     const periodsData = [
       { period: 0 },
@@ -65,8 +68,18 @@ app.post("/api/register", async (request, response) => {
       password: hashedPassword,
       name: request.body.name,
       username: request.body.username,
+      defaultSpace: defaultSpace,
       _id: userId,
     });
+
+    const space = new Space({
+      owner: userId,
+      settings: {
+        background: 0,
+      },
+      _id: defaultSpace,
+    });
+
     const toDo = new ToDo({
       owner: userId, // You may replace this with a valid user Id
       tasks: [],
@@ -115,13 +128,14 @@ app.post("/api/login", async (request, response) => {
     const token = jwt.sign(
       {
         userId: user._id,
+        defaultSpace: user.defaultSpace,
       },
       process.env.JWT_SECRET // Use environment variable for JWT secret
     );
 
     response.cookie("token", token, { httpOnly: true });
 
-    response.status(200).json({ message: "Login Successful", userId: user._id });
+    response.status(200).json({ message: "Login Successful", defaultSpace: user.defaultSpace });
   } catch (error) {
     console.error(error);
     response.status(500).json({ message: "Internal server error" });

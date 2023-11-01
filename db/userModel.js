@@ -30,6 +30,11 @@ const UserSchema = new mongoose.Schema({
     unique: true,
   },
 
+  defaultSpace: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+  },
+
   _id: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
@@ -37,4 +42,4 @@ const UserSchema = new mongoose.Schema({
 });
 
 // export UserSchema
-module.exports = mongoose.model.Users || mongoose.model("Users", UserSchema);
+module.exports = mongoose.model("Users", UserSchema);

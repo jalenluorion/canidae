@@ -76,10 +76,17 @@ app.post("/api/register", async (request, response) => {
       owner: userId,
       lists: {},
     });
+    const stats = new Stats({
+      owner: userId,
+      tasksCompleted: 0,
+      notesDownloaded: 0,
+      timersFinished: 0,
+    });
 
     await user.save();
     await toDo.save();
     await note.save();
+    await stats.save();
 
     // After successful registration, log in the user by generating a JWT token
     const token = jwt.sign(

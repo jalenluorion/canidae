@@ -66,7 +66,6 @@ const CampusView = ({ visible }) => {
       .then((response) => {
         if (response.status === 200) {
           setLoggedIn(true);
-          console.log(response.data);
           setGrades(response.data);
           setIsPopupOpen(false);
         }
@@ -77,7 +76,6 @@ const CampusView = ({ visible }) => {
       });
   }
 
-  console.log(grades)
   const gradeUpdates = [
     {
       id: 1,

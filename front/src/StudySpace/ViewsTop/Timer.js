@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faPause, faStop, faHourglassStart } from '@fortawesome/free-solid-svg-icons';
 import Cookies from 'js-cookie';
 import { CSSTransition } from 'react-transition-group';
+import { api } from '../../Helper';
 
 const TimerView = ({ visible }) => {
   const [studyTime, setStudyTime] = useState(1500); // Initial study time in seconds (25 minutes)
@@ -67,6 +68,7 @@ const TimerView = ({ visible }) => {
       clearInterval(interval);
       setIsActive(false);
       setIsPaused(true);
+      api.patch('/stats', { timersFinished: 1 }, { withCredentials: true });
       setTimeout(() => {
         alert("Your study timer has finished. Go take a break!");
         setTimerLabel('Break');
@@ -79,6 +81,7 @@ const TimerView = ({ visible }) => {
       clearInterval(interval);
       setIsActive(false);
       setIsPaused(true);
+      api.patch('/stats', { timersFinished: 1 }, { withCredentials: true });
       setTimeout(() => {
         alert("Your break timer has finished. Go study some more!");
         setTimerLabel('Study');

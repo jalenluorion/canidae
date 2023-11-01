@@ -73,6 +73,7 @@ const NoteView = ({ visible }) => {
     a.download = `${downloadTitle}.txt`;
     a.click();
     URL.revokeObjectURL(url);
+    api.patch('/stats', { notesDownloaded: 1 }, { withCredentials: true });
 
     setIsPopupOpen(false);
     setTitle('');

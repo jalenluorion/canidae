@@ -2,6 +2,9 @@
 const mongoose = require("mongoose");
 require('dotenv').config()
 
+const Stats = require("./statisticsModel");
+const User = require("./userModel");
+
 async function dbConnect() {
   // use mongoose to connect this app to our database on mongoDB using the DB_URL (connection string)
   mongoose

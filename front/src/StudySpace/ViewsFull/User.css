@@ -13,18 +13,59 @@
   }
   
   .user-container {
-    padding: 5px;
+    padding: 10px;
     border-radius: 10px;
     background: rgba(50, 50, 50, .75);
     backdrop-filter: blur(20px);
-    min-width: 520px;
-    width: 520px;
-    height: 272px;
+    width: 400px;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
   }
 
-  .user-information {
+  .user-container h1 {
+    margin: 0;
+    padding: 0;
+    margin-bottom: 5px;
+    font-size: 24px;
     color: white;
+  }
+ 
+  .user-information {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+  }
+
+  .user-statistics {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+  }
+
+  .random-qoute {
+    text-align: center;
+    color: white;
+  }
+
+  .logout-button {
+    width: 100px;
+    height: 30px;
+    border-radius: 5px;
+    background-color: #ff0000;
+    color: white;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+  }
+
+  .logout-button:hover {
+    background-color: #CD0000;
   }
 
   .alert-enter .user-container{

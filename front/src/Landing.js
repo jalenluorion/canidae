@@ -18,7 +18,7 @@ function Landing() {
       <EmojiRain />
       <div className={`landing-content ${isLoaded ? 'loaded' : ''}`}>
         <h1 className="landing-title">Welcome to Studace</h1>
-        <p className="landing-description">Virtual study rooms with practical tools for the modern online student</p>
+        <p className="landing-description">Virtual study rooms with practical tools for the modern digital student</p>
         <Link to="space"><button className="open-button">Enter Studace</button></Link>
       </div>
     </div>

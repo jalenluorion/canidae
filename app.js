@@ -5,13 +5,14 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
-const getCourseInfo = require("./infiniteCampus/campus.js"); 
+const getCourseInfo = require("./infiniteCampus/campus.js");
 
 // require database connection
 const dbConnect = require("./db/dbConnect");
 const User = require("./db/userModel");
 const ToDo = require("./db/toDoModel");
 const Note = require("./db/notesModel");
+const Stats = require("./db/statisticsModel");
 const Space = require("./db/spaceModel");
 const auth = require("./auth");
 
@@ -88,10 +89,17 @@ app.post("/api/register", async (request, response) => {
       owner: userId,
       lists: {},
     });
+    const stats = new Stats({
+      owner: userId,
+      tasksCompleted: 0,
+      notesDownloaded: 0,
+      timersFinished: 0,
+    });
 
     await user.save();
     await toDo.save();
     await note.save();
+    await stats.save();
 
     // After successful registration, log in the user by generating a JWT token
     const token = jwt.sign(
@@ -159,7 +167,7 @@ app.get("/api/user", auth, async (request, response) => {
       return response.status(404).json({ message: "User not found" });
     }
 
-    response.status(200).json({ message: "User found", user: user})
+    response.status(200).json({ message: "User found", user: user })
   } catch (error) {
     console.error(error);
     response.status(500).json({ message: "Internal server error" });
@@ -177,7 +185,7 @@ app.get("/api/verify", auth, async (request, response) => {
       return response.status(404).json({ message: "Requested user not found" });
     }
 
-    if (loggedInUser._id.equals(requestedUser._id)) { 
+    if (loggedInUser._id.equals(requestedUser._id)) {
       return response.status(200).json({ message: "User verified", user: loggedInUser });
     }
 
@@ -277,8 +285,47 @@ app.post("/api/campus", async (request, response) => {
         course.name = courseName[0] + "\u200B/" + courseName[1];
       }
     });
-    
+
     response.status(200).json(courseInfo);
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+app.get("/api/stats", auth, async (request, response) => {
+  try {
+    const stats = await Stats.findOne({ owner: request.user.userId });
+
+    response.status(200).json(stats);
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+app.patch("/api/stats", auth, async (request, response) => {
+  try {
+    const stats = await Stats.findOne({ owner: request.user.userId });
+
+    if (!stats) {
+      return response.status(404).json({ message: "User not found" });
+    }
+
+    if (request.body.tasksCompleted) {
+      stats.tasksCompleted += request.body.tasksCompleted;
+    }
+    if (request.body.notesDownloaded) {
+      stats.notesDownloaded += request.body.notesDownloaded;
+    }
+    if (request.body.timersFinished) {
+      stats.timersFinished += request.body.timersFinished;
+    }
+
+    await stats.save();
+
+    response.status(200).json({ message: "Stats updated successfully", stats });
+
   } catch (error) {
     console.error(error);
     response.status(500).json({ message: "Internal server error" });

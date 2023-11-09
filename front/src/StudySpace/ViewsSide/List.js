@@ -38,6 +38,7 @@ const ListView = ({ visible }) => {
 
   useEffect(() => {
     handleClearCompleted();
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -85,7 +86,9 @@ const ListView = ({ visible }) => {
   };
 
   const handleClearCompleted = () => {
+    const completedTasks = tasks.filter((task) => task.completed);
     setTasks((prevTasks) => prevTasks.filter((task) => !task.completed));
+    api.patch('/stats', { tasksCompleted: completedTasks.length }, { withCredentials: true });
   };
 
   const handleMarkAllCompleted = () => {

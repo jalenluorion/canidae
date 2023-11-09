@@ -22,6 +22,7 @@ function Controls({
     const [showFarRightView, setShowFarRightView] = useState(false);
 
     const [activeTab, setActiveTab] = useState('backgrounds');
+    
     return (
         <>
             <div className="item-container">

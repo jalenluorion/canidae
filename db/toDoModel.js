@@ -5,6 +5,7 @@ const ToDoSchema = new mongoose.Schema({
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
+        unique: true,
     },
 
     // Array of up to 7 to-do lists per user

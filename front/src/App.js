@@ -29,7 +29,7 @@ async function LoaderGuest() {
         const response = await api.get('/user', { withCredentials: true });
 
         if (response.status === 200) {
-            return({ loggedIn: true, userId: response.data.user._id });
+            return({ loggedIn: true, userId: response.data.user.defaultSpace });
         }
     } catch (error) {
         const ytReady = fetchPromise();
@@ -45,7 +45,7 @@ async function LoaderUser({ params }){
             const ytReady = fetchPromise();
             const toDo = api.get('/todo', { withCredentials: true }).then((response) => {return response.data});
             const notes = api.get('/notes', { withCredentials: true }).then((response) => {return response.data});
-            return defer({ loggedIn: true, user: response.data.user, isVideoReady: ytReady, toDo: toDo, notes: notes });
+            return defer({ loggedIn: true, user: response.data.user, space: response.space, isVideoReady: ytReady, toDo: toDo, notes: notes });
         }
     } catch (error) {
         return({ loggedIn: false });

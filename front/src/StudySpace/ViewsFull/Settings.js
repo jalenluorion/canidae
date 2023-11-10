@@ -4,6 +4,7 @@ import './ViewsFull.css'
 import { CSSTransition } from 'react-transition-group';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faVolumeUp, faVolumeMute, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { api } from '../../Helper';
 
 function SettingsView({
   visible,
@@ -82,6 +83,7 @@ function SettingsView({
                   <button
                     className={`background-button ${selectedBackground === background ? 'selected' : ''}`}
                     onClick={() => {
+                      api.post('/space/settings', { background: background.value }, { withCredentials: true });
                       setSelectedBackground(background);
                     }}
                   >

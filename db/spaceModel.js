@@ -8,6 +8,11 @@ const SpaceSchema = new mongoose.Schema({
         required: true,
     },
 
+    name: {
+        type: String,
+        required: true,
+    },
+
     // settings field
     settings: {
         type: Object,

@@ -293,7 +293,7 @@ app.post("/api/campus", async (request, response) => {
     courseInfo.forEach((course) => {
       const courseName = course.name.split("/");
       if (courseName.length > 1) {
-        course.name = courseName[0] + "\u200B/" + courseName[1];
+        course.name = courseName[0] + "/\u200B" + courseName[1];
       }
     });
 

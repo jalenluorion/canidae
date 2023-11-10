@@ -151,7 +151,7 @@ app.post("/api/logout", (request, response) => {
 app.get("/api/user", auth, async (request, response) => {
   try {
     const user = await User.findOne({ _id: request.user.userId });
-
+    
     if (!user) {
       return response.status(404).json({ message: "User not found" });
     }
@@ -167,8 +167,8 @@ app.get("/api/user", auth, async (request, response) => {
 app.get("/api/verify", auth, async (request, response) => {
   try {
     const queryId = request.query.id;
-    const requestedUser = await User.findOne({ _id: queryId });
-    const requestedSpace = await Space.findOne({ _id: request.user.userId });
+    const requestedUser = await User.findOne({ _id: request.user.userId });
+    const requestedSpace = await Space.findOne({ _id: queryId });
 
     if (!requestedUser) {
       return response.status(404).json({ message: "User not logged in!" });
@@ -190,7 +190,7 @@ app.get("/api/verify", auth, async (request, response) => {
 
 app.post("/api/space/settings", auth, async (request, response) => {
   try {
-    const space = await Space.findOne({ _id: request.user.userId });
+    const space = await Space.findOne({ _id: request.query.id });
 
     if (!space) {
       return response.status(404).json({ message: "Space not found" });

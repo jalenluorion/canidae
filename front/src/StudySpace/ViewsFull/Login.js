@@ -82,7 +82,7 @@ function LoginView() {
           setSuccess(true);
           setMessage(response.data.message);
           setTimeout(() => {
-            navigate('../' + response.data.userId);
+            navigate('../' + response.data.user.defaultSpace);
           }, 2000);
         } else {
           if (response.data && response.data.message) {
@@ -113,7 +113,7 @@ function LoginView() {
           setSuccess(true);
           setMessage(response.data.message);
           setTimeout(() => {
-            navigate('../' + response.data.userId);
+            navigate('../' + response.data.user.defaultSpace);
           }, 2000);
         } else {
           if (response.data && response.data.message) {

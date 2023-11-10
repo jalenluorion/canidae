@@ -13,7 +13,7 @@ const router = createBrowserRouter(
             <Route path="space" element={<GuestRoute />} loader={LoaderGuest}>
                 <Route path="login" element={<LoginView />} />
             </Route>
-            <Route path="space/:userId" element={<UserRoute />} loader={LoaderUser}/>
+            <Route path="space/:spaceId" element={<UserRoute />} loader={LoaderUser}/>
         </>
     )
 );
@@ -29,7 +29,7 @@ async function LoaderGuest() {
         const response = await api.get('/user', { withCredentials: true });
 
         if (response.status === 200) {
-            return({ loggedIn: true, userId: response.data.user.defaultSpace });
+            return({ loggedIn: true, spaceId: response.data.user.defaultSpace });
         }
     } catch (error) {
         const ytReady = fetchPromise();
@@ -39,13 +39,13 @@ async function LoaderGuest() {
 
 async function LoaderUser({ params }){
     try {
-        const response = await api.get('/verify?id=' + params.userId, { withCredentials: true });
+        const response = await api.get('/verify?id=' + params.spaceId, { withCredentials: true });
 
         if (response.status === 200) {
             const ytReady = fetchPromise();
             const toDo = api.get('/todo', { withCredentials: true }).then((response) => {return response.data});
             const notes = api.get('/notes', { withCredentials: true }).then((response) => {return response.data});
-            return defer({ loggedIn: true, user: response.data.user, space: response.space, isVideoReady: ytReady, toDo: toDo, notes: notes });
+            return defer({ loggedIn: true, user: response.data.user, space: response.data.space, isVideoReady: ytReady, toDo: toDo, notes: notes });
         }
     } catch (error) {
         return({ loggedIn: false });
@@ -56,7 +56,7 @@ function GuestRoute() {
     const data = useLoaderData();
 
     if (data.loggedIn === true) {
-        return <Navigate to={`${data.userId}`} replace />;
+        return <Navigate to={`${data.spaceId}`} replace />;
     }
 
     return <StudySpace data={data} options={options} views={views} />;

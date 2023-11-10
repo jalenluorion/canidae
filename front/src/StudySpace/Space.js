@@ -13,7 +13,7 @@ function StudySpace({
   options,
   views,
 }) {
-  const [selectedBackground, setSelectedBackground] = useState(data.space ? options.backgrounds[data.space.settings.background] : options.backgrounds[1]);
+  const [selectedBackground, setSelectedBackground] = useState(data.space ? options.backgrounds[data.space.settings.background] : options.backgrounds[0]);
   const [videoReady, setVideoReady] = useState(false);
 
   const [selectedAudio, setSelectedAudio] = useState({ value: 'none', label: 'None' });
@@ -110,7 +110,7 @@ function StudySpace({
           }
         />
         <Controls
-          space={data.space}
+          data={data}
           options={options}
           views={views}
           selectedBackground={selectedBackground}

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import './Settings.css';
 import './ViewsFull.css'
 import { CSSTransition } from 'react-transition-group';
@@ -20,6 +21,7 @@ function SettingsView({
 }) {
   const containerRef = useRef(null);
   const [mounted, setMounted] = useState(false);
+  const { spaceId } = useParams();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -78,12 +80,13 @@ function SettingsView({
           </div>
           {activeTab === 'backgrounds' && (
             <div className="settings-content">
-              {options.backgrounds.map((background) => (
+              {options.backgrounds.map((background, index) => (
                 <div className='background-button-container' key={background.value}>
                   <button
                     className={`background-button ${selectedBackground === background ? 'selected' : ''}`}
                     onClick={() => {
-                      api.post('/space/settings', { background: background.value }, { withCredentials: true });
+                      // save the background setting with the index value, like 0 1 or 2
+                      api.post('/space/settings?id=' + spaceId, { background: index }, { withCredentials: true })
                       setSelectedBackground(background);
                     }}
                   >
@@ -100,7 +103,7 @@ function SettingsView({
           )}
           {activeTab === 'audio' && (
             <div className="settings-content">
-              {options.audio.map((audioOption) => (
+              {options.audio.map((audioOption, index) => (
                   <button
                     key={audioOption.value}
                     className={`audio-button ${selectedAudio === audioOption ? 'selected' : ''

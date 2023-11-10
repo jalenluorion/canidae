@@ -30,6 +30,11 @@ const UserSchema = new mongoose.Schema({
     unique: true,
   },
 
+  defaultSpace: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+  },
+
   _id: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,

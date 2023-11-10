@@ -6,7 +6,7 @@ import './Control.css';
 import "bootstrap-icons/font/bootstrap-icons.css";
 
 function ControlContainer({
-    user,
+    space,
     views,
     showUserView,
     setShowUserView,
@@ -113,7 +113,7 @@ function ControlContainer({
     };
 
     const handleLoginButtonClick = () => {
-        if (user != null) {
+        if (space != null) {
             setShowUserView(!showUserView);
         } else {
             navigate("login", {state: {button: true, visible: true}})
@@ -129,7 +129,7 @@ function ControlContainer({
                 <button className="" onClick={handleLoginButtonClick}>
                     <FontAwesomeIcon icon={faUser} fixedWidth />
                 </button>
-                <h1>{user == null ? "Virtual Study Space" : user.name + '\'s Space'}</h1>
+                <h1>{space == null ? "Virtual Study Space" : space.name}</h1>
                 <button className="" onClick={handleButtonBarClick}>
                     <FontAwesomeIcon icon={buttonRowDisplayed ? faChevronDown : faChevronUp} fixedWidth />
                 </button>

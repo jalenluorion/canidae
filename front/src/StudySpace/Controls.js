@@ -42,7 +42,7 @@ function Controls({
                     </div>
                     <div className="control-view">
                         <ControlContainer
-                            user={data.user}
+                            space={data.space}
                             views={views}
                             showUserView={showUserView}
                             setShowUserView={setShowUserView}

@@ -13,6 +13,7 @@ const User = require("./db/userModel");
 const ToDo = require("./db/toDoModel");
 const Note = require("./db/notesModel");
 const Stats = require("./db/statisticsModel");
+const Space = require("./db/spaceModel");
 const auth = require("./auth");
 
 // execute database connection
@@ -48,28 +49,29 @@ app.get("/api", (request, response) => {
 app.post("/api/register", async (request, response) => {
   try {
     const hashedPassword = await bcrypt.hash(request.body.password, 10);
-    const userId = new mongoose.Types.ObjectId();
 
-    const periodsData = [
-      { period: 0 },
-      { period: 1 },
-      { period: 2 },
-      { period: 3 },
-      { period: 4 },
-      { period: 5 },
-      { period: 6 },
-      { period: 7 },
-    ];
+    const userId = new mongoose.Types.ObjectId();
+    const defaultSpace = new mongoose.Types.ObjectId();
 
     const user = new User({
       email: request.body.email,
       password: hashedPassword,
       name: request.body.name,
       username: request.body.username,
+      defaultSpace: defaultSpace,
       _id: userId,
     });
+
+    const space = new Space({
+      owner: userId,
+      name: request.body.name + "'s Space",
+      settings: {
+        background: 0,
+      },
+      _id: defaultSpace,
+    });
     const toDo = new ToDo({
-      owner: userId, // You may replace this with a valid user Id
+      owner: userId,
       tasks: [],
     });
     const note = new Note({
@@ -87,6 +89,7 @@ app.post("/api/register", async (request, response) => {
     await toDo.save();
     await note.save();
     await stats.save();
+    await space.save();
 
     // After successful registration, log in the user by generating a JWT token
     const token = jwt.sign(
@@ -100,7 +103,7 @@ app.post("/api/register", async (request, response) => {
     response.cookie("token", token);
 
     // Respond with a success message and the JWT token
-    response.status(201).json({ message: "User Created and Logged In Successfully", userId: user._id });
+    response.status(201).json({ message: "User Created and Logged In Successfully", user: user });
   } catch (error) {
     console.error(error);
     response.status(500).json({ message: "Internal server error" });
@@ -129,7 +132,7 @@ app.post("/api/login", async (request, response) => {
 
     response.cookie("token", token, { httpOnly: true });
 
-    response.status(200).json({ message: "Login Successful", userId: user._id });
+    response.status(200).json({ message: "Login Successful", user: user });
   } catch (error) {
     console.error(error);
     response.status(500).json({ message: "Internal server error" });
@@ -148,7 +151,7 @@ app.post("/api/logout", (request, response) => {
 app.get("/api/user", auth, async (request, response) => {
   try {
     const user = await User.findOne({ _id: request.user.userId });
-
+    
     if (!user) {
       return response.status(404).json({ message: "User not found" });
     }
@@ -160,22 +163,44 @@ app.get("/api/user", auth, async (request, response) => {
   }
 });
 
-// Verify if cookie user id equal to request user id
+// Verify if cookie user id is allowed in space
 app.get("/api/verify", auth, async (request, response) => {
   try {
     const queryId = request.query.id;
-    const loggedInUser = await User.findOne({ _id: request.user.userId });
-    const requestedUser = await User.findOne({ _id: queryId });
+    const requestedUser = await User.findOne({ _id: request.user.userId });
+    const requestedSpace = await Space.findOne({ _id: queryId });
 
     if (!requestedUser) {
-      return response.status(404).json({ message: "Requested user not found" });
+      return response.status(404).json({ message: "User not logged in!" });
+    }
+    if (!requestedSpace) {
+      return response.status(404).json({ message: "Space not found!" });
     }
 
-    if (loggedInUser._id.equals(requestedUser._id)) {
-      return response.status(200).json({ message: "User verified", user: loggedInUser });
+    if (requestedUser._id.equals(requestedSpace.owner)) {
+      return response.status(200).json({ message: "User verified", user: requestedUser, space: requestedSpace});
     }
 
     response.status(404).json({ message: "User not validated" });
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+app.post("/api/space/settings", auth, async (request, response) => {
+  try {
+    const space = await Space.findOne({ _id: request.query.id });
+
+    if (!space) {
+      return response.status(404).json({ message: "Space not found" });
+    }
+
+    space.settings = request.body;
+
+    await space.save();
+
+    response.status(200).json({ message: "Space settings updated successfully", space });
   } catch (error) {
     console.error(error);
     response.status(500).json({ message: "Internal server error" });

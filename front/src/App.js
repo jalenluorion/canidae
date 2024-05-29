@@ -2,10 +2,18 @@ import React from 'react';
 import { createBrowserRouter, defer, createRoutesFromElements, Route, RouterProvider, Navigate, useLoaderData} from 'react-router-dom';
 import StudySpace from './StudySpace/Space';
 import LoginView from './StudySpace/ViewsFull/Login';
-import { options, views } from './Data';
+import { mediaOptions, viewOptions } from './Data';
 import { api, fetchPromise } from './Helper';
 import Landing from './Landing';
 
+// App base
+function App() {
+    return (
+        <RouterProvider router={router} />
+    );
+}
+
+// Routing
 const router = createBrowserRouter(
     createRoutesFromElements(
         <>
@@ -18,12 +26,7 @@ const router = createBrowserRouter(
     )
 );
 
-function App() {
-    return (
-        <RouterProvider router={router} />
-    );
-}
-
+// Loads data for default guest space
 async function LoaderGuest() {
     try {
         const response = await api.get('/user', { withCredentials: true });
@@ -36,7 +39,23 @@ async function LoaderGuest() {
         return defer({ loggedIn: false, isVideoReady: ytReady });
     }
 }
+// Loads default guest space with loader data
+function GuestRoute() {
+    const data = useLoaderData();
 
+    if (data.loggedIn === true) {
+        return <Navigate to={`${data.spaceId}`} replace />;
+    }
+
+    const spaceData = {
+        mediaOptions: mediaOptions,
+        viewOptions: viewOptions,
+    }
+
+    return <StudySpace loggedIn={data.loggedIn} isReady={data.isVideoReady} data={spaceData} />;
+}
+
+// Loads data for user space
 async function LoaderUser({ params }){
     try {
         const response = await api.get('/verify?id=' + params.spaceId, { withCredentials: true });
@@ -51,25 +70,24 @@ async function LoaderUser({ params }){
         return({ loggedIn: false });
     }
 }
-
-function GuestRoute() {
-    const data = useLoaderData();
-
-    if (data.loggedIn === true) {
-        return <Navigate to={`${data.spaceId}`} replace />;
-    }
-
-    return <StudySpace data={data} options={options} views={views} />;
-}
-
+// Loads user space with loader data
 function UserRoute() {
     const data = useLoaderData();
 
-    if (data.loggedIn === true) {
-        return <StudySpace data={data} options={options} views={views} />;
+    if (data.loggedIn === false) {
+        return <Navigate to="../space" replace />;
     }
 
-    return <Navigate to="../space" replace />;
+    const spaceData = {
+        user: data.user,
+        space: data.space,
+        toDo: data.toDo,
+        notes: data.notes,
+        mediaOptions: mediaOptions,
+        viewOptions: viewOptions,
+    }
+
+    return <StudySpace loggedIn={data.loggedIn} isReady={data.isVideoReady} data={spaceData} />;
 }
 
 export default App;

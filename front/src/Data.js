@@ -8,7 +8,7 @@ import UserView from './StudySpace/ViewsFull/User'
 
 import { faListCheck, faUsers, faStickyNote, faClock, faPalette, faBook, faBoxArchive } from '@fortawesome/free-solid-svg-icons'; // Import the new icons
 
-const options = {
+const mediaOptions = {
     backgrounds: [
       { value: 'c0_ejQQcrwI', label: 'Coffee Shop', live: false },
       { value: '-VgN7nKx9MU', label: 'Fireplace', live: false },
@@ -30,7 +30,7 @@ const options = {
       { value: 'LVbUNRwpXzw', label: 'Techno' },
     ],
 };
-const views = {
+const viewOptions = {
     farLeftView: { label: 'Social', icon: faUsers, component: ListView },
     left1View: { label: 'To-Do', icon: faListCheck, component: ListView },
     left2View: { label: 'Files', icon: faBoxArchive, component: FilesView },
@@ -42,6 +42,6 @@ const views = {
 }
 
 export {
-  options,
-  views,
+  mediaOptions,
+  viewOptions,
 }

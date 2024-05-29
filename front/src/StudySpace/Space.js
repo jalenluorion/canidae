@@ -9,17 +9,16 @@ import Loading from './ViewsFull/Loading';
 const Controls = lazy(() => import('./Controls'));
 
 function StudySpace({
+  loggedIn,
+  isReady,
   data,
-  options,
-  views,
 }) {
-  const [selectedBackground, setSelectedBackground] = useState(data.space ? options.backgrounds[data.space.settings.background] : options.backgrounds[0]);
-  const [videoReady, setVideoReady] = useState(false);
-
+  const [selectedBackground, setSelectedBackground] = useState(data.space ? data.mediaOptions.backgrounds[data.space.settings.background] : data.mediaOptions.backgrounds[0]);
   const [selectedAudio, setSelectedAudio] = useState({ value: 'none', label: 'None' });
-  const [playAudio, setPlayAudio] = useState(false);
-  const [audioReady, setAudioReady] = useState(false);
 
+  const [videoReady, setVideoReady] = useState(false);
+  const [audioReady, setAudioReady] = useState(false);
+  
   const [isRainPlaying, setIsRainPlaying] = useState(false);
   const [isFirePlaying, setIsFirePlaying] = useState(false);
 
@@ -28,11 +27,9 @@ function StudySpace({
     if (selectedAudio.value !== 'none') {
       setIsRainPlaying(selectedAudio.label === 'Rain');
       setIsFirePlaying(selectedAudio.label === 'Fireplace');
-      setPlayAudio(true);
     } else {
       setIsRainPlaying(false);
       setIsFirePlaying(false);
-      setPlayAudio(false);
     }
   }, [selectedAudio]);
   useEffect(() => {
@@ -65,7 +62,7 @@ function StudySpace({
 
   return (
     <div className="App">
-      {playAudio && (
+      {selectedAudio.value !== 'none' && (
         <YouTube
           className='hidden-player'
           videoId={selectedAudio.value}
@@ -87,7 +84,7 @@ function StudySpace({
           opts={videoOpts}
           onPlay={() => {
             setVideoReady(true);
-            resolvePromise();
+            resolvePromise("Video Loaded");
           }}
         />
         {!videoReady && (
@@ -104,15 +101,14 @@ function StudySpace({
       </div>
       <Suspense fallback={<Loading />}>
         <Await
-          resolve={data.isVideoReady}
+          resolve={isReady}
           errorElement={
             <p>Error loading package location!</p>
           }
         />
         <Controls
+          loggedIn={loggedIn}
           data={data}
-          options={options}
-          views={views}
           selectedBackground={selectedBackground}
           setSelectedBackground={setSelectedBackground}
           selectedAudio={selectedAudio}

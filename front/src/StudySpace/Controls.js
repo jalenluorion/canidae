@@ -3,9 +3,8 @@ import ControlContainer from './ControlView/Control';
 import { Outlet, Await } from 'react-router-dom';
 
 function Controls({
+    loggedIn,
     data,
-    options,
-    views,
     selectedBackground,
     setSelectedBackground,
     selectedAudio,
@@ -33,17 +32,17 @@ function Controls({
                     }
                 >
                     <div className="left-view">
-                        <views.left1View.component visible={showLeft1View} />
-                        <views.left2View.component visible={showLeft2View} />
+                        <data.viewOptions.left1View.component visible={showLeft1View} />
+                        <data.viewOptions.left2View.component visible={showLeft2View} />
                     </div>
                 </Await>
                     <div className="top-view">
-                        <views.topView.component visible={showTopView} />
+                        <data.viewOptions.topView.component visible={showTopView} />
                     </div>
                     <div className="control-view">
                         <ControlContainer
                             space={data.space}
-                            views={views}
+                            viewOptions={data.viewOptions}
                             showUserView={showUserView}
                             setShowUserView={setShowUserView}
                             showLeft1View={showLeft1View}
@@ -67,15 +66,15 @@ function Controls({
                     }
                 >
                     <div className="right-view">
-                        <views.right1View.component visible={showRight1View} />
-                        <views.right2View.component visible={showRight2View} />
+                        <data.viewOptions.right1View.component visible={showRight1View} />
+                        <data.viewOptions.right2View.component visible={showRight2View} />
                     </div>
                 </Await>
             </div>
-            <views.farRightView.component
+            <data.viewOptions.farRightView.component
                 visible={showFarRightView}
                 setVisible={setShowFarRightView}
-                options={options}
+                mediaOptions={data.mediaOptions}
                 selectedBackground={selectedBackground}
                 setSelectedBackground={setSelectedBackground}
                 selectedAudio={selectedAudio}
@@ -84,7 +83,7 @@ function Controls({
                 activeTab={activeTab}
                 setActiveTab={setActiveTab}
             />
-            <views.userView.component
+            <data.viewOptions.userView.component
                 visible={showUserView}
                 setVisible={setShowUserView}
                 user={data.user}

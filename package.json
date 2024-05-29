@@ -4,6 +4,10 @@
   "description": "Server for Canidae",
   "main": "index.js",
   "dependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.12.13",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
@@ -13,7 +17,8 @@
     "infinite-campus": "^3.1.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.5.3",
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.0.1",
+    "typescript": "^5.4.5"
   },
   "scripts": {
     "start": "nodemon index.js",

@@ -10,7 +10,7 @@ import { api } from '../../Helper';
 function SettingsView({
   visible,
   setVisible,
-  options,
+  mediaOptions,
   selectedBackground,
   setSelectedBackground,
   selectedAudio,
@@ -80,7 +80,7 @@ function SettingsView({
           </div>
           {activeTab === 'backgrounds' && (
             <div className="settings-content">
-              {options.backgrounds.map((background, index) => (
+              {mediaOptions.backgrounds.map((background, index) => (
                 <div className='background-button-container' key={background.value}>
                   <button
                     className={`background-button ${selectedBackground === background ? 'selected' : ''}`}
@@ -103,7 +103,7 @@ function SettingsView({
           )}
           {activeTab === 'audio' && (
             <div className="settings-content">
-              {options.audio.map((audioOption, index) => (
+              {mediaOptions.audio.map((audioOption, index) => (
                   <button
                     key={audioOption.value}
                     className={`audio-button ${selectedAudio === audioOption ? 'selected' : ''

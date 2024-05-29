@@ -26,4 +26,4 @@ const SpaceSchema = new mongoose.Schema({
 });
 
 // export UserSchema
-module.exports = mongoose.model("Spaces", SpaceSchema);
+module.exports = mongoose.model("Space", SpaceSchema);

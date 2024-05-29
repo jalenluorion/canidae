@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const api = axios.create({
+const api = axios.create({
   baseURL: '/api'
 });
 
@@ -34,13 +34,13 @@ export const api = axios.create({
 
 let resolvePromiseFunction;
 
-export function resolvePromise() {
+function resolvePromise(reason) {
   if (resolvePromiseFunction) {
-    resolvePromiseFunction("hi");
+    resolvePromiseFunction(reason);
   }
 }
 
-export function fetchPromise() {
+function fetchPromise() {
   const customPromise = new Promise((resolve) => {
     resolvePromiseFunction = resolve;
   })
@@ -49,7 +49,7 @@ export function fetchPromise() {
   return customPromise
 }
 
-export function fetchTimerDate() {
+function fetchTimedPromise() {
   const customPromise = new Promise((resolve) => {
     setTimeout(() => {
       resolve("hi");
@@ -58,4 +58,11 @@ export function fetchTimerDate() {
     .then((res) => res)
     
   return (customPromise)
+}
+
+export {
+  api,
+  resolvePromise,
+  fetchPromise,
+  fetchTimedPromise,
 }

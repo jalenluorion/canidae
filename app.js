@@ -1,3 +1,4 @@
+// Imports
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
@@ -6,17 +7,15 @@ const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const getCourseInfo = require("./infiniteCampus/campus.js");
+const auth = require("./auth.js");
 
-// require database connection
-const dbConnect = require("./db/dbConnect");
-const User = require("./db/userModel");
-const ToDo = require("./db/toDoModel");
-const Note = require("./db/notesModel");
-const Stats = require("./db/statisticsModel");
-const Space = require("./db/spaceModel");
-const auth = require("./auth");
+// Get database stuff
+const dbConnect = require("./db/dbConnect.js");
+const User = require("./db/userModel.js");
+const Space = require("./db/spaceModel.js");
+const { NoteList, ToDo, Timer } = require("./db/viewModels.js");
 
-// execute database connection
+// Start database connection
 dbConnect();
 
 // Middleware for parsing cookies
@@ -45,14 +44,15 @@ app.get("/api", (request, response) => {
   response.json({ message: "Hey! This is your server response!" });
 });
 
-// Register endpoint with input validation
+// Register new user endpoint with input validation
 app.post("/api/register", async (request, response) => {
   try {
+    // Generate hash of password and IDs of the user and the user's default space
     const hashedPassword = await bcrypt.hash(request.body.password, 10);
-
     const userId = new mongoose.Types.ObjectId();
     const defaultSpace = new mongoose.Types.ObjectId();
 
+    // Create DB entrys for user and user's default space
     const user = new User({
       email: request.body.email,
       password: hashedPassword,
@@ -61,7 +61,6 @@ app.post("/api/register", async (request, response) => {
       defaultSpace: defaultSpace,
       _id: userId,
     });
-
     const space = new Space({
       owner: userId,
       name: request.body.name + "'s Space",
@@ -70,25 +69,28 @@ app.post("/api/register", async (request, response) => {
       },
       _id: defaultSpace,
     });
+
+    // DB entrys for the views
+    const noteList = new NoteList({
+        owner: userId,
+        lists: [],
+        notesDownloaded: 0,
+    });
     const toDo = new ToDo({
-      owner: userId,
-      tasks: [],
+        owner: userId,
+        tasks: [],
+        tasksCompleted: 0,
     });
-    const note = new Note({
-      owner: userId,
-      lists: {},
-    });
-    const stats = new Stats({
-      owner: userId,
-      tasksCompleted: 0,
-      notesDownloaded: 0,
-      timersFinished: 0,
+    const timer = new Timer({
+        owner: userId,
+        timer: 0,
+        timersFinished: 0,
     });
 
     await user.save();
     await toDo.save();
-    await note.save();
-    await stats.save();
+    await noteList.save();
+    await timer.save();
     await space.save();
 
     // After successful registration, log in the user by generating a JWT token
@@ -245,7 +247,7 @@ app.post("/api/todo", auth, async (request, response) => {
 // Get notes for a user
 app.get("/api/notes", auth, async (request, response) => {
   try {
-    const noteLists = await Note.findOne({ owner: request.user.userId });
+    const noteLists = await NoteList.findOne({ owner: request.user.userId });
 
     response.status(200).json(noteLists);
   } catch (error) {
@@ -258,7 +260,7 @@ app.get("/api/notes", auth, async (request, response) => {
 app.post("/api/notes", auth, async (request, response) => {
   try {
     // Find the user by their Id
-    const noteLists = await Note.findOne({ owner: request.user.userId });
+    const noteLists = await NoteList.findOne({ owner: request.user.userId });
 
     if (!noteLists) {
       return response.status(404).json({ message: "User not found" });
@@ -306,9 +308,11 @@ app.post("/api/campus", async (request, response) => {
 
 app.get("/api/stats", auth, async (request, response) => {
   try {
-    const stats = await Stats.findOne({ owner: request.user.userId });
+    const toDoStat = await ToDo.findOne({ owner: request.user.userId });
+    const noteStat = await NoteList.findOne({ owner: request.user.userId });
+    const timerStat = await Timer.findOne({ owner: request.user.userId });
 
-    response.status(200).json(stats);
+    response.status(200).json({ tasksCompleted: toDoStat.tasksCompleted, notesDownloaded: noteStat.notesDownloaded, timersFinished: timerStat.timersFinished });
   } catch (error) {
     console.error(error);
     response.status(500).json({ message: "Internal server error" });
@@ -317,26 +321,33 @@ app.get("/api/stats", auth, async (request, response) => {
 
 app.patch("/api/stats", auth, async (request, response) => {
   try {
-    const stats = await Stats.findOne({ owner: request.user.userId });
-
-    if (!stats) {
-      return response.status(404).json({ message: "User not found" });
-    }
-
     if (request.body.tasksCompleted) {
-      stats.tasksCompleted += request.body.tasksCompleted;
+        const toDoStat = await ToDo.findOne({ owner: request.user.userId });
+        if (!toDoStat) {
+            return response.status(404).json({ message: "User not found" });
+        }
+        toDoStat.tasksCompleted += request.body.tasksCompleted;
+        await toDoStat.save();
+        response.status(200).json({ message: "Stats updated successfully", tasksCompleted: toDoStat.tasksCompleted });
     }
     if (request.body.notesDownloaded) {
-      stats.notesDownloaded += request.body.notesDownloaded;
+        const noteStat = await NoteList.findOne({ owner: request.user.userId });
+        if (!noteStat) {
+            return response.status(404).json({ message: "User not found" });
+        }
+        noteStat.notesDownloaded += request.body.notesDownloaded;
+        await noteStat.save();
+        response.status(200).json({ message: "Stats updated successfully", notesDownloaded: noteStat.notesDownloaded });
     }
     if (request.body.timersFinished) {
-      stats.timersFinished += request.body.timersFinished;
+        const timerStat = await Timer.findOne({ owner: request.user.userId });
+        if (!timerStat) {
+            return response.status(404).json({ message: "User not found" });
+        }
+        timerStat.timersFinished += request.body.timersFinished;
+        await timerStat.save();
+        response.status(200).json({ message: "Stats updated successfully", timersFinished: timerStat.timersFinished });
     }
-
-    await stats.save();
-
-    response.status(200).json({ message: "Stats updated successfully", stats });
-
   } catch (error) {
     console.error(error);
     response.status(500).json({ message: "Internal server error" });

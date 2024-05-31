@@ -5,9 +5,13 @@ import LoginView from './StudySpace/ViewsFull/Login';
 import { mediaOptions, viewOptions } from './Data';
 import { api, fetchPromise } from './Helper';
 import Landing from './Landing';
+import ReactGA from 'react-ga4';
 
 // App base
 function App() {
+    ReactGA.initialize("G-ZMHK35E10N");
+    ReactGA.send({ hitType: 'pageview', page: window.location.pathname });
+    
     return (
         <RouterProvider router={router} />
     );
